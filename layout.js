@@ -35,16 +35,11 @@ settings = {
 			TweenMax.to("#settingsTab", 0.5, { backgroundColor: "rgba(17,17,17,0)", ease: Power4.easeOut });
 		}
 	},
-	getCookie: function (name) {
-		var value = "; " + document.cookie;
-		var parts = value.split("; " + name + "=");
-		if (parts.length === 2) { return parts.pop().split(";").shift(); }
-	},
 	applyCookie: function () {
-		//reads the user's cookie and returns it as a settings object
-		savedSettings = (typeof (settings.getCookie('settings')) !== 'undefined') ? JSON.parse(settings.getCookie('settings')) : {};
+		//reads the user's localStorage with basil and returns it as a settings object
+		savedSettings = basil.get('settings') || {};
 
-		//applies each setting from the cookie to the radio buttons
+		//applies each setting from basil to the radio buttons
 		$.each(savedSettings, function (k, v) {
 			$('input:radio[name=' + k + ']:nth(' + v + ')').attr('checked', true);
 		});
@@ -64,7 +59,7 @@ settings = {
 		settings.timerMode = $("input[name='timerMode']:checked").val();
 		settings.predictor = $("input[name='predictor']:checked").val();
 
-		document.cookie = "settings=" + JSON.stringify(settings) + "; expires=Sat, 26 Dec 2025 12:00:00 UTC; path=/";
+		basil.set('settings',settings);
 
 		if (settings.combineFetch == 1) {
 			$('.showCombined').css({ 'display': 'none' });
