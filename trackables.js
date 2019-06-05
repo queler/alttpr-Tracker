@@ -182,8 +182,21 @@ keyShops = {
 	8: { world: "DW", xPos: 78.9, yPos: 31.3, active: false, name: "Dark World Potion Shop" },
 }
 
-
-
+trackables= {
+	objs:{items, chests, dungeons,keyShops},
+	save: function(){
+		basil.set("items", items);
+		basil.set("chests", chests);
+		basil.set("dungeons", dungeons);
+		basil.set("keyShops", keyShops);
+	},
+	load: function(){
+		items=basil.get("items")||items;
+		chests=basil.get("chests")||chests;
+		dungeons=basil.get("dungeons")||dungeons;
+		keyShops=basil.get("keyShops")||keyShops;
+	}
+}
 map = {
 	populate: function () {
 		$.each(chests, function (id, chest) {	//places all the chest icons onto the map

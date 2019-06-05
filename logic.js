@@ -1463,12 +1463,6 @@ logic = {
             }
 
         });
-
-
-
-
-
-
-
+        trackables.save();
     },
 };
