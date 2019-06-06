@@ -14,7 +14,8 @@
 	<script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
 	<script src="basil.min.js"></script>
 	<script src="eruda.min.js"></script>
-
+	<script>eruda.init();</script>
+			
 
 	<script src="logic.js"></script>
 	<script src="layout.js"></script>
@@ -413,7 +414,6 @@
 	<script>
 
 		$(window).load(function () {
-			if (eruda) eruda.init();
 			basil=new window.Basil({namespace: 'queler/z3r_tracker'});
 			trackables.load();
 			layout.sizeMap($("input[name='mapAlign']:checked").val()); //arranges the maps to best fit on screen
