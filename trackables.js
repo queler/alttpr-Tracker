@@ -195,6 +195,11 @@ trackables= {
 		chests=basil.get("chests")||chests;
 		dungeons=basil.get("dungeons")||dungeons;
 		keyShops=basil.get("keyShops")||keyShops;
+//below for printing all icons.  starting point to 
+//quick and dirty toggle every icon to get back to original value
+//		$(".icon").each(function(i){console.log(this.id+":"+this.parentElement.id);});
+// this should get everything we need to get the state of
+//$(".icon").filter(':visible')		
 	}
 }
 map = {
