@@ -1,4 +1,4 @@
-
+idRegex=/(\D+)+(\d+)/;
 logic = {
     //these functions return true or false
     darkWorldNW: function () { //check for access to this whole region
@@ -65,7 +65,7 @@ logic = {
         // 0 = unknown, 1 = red/blue pend, 2 = green pend, 3 = blue crystal, 4 = red crystal
 
         for (i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
-            if (dungeons[i].completed) {
+            if (items["boss"+i]) {
                 counts[dungeons[i].prize]++;
                 counts.total++;
             }
@@ -341,7 +341,7 @@ logic = {
     //min = the minimum items possibly available (accounting for worst luck, bad key use if key-sanity, no dark rooms or sequence breaks)
     dungeons: {
 
-
+        
         0: function () { // Eastern Palace
             var bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 lamp = items.lamp.val,

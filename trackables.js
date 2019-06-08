@@ -156,18 +156,18 @@ chests = {
 };
 
 dungeons = {
-	0: { world: "LW", xPos: 92.9, yPos: 40.0, chests0: 3, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Eastern Palace" },
-	1: { world: "LW", xPos: 7.00, yPos: 78.5, chests0: 2, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Desert Palace" },
-	2: { world: "LW", xPos: 56.0, yPos: 4.00, chests0: 2, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Tower of Hera" },
-	3: { world: "DW", xPos: 92.9, yPos: 40.0, chests0: 5, chests1: 14, chests2: 11, openChests: 0, completed: false, status: null, prize: 0, name: "Palace of Darkness" },
-	4: { world: "DW", xPos: 45.5, yPos: 91.5, chests0: 6, chests1: 10, chests2: 7, openChests: 0, completed: false, status: null, prize: 0, name: "Swamp Palace" },
-	5: { world: "DW", xPos: 5.00, yPos: 5.00, chests0: 2, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Skull Woods" },
-	6: { world: "DW", xPos: 12.0, yPos: 48.0, chests0: 4, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Thieves Town" },
-	7: { world: "DW", xPos: 79.0, yPos: 85.0, chests0: 3, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Ice Palace" },
-	8: { world: "DW", xPos: 9.00, yPos: 83.2, chests0: 2, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Misery Mire" },
-	9: { world: "DW", xPos: 92.9, yPos: 5.00, chests0: 5, chests1: 12, chests2: 9, openChests: 0, completed: false, status: null, prize: 0, name: "Turtle Rock" },
-	10: { world: "DW", xPos: 56.0, yPos: 4.00, chests0: 20, chests1: 27, chests2: 24, openChests: 0, completed: false, status: null, prize: 0, name: "Ganon's Tower" },
-	11: { world: "LW", xPos: 50.0, yPos: 51.0, chests0: 0, chests1: 2, chests2: 2, openChests: 0, completed: false, status: null, prize: "AGA", name: "Agahnim's Tower" },
+	0: { world: "LW", xPos: 92.9, yPos: 40.0, chests0: 3, chests1: 6, chests2: 3, openChests: 0, status: null, prize: 0, name: "Eastern Palace" },
+	1: { world: "LW", xPos: 7.00, yPos: 78.5, chests0: 2, chests1: 6, chests2: 3, openChests: 0, status: null, prize: 0, name: "Desert Palace" },
+	2: { world: "LW", xPos: 56.0, yPos: 4.00, chests0: 2, chests1: 6, chests2: 3, openChests: 0, status: null, prize: 0, name: "Tower of Hera" },
+	3: { world: "DW", xPos: 92.9, yPos: 40.0, chests0: 5, chests1: 14, chests2: 11, openChests: 0, status: null, prize: 0, name: "Palace of Darkness" },
+	4: { world: "DW", xPos: 45.5, yPos: 91.5, chests0: 6, chests1: 10, chests2: 7, openChests: 0, status: null, prize: 0, name: "Swamp Palace" },
+	5: { world: "DW", xPos: 5.00, yPos: 5.00, chests0: 2, chests1: 8, chests2: 5, openChests: 0, status: null, prize: 0, name: "Skull Woods" },
+	6: { world: "DW", xPos: 12.0, yPos: 48.0, chests0: 4, chests1: 8, chests2: 5, openChests: 0, status: null, prize: 0, name: "Thieves Town" },
+	7: { world: "DW", xPos: 79.0, yPos: 85.0, chests0: 3, chests1: 8, chests2: 5, openChests: 0, status: null, prize: 0, name: "Ice Palace" },
+	8: { world: "DW", xPos: 9.00, yPos: 83.2, chests0: 2, chests1: 8, chests2: 5, openChests: 0, status: null, prize: 0, name: "Misery Mire" },
+	9: { world: "DW", xPos: 92.9, yPos: 5.00, chests0: 5, chests1: 12, chests2: 9, openChests: 0, status: null, prize: 0, name: "Turtle Rock" },
+	10: { world: "DW", xPos: 56.0, yPos: 4.00, chests0: 20, chests1: 27, chests2: 24, openChests: 0, status: null, prize: 0, name: "Ganon's Tower" },
+	11: { world: "LW", xPos: 50.0, yPos: 51.0, chests0: 0, chests1: 2, chests2: 2, openChests: 0, status: null, prize: "AGA", name: "Agahnim's Tower" },
 };
 
 keyShops = {
@@ -312,6 +312,8 @@ toggle = {
 		logic.apply();
 	},
 	boss: function (id) {							//toggles a dungeon's completion and marks its boss icon appropriately
+		
+		//last thing to consolidate
 		dungeons[id].completed = !dungeons[id].completed;
 		items["boss" + id].val = items["boss" + id].val ? 0 : 1;
 		$('#boss' + id)
@@ -353,7 +355,7 @@ toggle = {
 
 		if (icon.id.indexOf("boss") >= 0) {								//if it's a boss, do the boss toggle stuff
 			num = icon.id.replace(/\D/g, '');
-			dungeons[num].completed = !dungeons[num].completed;
+			//dungeons[num].completed = !dungeons[num].completed;
 			$("#bigPrize" + num).toggleClass("complete", dungeons[num].completed);
 		}
 
