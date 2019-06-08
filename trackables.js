@@ -1,4 +1,4 @@
-
+idParser=/(\D+)(\d*)/;
 items = {				//a list of everything we're tracking-- includes all inventory items and also some other variables
 	bow: { val: 0, max: 3 },
 	boomerang: { val: 0, max: 3 },
@@ -195,6 +195,19 @@ trackables= {
 		chests=basil.get("chests")||chests;
 		dungeons=basil.get("dungeons")||dungeons;
 		keyShops=basil.get("keyShops")||keyShops;
+		$('.icon').each(function() {
+			rID=(/(\D+)(\d*)/.exec(this.id));
+			if(rID[1]!='abbr'){
+				if(rID[1]=='bigPrize'){
+					this.classList.toggle("complete",items['boss'+rID[2]].val)
+					itemId='prize' +rID[2];
+				}
+				else{
+					itemId=this.id;
+				}
+				this.className=this.className.replace(/state(\d+)/,"state"+items[itemId].val)
+			}
+		})
 	}
 }
 map = {
@@ -381,8 +394,7 @@ toggle = {
 
 		$("#" + icon.id)																	//removes the previous class from the icon and adds the proper new class
 			.attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); })
-			.addClass("state" + items[icon.id].val)
-			;
+			.addClass("state" + items[icon.id].val);
 
 		logic.apply();
 	},
