@@ -8,13 +8,13 @@
 	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="eruda.min.js"></script>
+	<script>eruda.init();</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/utils/Draggable.min.js"></script>
 	<script src="https://code.createjs.com/soundjs-0.6.1.min.js"></script>
 	<script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
 	<script src="basil.min.js"></script>
-	<script src="eruda.min.js"></script>
-	<script>eruda.init();</script>
 			
 
 	<script src="logic.js"></script>
@@ -415,9 +415,9 @@
 
 		$(window).load(function () {
 			basil=new window.Basil({namespace: 'queler/z3r_tracker'});
-			trackables.load();
 			layout.sizeMap($("input[name='mapAlign']:checked").val()); //arranges the maps to best fit on screen
 			map.populate();											//adds dungeons and chest icons to the maps
+			trackables.load();
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
 			stats.fetch();
 		});

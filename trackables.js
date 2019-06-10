@@ -84,7 +84,7 @@ items = {				//a list of everything we're tracking-- includes all inventory item
 	pendant: { val: 0, max: 3 },
 	greenPendant: { val: 0, max: 1 },
 	crystal: { val: 0, max: 7 },
-	redCrystal: { val: 0, max: 2 },
+	redCrystal: { val: 0, max: 2 }
 }
 
 chests = {
@@ -195,17 +195,28 @@ trackables= {
 		chests=basil.get("chests")||chests;
 		dungeons=basil.get("dungeons")||dungeons;
 		keyShops=basil.get("keyShops")||keyShops;
-		$('.icon').each(function() {
+		$('.icon,.dungeon').each(function() {
 			rID=(/(\D+)(\d*)/.exec(this.id));
-			if(rID[1]!='abbr'){
-				if(rID[1]=='bigPrize'){
-					this.classList.toggle("complete",items['boss'+rID[2]].val)
+			if(rID[1]!=='abbr'){
+				switch (rID[1]){
+					case 'bigPrize':
+						this.classList.toggle("complete",items['boss'+rID[2]].val);
+					case "dungeon":
 					itemId='prize' +rID[2];
+					break;
+					default:
+						itemId=this.id;
+					break;
 				}
-				else{
-					itemId=this.id;
+				if (items[itemId]) {
+					newCN=this.className.replace(/state(\d*)/,"state"+items[itemId].val);
+					if (newCN===this.className){
+						this.classList.add("state"+items[itemId].val)
+					}
+					else{
+						this.className=newCN
+					}
 				}
-				this.className=this.className.replace(/state(\d+)/,"state"+items[itemId].val)
 			}
 		})
 	}
