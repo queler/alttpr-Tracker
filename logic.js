@@ -981,14 +981,14 @@ logic = {
                         medallion :
                     0;
 
-                max = entry ?
+                max = entry && medallion == 1 ?
                     4 +			                    //Bridge Chest, Spike Chest, Map Chest, Main Room
                     (fire ? 2 : 0) +               //Compass Chest, Big Key Chest
                     (bigKey ? 1 : 0) +	            //Big Chest
                     (fightVit && bigKey ? 1 : 0) :     //Boss
                     0;
 
-                min = entry ?
+                min = entry && medallion !== 0 ?
                     3 +			                            //Bridge Chest, Map Chest, Main Room
                     (spikeWalk ? 1 : 0) +                   //Spike Chest
                     (fire ? 2 : 0) +                        //Compass Chest, Big Key Chest
