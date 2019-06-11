@@ -1431,7 +1431,7 @@ logic = {
             dStatus.boss = dungeons[id].completed ? null : dStatus.boss;
             dungeons[id].status = dStatus.boss;              //applies the test result to the dungeons object
             logic.colour("#dungeon" + id, dStatus.boss);    //colours the boss by its status
-
+            setState($("#dungeon"+id)[0],dungeons[id].prize);
             total = dungeons[id]["chests" + settings.keyMode];
             opened = dungeons[id].openChests;
 

@@ -266,6 +266,7 @@
 	<div id="settingsTab">
 		<div id="tabIcon" onclick="settings.toggle()">&#9776;</div>
 		<div id="tabIcon" style="left:40px" onclick="popout()"> &#8663;</div>
+		<div id="tabIcon" style="left:80px" onclick="trackables.reset()">&#8635;</div>
 		<div id="caption"></div>
 
 		<div class="selection" style="top: 40px;left:50px;">
@@ -414,10 +415,11 @@
 	<script>
 
 		$(window).load(function () {
+			//$('#caption').on("click",trackables.reset)
 			basil=new window.Basil({namespace: 'queler/z3r_tracker'});
 			layout.sizeMap($("input[name='mapAlign']:checked").val()); //arranges the maps to best fit on screen
-			map.populate();											//adds dungeons and chest icons to the maps
 			trackables.load();
+			map.populate();											//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
 			stats.fetch();
 		});
