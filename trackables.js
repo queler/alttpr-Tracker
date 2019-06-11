@@ -85,7 +85,7 @@ items = {				//a list of everything we're tracking-- includes all inventory item
 	greenPendant: { val: 0, max: 1 },
 	crystal: { val: 0, max: 7 },
 	redCrystal: { val: 0, max: 2 }
-}
+};
 
 chests = {
 	0: { world: "LW", amount: 3, xPos: 82.5, yPos: 42.5, opened: false, status: null, name: "Sahasrahla's Hut" },
@@ -180,10 +180,10 @@ keyShops = {
 	6: { world: "DW", xPos: 31.7, yPos: 43.4, active: false, name: "Dark World Forest Shop" },
 	7: { world: "DW", xPos: 32.1, yPos: 3.40, active: false, name: "Dark World Lumberjack Shop" },
 	8: { world: "DW", xPos: 78.9, yPos: 31.3, active: false, name: "Dark World Potion Shop" },
-}
+};
 
 trackables= {
-	objs:{items, chests, dungeons,keyShops},
+//	objs:{items, chests, dungeons,keyShops},
 	save: function(){
 		basil.set("items", items);
 		basil.set("chests", chests);
@@ -201,6 +201,7 @@ trackables= {
 				switch (rID[1]){
 					case 'bigPrize':
 						this.classList.toggle("complete",items['boss'+rID[2]].val);
+						/* falls through */
 					case "dungeon":
 					itemId='prize' +rID[2];
 					break;
@@ -211,16 +212,16 @@ trackables= {
 				if (items[itemId]) {
 					newCN=this.className.replace(/state(\d*)/,"state"+items[itemId].val);
 					if (newCN===this.className){
-						this.classList.add("state"+items[itemId].val)
+						this.classList.add("state"+items[itemId].val);
 					}
 					else{
-						this.className=newCN
+						this.className=newCN;
 					}
 				}
 			}
-		})
+		});
 	}
-}
+};
 map = {
 	populate: function () {
 		$.each(chests, function (id, chest) {	//places all the chest icons onto the map
@@ -235,7 +236,7 @@ map = {
 		$('.dungeonChest').mousedown(function (event) {	//adds right-click functionality to dungeon chest counters
 			if (event.which == 3) {
 				toggle.dungeonChest((this.id.replace(/\D/g, '')), true);
-			};
+			}
 		});
 
 		$("#dungeon10").css({ 'background-image': 'none' }).html("GT");	//replaces prize icons with text for these dungeons
@@ -256,16 +257,16 @@ map = {
 
 
 		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering
-
+			var state ;
 			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
 			id = (this.id.replace(/\D/g, ''));
 			if (this.id.indexOf("dungeonChest") >= 0) {
 				$("#caption").html(dungeons[id].name + " Chests");
 			} else if (this.id.indexOf("keyShop") >= 0) {
-				var state = logic.keyShops[id]();
+				state = logic.keyShops[id]();
 				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			} else {
-				var state = logic.chests[id]();
+				state = logic.chests[id]();
 				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			}
 
@@ -339,7 +340,8 @@ toggle = {
 		$("#bigPrize" + id).toggleClass("complete", dungeons[id].completed);
 		logic.apply();
 	},
-	dungeonChest: function (id, reverse = false) {			//increments or decrements a dungeon's open chest count
+	dungeonChest: function (id, reverse ) {			//increments or decrements a dungeon's open chest count
+		reverse=(typeof reverse !== 'undefined') ?  reverse : false;
 		dungeons[id].openChests += reverse ? -1 : 1;
 		if (dungeons[id].openChests > dungeons[id]["chests" + settings.keyMode]) { dungeons[id].openChests = 0; }
 		if (dungeons[id].openChests < 0) { dungeons[id].openChests = dungeons[id]["chests" + settings.keyMode]; }
@@ -350,8 +352,8 @@ toggle = {
 		$("#keyShop" + id).toggleClass("active", keyShops[id].active);
 		logic.apply();
 	},
-	icon: function (icon, reverse = false) {			//toggles icons on the tracker
-
+	icon: function (icon, reverse ) {			//toggles icons on the tracker
+		reverse=(typeof reverse !== 'undefined') ?  reverse : false;
 		if (icon.id.indexOf("bigPrize") >= 0) {			//if icon is a Bigprize, changes the target
 			num = icon.id.replace(/\D/g, '');
 			icon = $("#prize" + num)[0];
@@ -364,10 +366,10 @@ toggle = {
 
 		//increments or decrements the icon state
 		curVal = items[icon.id].val;
-		if (reverse == false) {
+		if (reverse === false) {
 			items[icon.id].val = (curVal == items[icon.id].max) ? 0 : (curVal + 1);
 		} else {
-			items[icon.id].val = (curVal == 0) ? items[icon.id].max : (curVal - 1);
+			items[icon.id].val = (curVal === 0) ? items[icon.id].max : (curVal - 1);
 		}
 
 		if (icon.id.indexOf("boss") >= 0) {								//if it's a boss, do the boss toggle stuff
@@ -382,7 +384,6 @@ toggle = {
 			$("#dungeon" + num + ",#bigPrize" + num)
 				.attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); })
 				.addClass("state" + dungeons[num].prize);
-			;
 		}
 
 		if (icon.id == "mushroompowder" || icon.id == "shovelflute") {		//this ensures that the separated mushroom/powder and shovel/flute icons always match the combined versions of those icons
