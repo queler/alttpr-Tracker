@@ -1,19 +1,38 @@
-
+function inverted() {
+    return settings.openMode==2;
+}
 logic = {
     //these functions return true or false
-    darkWorldNW: function () { //check for access to this whole region
+
+    darkWorldNWReg: function (){
         return items.pearl.val && //need this of course
             (items.glove.val >= 2 || //kakariko portal
                 (items.glove.val >= 1 && items.hammer.val) || //kakariko portal
                 (items.boss11.val && items.hookshot.val && (items.hammer.val || items.glove.val || items.flippers.val)) //agahnim then river crossing
             );
     },
-    darkWorldEast: function () { //check for access to this whole region
+    darkWorldNW: function () { //check for access to this whole region
+        return inverted()?true: this.darkWorldNWReg();
+    },
+
+    darkWorldEastInv: function(){
+    //emu: [ "hammer", "flippers", "lift2,pearl,mirror", "aga1,mirror" ], => pyr, catfish, pod
+    //hyph: DW*N*E flippers || hammer || (canEnterLightWorld && trackerData.items.mirror) => [yr catfish pod,
+            //LW=aga1(boss11) || ((canLiftDarkRocks() || (trackerData.items.hammer && canLiftRocks())) && trackerData.items.moonpearl)
+        return items.hammer.val || items.flippers.val ||
+            (items.mirror.val &&
+                (items.boss11.val || (items.glove.val>=2 && items.pearl.val)) );
+    },
+
+    darkWorldEastReg: function () {
         return items.pearl.val && //need this of course
             (items.boss11.val || //agahnim gives direct access
                 items.hammer.val && items.glove.val || //portal at flute 5
                 items.glove.val >= 2 && items.flippers.val //kakariko portal then river crossing
             ); //
+    },
+    darkWorldEast: function (){ //check for access to this whole region
+        return inverted()?this.darkWorldEastInv():this.darkWorldEastReg();
     },
     darkWorldSouth: function () { //check for access to this whole region
         return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
