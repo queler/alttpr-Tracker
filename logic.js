@@ -34,7 +34,10 @@ logic = {
     darkWorldEast: function (){ //check for access to this whole region
         return inverted()?this.darkWorldEastInv():this.darkWorldEastReg();
     },
-    darkWorldSouth: function () { //check for access to this whole region
+    darkWorldSouth: function () {
+        return inverted()? true:darkWorldSouthReg();
+    },
+    darkWorldSouthReg: function () { //check for access to this whole region
         return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
             (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
     },

@@ -109,6 +109,7 @@ function chestsDef(){return {
 	18: { world: "LW", amount: 1, xPos: 56.5, yPos: 27.0, opened: false, status: null, name: "Graveyard Ledge" },
 	19: { world: "LW", amount: 1, xPos: 12.3, yPos: 8.60, opened: false, status: null, name: "Mushroom" },
 	20: { world: "LW", amount: 2, xPos: 46.9, yPos: 93.5, opened: false, status: null, name: "Dam" },
+       //TODO: FLIP WORLDS
 	21: { world: "LW", amount: 1, xPos: 54.6, yPos: 68.0, opened: false, status: null, name: "Link's House" },
 	22: { world: "LW", amount: 1, xPos: 20.0, yPos: 82.5, opened: false, status: null, name: "Aginah's Cave" },
 	23: { world: "LW", amount: 5, xPos: 65.3, yPos: 93.8, opened: false, status: null, name: "Mini Moldorm Cave" },
@@ -127,6 +128,7 @@ function chestsDef(){return {
 	36: { world: "LW", amount: 1, xPos: 51.0, yPos: 36.5, opened: false, status: null, name: "Sewers - Dark Cross" },
 	37: { world: "LW", amount: 3, xPos: 50.0, yPos: 43.6, opened: false, status: null, name: "Hyrule Castle" },
 	38: { world: "LW", amount: 2, xPos: 57.3, yPos: 42.3, opened: false, status: null, name: "Link's Uncle" },
+        //TODO:maybe switch
 	39: { world: "LW", amount: 1, xPos: 40.7, yPos: 18.6, opened: false, status: null, name: "Old Man" },
 	40: { world: "LW", amount: 1, xPos: 48.9, yPos: 14.5, opened: false, status: null, name: "Spectacle Rock Cave" },
 	41: { world: "LW", amount: 1, xPos: 42.1, yPos: 2.60, opened: false, status: null, name: "Ether Tablet" },
