@@ -35,7 +35,7 @@ logic = {
         return inverted()?this.darkWorldEastInv():this.darkWorldEastReg();
     },
     darkWorldSouth: function () {
-        return inverted()? true:darkWorldSouthReg();
+        return inverted()? true:logic.darkWorldSouthReg();
     },
     darkWorldSouthReg: function () { //check for access to this whole region
         return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
