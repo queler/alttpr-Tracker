@@ -1,6 +1,14 @@
 function inverted() {
     return settings.openMode==2;
 }
+STATE={
+      unavail:0,
+      avail:1,
+      dark:2,
+      maybe:3,
+      visible:4
+};
+
 logic = {
     //these functions return true or false
 
@@ -135,7 +143,7 @@ logic = {
         6: function () {                            // Master Sword Pedestal
             return (items.pendant.val == 3) ?
                 1 :
-                items.book.val ? 4 : 0;
+                items.book.val ? STATE.visible : 0;
         },
         7: function () {                                                // King's Tomb
             return items.boots.val &&
@@ -156,7 +164,7 @@ logic = {
         },
         15: function () { return items.bottle.val >= 1 ? 1 : 0; }, // Sick Kid
         16: function () { return 1; }, // Lost Woods Hideout
-        17: function () { return items.boss11.val && items.boots.val ? 1 : 4; }, // Lumberjack Tree
+        17: function () { return items.boss11.val && items.boots.val ? 1 : STATE.visible; }, // Lumberjack Tree
         18: function () { return logic.darkWorldNW() && items.mirror.val ? 1 : 0; }, // Graveyard Ledge
         19: function () { return 1; }, // Mushroom
         20: function () { return 1; }, // Dam
@@ -167,7 +175,7 @@ logic = {
         25: function () { return items.flippers.val; }, // Hobo
         26: function () { // Bombos Tablet
             return items.book.val && items.mirror.val && logic.darkWorldSouth() ?
-                items.sword.val >= 2 ? 1 : 4 :
+                items.sword.val >= 2 ? 1 : STATE.visible :
                 0;
         },
         27: function () { // Cave 45
@@ -177,16 +185,16 @@ logic = {
         28: function () { // Checkerboard Cave
             return items.flute.val && items.glove.val >= 2 && items.mirror.val ? 1 : 0;
         },
-        29: function () { return items.boots.val ? 1 : 4; }, // Library
+        29: function () { return items.boots.val ? 1 : STATE.visible; }, // Library
         30: function () { return 1; }, // Maze Race
         31: function () { // Desert Ledge
-            return logic.entry1() ? 1 : 4;
+            return logic.entry1() ? 1 : STATE.visible;
         },
         32: function () { // Lake Hylia Island
             return items.flippers.val ?
                 items.pearl.val && items.mirror.val && (items.boss11.val || items.glove.val >= 2 || items.glove.val && items.hammer.val) ?
-                    1 : 4 :
-                4;
+                    1 : STATE.visible :
+                STATE.visible;
         },
         33: function () { return items.shovel.val; }, // Flute Spot
         34: function () { return 1; }, // Sanctuary
@@ -212,7 +220,7 @@ logic = {
                     items.key12.val ? lampTest : 0 :
                     settings.keyMode == 2 && items.keyShopFound.val == 0 ?
                         maxKey >= 1 ?
-                            minKey >= 1 ? lampTest : 3 :
+                            minKey >= 1 ? lampTest : STATE.maybe :
                             0 :
                         lampTest
                 ;
@@ -238,14 +246,14 @@ logic = {
             return items.book.val && logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) ?
                 items.sword.val >= 2 ?
                     logic.DMlight() ? 1 : 2 :
-                    4 :
+                    STATE.visible :
                 0;
         },
         42: function () { // Spectacle Rock
             return logic.climbDM() ?
                 items.mirror.val ?
                     logic.DMlight() ? 1 : 2 :
-                    4 :
+                    STATE.visible :
                 0;
         },
         43: function () { // Spiral Cave
@@ -265,7 +273,7 @@ logic = {
                     logic.medallion(9) :
                     items.firerod.val ?
                         logic.DMlight() ? 1 : 2 :
-                        3 :
+                        STATE.maybe :
                 0;
 
         },
@@ -278,7 +286,7 @@ logic = {
             return logic.eastDM() ?
                 items.mirror.val && items.pearl.val && items.glove.val >= 2 ?
                     logic.DMlight() ? 1 : 2 :
-                    4 :
+                    STATE.visible :
                 0;
         },
         47: function () { // Superbunny Cave
@@ -330,7 +338,7 @@ logic = {
         },
         58: function () { // Bumper Cave
             return logic.darkWorldNW() ?
-                items.glove.val && items.cape.val ? 1 : 4 :
+                items.glove.val && items.cape.val ? 1 : STATE.visible :
                 0;
         },
         59: function () { // BlackSmith
@@ -372,8 +380,8 @@ logic = {
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
                 boss = bow && bigKey ?          // need these to reach
-                    lamp ? 1 : 2 :              // boss accessible; light determines status
-                    0;
+                    lamp ? STATE.avail : STATE.dark :              // boss accessible; light determines status
+                    STATE.unavil;
 
                 min = 3 +                             // base access
                     (lamp ? 1 : 0) +                  // BK chest
@@ -389,7 +397,7 @@ logic = {
             } else {             // REGULAR AND RETRO LOGIC
 
                 boss = bow ?             // need this to reach
-                    lamp ? 1 : 2 :       // boss accessible; light determines status
+                    lamp ? STATE.avail : STATE.dark :       // boss accessible; light determines status
                     0;
 
                 min = lamp ?
@@ -416,7 +424,7 @@ logic = {
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
                 boss = fightLanmo && bigKey ?
-                    key ? 1 : 3 :   // if no key, player might steal pot key for chests and lock themselves out of boss
+                    key ? STATE.avail : STATE.maybe :   // if no key, player might steal pot key for chests and lock themselves out of boss
                     0;
 
                 min = entry ?
@@ -440,8 +448,8 @@ logic = {
                 if (items.keyShopFound.val) {     // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightLanmo ?     // have inventory to fight the boss
-                        boots ? 1 : 3 :     // big key might be on torch, so if missing boots, boss access unknown
-                        0;
+                        boots ? STATE.avail : STATE.maybe :     // big key might be on torch, so if missing boots, boss access unknown
+                        STATE.unavail;
 
                     min = entry ?
                         boots ?
@@ -465,8 +473,8 @@ logic = {
                     );
 
                     boss = fightLanmo ?
-                        minKey >= 1 && boots ? 1 : 3 : // if missing boots or if key uncertain, boss state unknown
-                        0;
+                        minKey >= 1 && boots ? STATE.avail : STATE.maybe : // if missing boots or if key uncertain, boss state unknown
+                        STATE.unavail;
 
                     min = entry && minKey >= 1 ?
                         boots ?
@@ -486,7 +494,7 @@ logic = {
             } else {     // REGULAR LOGIC
 
                 boss = fightLanmo ?
-                    boots ? 1 : 3 : // if no boots, boss state unknown
+                    boots ? STATE.avail : STATE.maybe : // if no boots, boss state unknown
                     0;
 
                 min = entry ?
@@ -512,8 +520,8 @@ logic = {
 
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
                 boss = fightMold && bigKey ?    // requirements for boss
-                    light ? 1 : 2 :             // checks if player had to use dark room to climb Death Mountain
-                    0;
+                    light ? STATE.avail: STATE.dark:             // checks if player had to use dark room to climb Death Mountain
+                    STATE.unavail;
 
                 max = entry ?
                     2 +                                    //base access
@@ -529,9 +537,9 @@ logic = {
 
                     boss = fightMold ?
                         fire ?
-                            light ? 1 : 2 :     // checks if player had to use dark room to climb Death Mountain
-                            3 :                 // big key might be in basement, locking out boss
-                        0;
+                            light ? STATE.avail: STATE.dark:     // checks if player had to use dark room to climb Death Mountain
+                            STATE.maybe :                 // big key might be in basement, locking out boss
+                        STATE.unavail;
 
                     min = entry && light && fire ?
                         2 +                     // can open every chest and get at least 2 items
@@ -554,9 +562,9 @@ logic = {
 
                     boss = fightMold && maxKey >= 1 ?
                         fire && minKey >= 1 ?
-                            light ? 1 : 2 :     // checks if player had to use dark room to climb Death Mountain
-                            3 :                 // big key might be in basement, locking out boss
-                        0;
+                            light ? STATE.avail: STATE.dark:     // checks if player had to use dark room to climb Death Mountain
+                            STATE.maybe :                 // big key might be in basement, locking out boss
+                        STATE.unavail;
 
                     min = entry && light && fire && minKey >= 1 ?
                         2 +                    // can open every chest and get at least 2 items
@@ -570,9 +578,9 @@ logic = {
 
                 boss = fightMold ?
                     fire ?
-                        light ? 1 : 2 :     // checks if player had to use dark room to climb Death Mountain
-                        3 :                 // big key might be in basement, locking out boss
-                    0;
+                        light ? STATE.avail: STATE.dark:     // checks if player had to use dark room to climb Death Mountain
+                        STATE.maybe :                 // big key might be in basement, locking out boss
+                    STATE.unavail;
 
                 min = entry && light && fire ?
                     1 +                    // can open every chest and get at least 1 item
@@ -601,9 +609,9 @@ logic = {
 
                 boss = entry && hamBow && bigKey && key >= 1 ? // need all this for boss
                     key == 6 ?
-                        lamp ? 1 : 2 :   // checks if player has to go through dark
-                        3 :              // if less than 6 keys, might spend them all elsewhere
-                    0;
+                        lamp ? STATE.avail : STATE.dark :   // checks if player has to go through dark
+                        STATE.maybe :              // if less than 6 keys, might spend them all elsewhere
+                    STATE.unavail;
 
                 min = entry ?
                     1 +                                                                       // first chest
@@ -637,8 +645,8 @@ logic = {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightHelm ?  // need for boss
-                        lamp ? 1 : 2 : // checks if player has to go through dark
-                        0;
+                        lamp ? STATE.avail : STATE.dark : // checks if player has to go through dark
+                        STATE.unavail;
 
                     min = entry ?
                         3 +                         // first 3 chests
@@ -669,9 +677,9 @@ logic = {
 
                     boss = entry && hamBow && maxKey >= 1 ? // need to have at least 1 key
                         minKey >= 6 ?
-                            lamp ? 1 : 2 : // checks if player has to go through dark
-                            3 :            // if less than 6 guaranteed keys, boss status unknown
-                        0;
+                            lamp ? STATE.avail : STATE.dark : // checks if player has to go through dark
+                            STATE.maybe :            // if less than 6 guaranteed keys, boss status unknown
+                        STATE.unavail;
 
                     min = entry ?
                         (minKey >= 2 ? 1 : 0) +
@@ -708,8 +716,8 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightHelm ?  // need for boss
-                    lamp ? 1 : 2 : // checks if player has to go through dark
-                    0;
+                    lamp ? STATE.avail : STATE.dark : // checks if player has to go through dark
+                    STATE.unavail;
 
                 min = entry && bow && lamp ?   // if fully equipped, can do whole dungeon except boss
                     hammer ? 5 : 4 :           // if hammer, can do boss too
@@ -733,7 +741,7 @@ logic = {
 
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
-                boss = fightArrg && key ? 1 : 0;              // all you need
+                boss = fightArrg && key ? STATE.avail: STATE.unavail;              // all you need
 
                 min = entry ?
                     1 +                                       // entrance
@@ -748,7 +756,7 @@ logic = {
             } else if (settings.keyMode == 2) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
-                    boss = fightArrg ? 1 : 0;
+                    boss = fightArrg ? STATE.avail: STATE.unavail;
 
                     min = entry && hammer ?
                         3 +                     // main dungeon access guarantees 3
@@ -776,9 +784,9 @@ logic = {
                         - 2                         // Agahnim
                     );
 
-                    boss = fightArrg && maxKey >= 1 ?
-                        minKey >= 1 ? 1 : 3 :     // if 1 key not guaranteed, boss state unknown
-                        0;
+                    boss = fightArrg && maxKey >= STATE.avail?
+                        minKey >= 1 ? STATE.avail: STATE.maybe :     // if 1 key not guaranteed, boss state unknown
+                        STATE.unavail;
 
                     min = entry && minKey >= 1 ?
                         (hammer ? 3 : 0) +               // main dungeon access guarantees 3
@@ -795,7 +803,7 @@ logic = {
                 }
             } else {    // REGULAR LOGIC
 
-                boss = fightArrg ? 1 : 0;
+                boss = fightArrg ? STATE.avail: STATE.unavail;
 
                 min = entry ?
                     (hammer ? 2 : 0) +              // main dungeon access guarantees 2
@@ -824,7 +832,7 @@ logic = {
 
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
-                boss = fightMoth ? 1 : 0;      //boss reqs
+                boss = fightMoth ? STATE.avail: STATE.unavail;      //boss reqs
 
                 min = entry ?
                     5 +                         // base access
@@ -837,7 +845,7 @@ logic = {
 
             } else if (settings.keyMode == 2) {    // RETRO LOGIC
 
-                boss = fightMoth ? 1 : 0;      //boss reqs
+                boss = fightMoth ? STATE.avail: STATE.unavail;      //boss reqs
 
                 min = entry ?
                     3 +                             // guaranteed 3 in 1st/2nd phase
@@ -852,7 +860,7 @@ logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = fightMoth ? 1 : 0;       //boss reqs
+                boss = fightMoth ? STATE.avail: STATE.unavail;       //boss reqs
 
                 min = entry && firerod ?
                     1 +                         // both might be in phase 3
@@ -876,7 +884,7 @@ logic = {
 
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
-                boss = fightBlind && bigKey ? 1 : 0;
+                boss = fightBlind && bigKey ? STATE.avail: STATE.unavail;
 
                 min = entry ?
                     4 +                                     // base access
@@ -901,7 +909,7 @@ logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = fightBlind ? 1 : 0;      //boss reqs
+                boss = fightBlind ? STATE.avail: STATE.unavail;      //boss reqs
 
                 min = entry ?
                     2 +                         // guaranteed 2 from access
@@ -930,7 +938,7 @@ logic = {
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
                 boss = fightKhold ?
-                    bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? 1 : 3 : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
+                    bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? STATE.avail: STATE.possbile : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
                     0;
 
                 min = entry ?
@@ -950,7 +958,7 @@ logic = {
             } else if (settings.keyMode == 2) {    // RETRO LOGIC
 
                 boss = fightKhold ?                   //boss reqs
-                    spikeWalk ? 1 : 3 :             //big key might be past spikes
+                    spikeWalk ? STATE.avail: STATE.possbile:             //big key might be past spikes
                     0;
 
                 min = entry ?
@@ -967,7 +975,7 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightKhold ?
-                    hookshot ? 1 : 3 :            // big key might be past spikes
+                    hookshot ? STATE.avail: STATE.possbile :            // big key might be past spikes
                     0;
 
                 min = entry ?
@@ -999,9 +1007,9 @@ logic = {
 
                 boss = fightVit && bigKey ?
                     medallion == 1 ?
-                        lamp ? 1 : 2 :
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 max = entry && medallion !== 0 ?
                     4 +			                    //Bridge Chest, Spike Chest, Map Chest, Main Room
@@ -1021,10 +1029,10 @@ logic = {
             } else if (settings.keyMode == 2) {    // RETRO LOGIC
 
                 boss = fightVit ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && medallion == 1 ?
                     1 +
@@ -1040,10 +1048,10 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightVit ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && medallion == 1 ?
                     fightVit && lamp ?
@@ -1073,12 +1081,12 @@ logic = {
             if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
 
                 boss = fightTri && bigKey && key >= 3 ?
-                    medallion == 1 ?
+                    medallion == STATE.avail ?
                         key == 4 ?
-                            light ? 1 : 2 :
-                            3 :
+                            light ? STATE.avail : STATE.dark:
+                            STATE.possbile:
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && light && 1 == medallion ?
                     1 +                             // compass Chest
@@ -1102,12 +1110,12 @@ logic = {
                     0;
 
             } else if (settings.keyMode == 2) {    // RETRO LOGIC
-
+                //must have a keyshop if accessible?
                 boss = fightTri ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && light && medallion == 1 ?
                     2 +
@@ -1124,10 +1132,10 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightTri ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail ?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 max = entry && medallion !== 0 ? 5 : 0;
 
@@ -1161,9 +1169,9 @@ logic = {
 
                 boss = entry && canClimb && hookshot && bigKey && key >= 1 ?
                     key == 4 ?
-                        logic.DMlight() ? 1 : 2 :
-                        3 :
-                    0;
+                        logic.DMlight() ? STATE.avail : STATE.dark:
+                        STATE.possbile :
+                    STATE.unavail;
 
                 max = entry ?
                     2 +                     //hope room
@@ -1225,7 +1233,7 @@ logic = {
 
                 boss = entry && canClimb && hookshot ?
                     hamHook && fireCane && boots ?
-                        logic.DMlight() ? 1 : 2 :
+                        logic.DMlight() ? STATE.avail : STATE.dark :
                         3 :
                     0;
 
@@ -1268,9 +1276,9 @@ logic = {
 
                 boss = entry && canClimb && hookshot ?
                     hamHook && fireCane && boots ?
-                        logic.DMlight() ? 1 : 2 :
-                        3 :
-                    0;
+                        logic.DMlight() ? STATE.avail : STATE.dark:
+                        STATE.possbile :
+                    STATE.unavail;
 
                 min = entry ?
                     (somaria && firerod && hammer && hookshot ? 3 : 0) +
@@ -1314,8 +1322,8 @@ logic = {
 
 
                 boss = entry && sword && key == 2 ?
-                    light ? 1 : 2 :
-                    0;
+                    light ? STATE.avail : STATE.dark:
+                    STATE.unavail;
 
                 max = entry ?
                     1 +             //first chest
@@ -1333,8 +1341,8 @@ logic = {
                 if (items.keyShopFound.val) { //infinite key logic
 
                     boss = entry && sword ?
-                        light ? 1 : 2 :
-                        0;
+                        light ? STATE.avail : STATE.dark:
+                        STATE.unavail;
 
                     min = entry ?
                         light ? 2 : 1 :
@@ -1357,9 +1365,9 @@ logic = {
 
                     boss = entry && maxKey >= 2 && sword ?
                         minKey >= 2 ?
-                            light ? 1 : 2 :
-                            3 :
-                        0;
+                            light ? STATE.avail : STATE.dark:
+                            STATE.possbile:
+                        STATE.unavail;
 
                     max = entry ?
                         maxKey >= 1 ? 2 : 1 :
@@ -1374,8 +1382,8 @@ logic = {
 
             } else {
                 boss = entry && sword ?
-                    light ? 1 : 2 :
-                    0;
+                    light ? STATE.avail : STATE.dark:
+                    STATE.unavail;
 
                 max = 0;
                 min = 0;
@@ -1488,3 +1496,4 @@ logic = {
         trackables.save();
     },
 };
+
