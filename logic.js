@@ -282,8 +282,8 @@ logic = {
                 0;
         },
         47: function () { // Superbunny Cave
-
-            return items.pearl.val && items.glove.val >= 2 && logic.eastDM() ?
+//update for tr portal w/o pearl
+            return  items.glove.val >= 2 && logic.eastDM() ?
                 logic.DMlight() ? 1 : 2 :
                 0;
 
