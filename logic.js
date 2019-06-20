@@ -50,6 +50,7 @@ logic = {
             (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
     },
     DMlight: function () { return (items.lamp.val || items.flute.val); }, //used to determine if DM chests require dark
+DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
     climbDM: function () { return (items.glove.val || items.flute.val); }, //can get up Death Mountain
     eastDM: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
     darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
@@ -239,26 +240,26 @@ logic = {
         },
         40: function () { // Spectacle Rock Cave
             return logic.climbDM() ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         41: function () { // Ether Tablet
             return items.book.val && logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) ?
                 items.sword.val >= 2 ?
-                    logic.DMlight() ? 1 : 2 :
+                    logic.DMlightAorD() :
                     STATE.visible :
                 0;
         },
         42: function () { // Spectacle Rock
             return logic.climbDM() ?
                 items.mirror.val ?
-                    logic.DMlight() ? 1 : 2 :
+                    logic.DMlightAorD() :
                     STATE.visible :
                 0;
         },
         43: function () { // Spiral Cave
             return logic.eastDM() ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         44: function () { // Mimic Cave
@@ -272,43 +273,43 @@ logic = {
                 logic.medallion(9) !== 1 ?
                     logic.medallion(9) :
                     items.firerod.val ?
-                        logic.DMlight() ? 1 : 2 :
+                        logic.DMlightAorD() :
                         STATE.maybe :
                 0;
 
         },
         45: function () { // Paradox Cave
             return logic.eastDM() ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         46: function () { // Floating Island
             return logic.eastDM() ?
                 items.mirror.val && items.pearl.val && items.glove.val >= 2 ?
-                    logic.DMlight() ? 1 : 2 :
+                    logic.DMlightAorD() :
                     STATE.visible :
                 0;
         },
         47: function () { // Superbunny Cave
 //update for tr portal w/o pearl
             return  items.glove.val >= 2 && logic.eastDM() ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
 
         },
         48: function () { // Hookshot Cave
             return items.pearl.val && items.glove.val >= 2 && items.hookshot.val ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         49: function () { // Hookshot Cave - Bottom Chest
             return items.pearl.val && items.glove.val >= 2 && (items.hookshot.val || (items.mirror.val && items.hammer.val && items.boots.val)) ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         50: function () { // Spike Cave
             return items.pearl.val && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val) ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         51: function () { // Catfish"
@@ -1395,9 +1396,9 @@ logic = {
     keyShops: {
         0: function () { return 1 },  //LW Lake Hylia
         1: function () { return 1 },  //Kakariko
-        2: function () { return logic.eastDM() ? logic.DMlight() ? 1 : 2 : 0; },  //Death Mountain
+        2: function () { return logic.eastDM() ? logic.DMlightAorD() : 0; },  //Death Mountain
         3: function () { return logic.darkWorldSouth() ? 1 : 0; },  //DW Lake Hylia
-        4: function () { return logic.darkEastDM() ? logic.DMlight() ? 1 : 2 : 0; },  //Dark EDM
+        4: function () { return logic.darkEastDM() ? logic.DMlightAorD() : 0; },  //Dark EDM
         5: function () { return logic.darkWorldNW() && items.hammer.val ? 1 : 0; },  //Outcasts
         6: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Forest
         7: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Lumberjack
