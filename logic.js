@@ -49,8 +49,26 @@ logic = {
         return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
             (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
     },
+	lightWorld: function (){
+		return !inverted() || (
+		   items.boss11.val ||//aga1
+           (
+              (
+                 items.glove.val >=2 ||
+                 (items.hammer.val && items.glove.val)
+              ) && items.pearl.val
+           )
+        );
+	},
+	canFly: function () {
+        return items.flute.val &&
+        (
+            !inverted() ||
+            (this.lightWorld() && items.pearl.val)
+        );
+    },
     DMlight: function () { return (items.lamp.val || items.flute.val); }, //used to determine if DM chests require dark
-DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
+    DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
     climbDM: function () { return (items.glove.val || items.flute.val); }, //can get up Death Mountain
     eastDM: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
     darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
@@ -59,17 +77,17 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
     fire: function () { return items.lamp.val || items.firerod.val; }, //can light torches
     //Dungeon entry
     entry0: function () { return true; },
-    entry1: function () { return items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val },
-    entry2: function () { return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) },
-    entry3: function () { return logic.darkWorldEast() },
-    entry4: function () { return logic.darkWorldSouth() && items.mirror.val && items.flippers.val },
-    entry5: function () { return logic.darkWorldNW() },
-    entry6: function () { return logic.darkWorldNW() },
-    entry7: function () { return items.pearl.val && items.glove.val >= 2 && items.flippers.val && (items.firerod.val || (items.bombos.val && items.sword.val >= 1)) },
-    entry8: function () { return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val) },
-    entry9: function () { return logic.darkEastDM() && items.hammer.val && items.somaria.val },
-    entry10: function () { return items.crystal.val >= 7 && logic.darkEastDM() },
-    entry11: function () { return items.sword.val >= 2 || items.cape.val },
+    entry1: function () { return items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
+    entry2: function () { return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val); },
+    entry3: function () { return logic.darkWorldEast(); },
+    entry4: function () { return logic.darkWorldSouth() && items.mirror.val && items.flippers.val; },
+    entry5: function () { return logic.darkWorldNW(); },
+    entry6: function () { return logic.darkWorldNW(); },
+    entry7: function () { return items.pearl.val && items.glove.val >= 2 && items.flippers.val && (items.firerod.val || (items.bombos.val && items.sword.val >= 1)); },
+    entry8: function () { return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val); },
+    entry9: function () { return logic.darkEastDM() && items.hammer.val && items.somaria.val; },
+    entry10: function () { return items.crystal.val >= 7 && logic.darkEastDM(); },
+    entry11: function () { return items.sword.val >= 2 || items.cape.val; },
     //this function returns 0, 1, or 3
     // 0 = unavailable
     // 1 = available
@@ -92,7 +110,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
     //this sets the prizes in the item tracker based on completed dungeons
     setPrizes: function () {
 
-        counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }; //tally of each type of prize; 
+        counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }; //tally of each type of prize;
         // 0 = unknown, 1 = red/blue pend, 2 = green pend, 3 = blue crystal, 4 = red crystal
 
         for (i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
@@ -149,8 +167,8 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
         7: function () {                                                // King's Tomb
             return items.boots.val &&
                 (items.glove.val >= 2 ||
-                    (logic.darkWorldNW() && items.mirror.val))
-                ? 1 : 0;
+                    (logic.darkWorldNW() && items.mirror.val))?
+						1 : 0;
         },
         8: function () { return 1; }, // Kakariko Tavern
         9: function () { return 1; }, // Chicken House
@@ -409,7 +427,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
                 max = 3;      // always possible for the first three chests to have items
             }
 
-            return { boss: boss, max: max, min: min }
+            return { boss: boss, max: max, min: min };
         },
         1: function () { //Desert Palace
 
@@ -488,7 +506,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
                         1 + //map chest
                         (maxKey >= 1 || glove ?
                             2 :       // compass chest and BK chest accessible
-                            boots ? 1 : 0) :  // with no glove, best case is that torch has item 
+                            boots ? 1 : 0) :  // with no glove, best case is that torch has item
                         0;
 
                 }
@@ -507,7 +525,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
                 max = entry ? 2 : 0;  //2 of first three chests might have items
             }
 
-            return { boss: boss, max: max, min: min }
+            return { boss: boss, max: max, min: min };
         },
         2: function () { //Tower of Hera
 
@@ -592,7 +610,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
 
             }
 
-            return { boss: boss, max: max, min: min }
+            return { boss: boss, max: max, min: min };
         },
         3: function () { //Palace of Darkness
 
@@ -623,7 +641,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
                     (bow ? 2 : 0) +                                                           // mimic chests
                     ((key == 2 || key == 4 || key == 5) && bow && hammer ? -1 : 0) +          // if have hammer, might waste key going toward boss at these key counts. don't ask why 3 is left out, it just is
                     (key >= 3 && lamp && !hamBow ? 3 : 0) +                 // if you have light and no hammer+bow, you're forced to go toward the dark rooms, which have the most chests
-                    (key >= 4 && hamBow && lamp ? 2 : 0) +              // I dont know what these two mean 
+                    (key >= 4 && hamBow && lamp ? 2 : 0) +              // I dont know what these two mean
                     (key == 4 || key == 6 && hamBow && lamp ? 1 : 0) +  // but they make the numbers right
                     (key >= 5 && lamp ? 1 : 0) +                                              // now you can get 2 from the dark maze instead of 1 from somewhere else, I think is what this means
                     (key >= 5 && lamp && bigKey ? 1 : 0) +                                    // big chest
@@ -748,7 +766,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
                     1 +                                       // entrance
                     (key ? 1 : 0) +                           // ledge Chest
                     (key && hammer ? 3 : 0) +                 // main Dungeon
-                    (key && hammer && bigKey ? 1 : 0) +       // big Chest 
+                    (key && hammer && bigKey ? 1 : 0) +       // big Chest
                     (key && hammer && hookshot ? 4 : 0) :     // back of dungeon
                     0;
 
@@ -944,7 +962,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
 
                 min = entry ?
                     3 +                                                                               // compass chest, freezor chest, ice T chest
-                    (bigKey ? 1 : 0) +                                                                   // big chest    
+                    (bigKey ? 1 : 0) +                                                                   // big chest
                     ((key == 0 && hookshot) || (key >= 1 && spikeWalk) ? 1 : 0) +                     // spike chest -- specifically need hookshot if 0 keys, otherwise any spike safety will do
                     (hammer && ((key == 0 && hookshot) || (key >= 1 && spikeWalk)) ? 2 : 0) +       // map chest, BK chest -- specifically need hookshot if 0 keys, otherwise any spike safety will do
                     (key >= 1 && hammer && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? 1 : 0) : //boss: need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
@@ -1184,7 +1202,7 @@ DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determin
                     (bigKey && (fireCane || hamHook) ? 1 : 0) + //big chest
                     (hamHook || hamBoots ? 1 : 0) + //map chest
                     (key >= 1 && hamHook ? 1 : 0) + //firesnake room
-                    //chests from either compass or rando room  
+                    //chests from either compass or rando room
                     (key == 0 && canClimb && fireCane && hamHook ? 3 : 0) +
                     (key >= 1 && fireCane && hamHook ? 3 : 0) +
                     (key >= 2 && fireCane && hamHook ? 1 : 0) +
