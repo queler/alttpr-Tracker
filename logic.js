@@ -1,3 +1,6 @@
+function keysanity() {
+	return (settings.keyMode == 1);
+}
 function retro() {
 	return (settings.keyMode == 2);
 }
@@ -238,7 +241,7 @@ logic = {
 
             return settings.openMode == 0 || items.glove.val ?
                 1 :
-                settings.keyMode == 1 ?
+                keysanity() ?
                     items.key12.val ? lampTest : 0 :
                     retro() && items.keyShopFound.val == 0 ?
                         maxKey >= 1 ?
@@ -285,7 +288,7 @@ logic = {
         },
         44: function () { // Mimic Cave
 
-            return !(settings.keyMode == 1 && items.key9.val < 2) &&
+            return !(keysanity() && items.key9.val < 2) &&
                 items.pearl.val &&
                 items.hammer.val &&
                 items.glove.val >= 2 &&
@@ -399,7 +402,7 @@ logic = {
                 lamp = items.lamp.val,
                 bigKey = items.bigKey0.val;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = bow && bigKey ?          // need these to reach
                     lamp ? STATE.avail : STATE.dark :              // boss accessible; light determines status
@@ -443,7 +446,7 @@ logic = {
                 key = items.key1.val,
                 bigKey = items.bigKey1.val;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightLanmo && bigKey ?
                     key ? STATE.avail : STATE.maybe :   // if no key, player might steal pot key for chests and lock themselves out of boss
@@ -540,7 +543,7 @@ logic = {
                 bigKey = items.bigKey2.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
                 boss = fightMold && bigKey ?    // requirements for boss
                     light ? STATE.avail: STATE.dark:             // checks if player had to use dark room to climb Death Mountain
                     STATE.unavail;
@@ -627,7 +630,7 @@ logic = {
                 fightHelm = entry && hamBow
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = entry && hamBow && bigKey && key >= 1 ? // need all this for boss
                     key == 6 ?
@@ -761,7 +764,7 @@ logic = {
                 bigKey = items.bigKey4.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightArrg && key ? STATE.avail: STATE.unavail;              // all you need
 
@@ -852,7 +855,7 @@ logic = {
                 bigKey = items.bigKey5.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightMoth ? STATE.avail: STATE.unavail;      //boss reqs
 
@@ -904,7 +907,7 @@ logic = {
                 bigKey = items.bigKey6.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightBlind && bigKey ? STATE.avail: STATE.unavail;
 
@@ -957,7 +960,7 @@ logic = {
                 bigKey = items.bigKey7.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightKhold ?
                     bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? STATE.avail: STATE.possbile : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
@@ -1025,7 +1028,7 @@ logic = {
                 medallion = logic.medallion(8)
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightVit && bigKey ?
                     medallion == 1 ?
@@ -1100,7 +1103,7 @@ logic = {
                 bigKey = items.bigKey9.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightTri && bigKey && key >= 3 ?
                     medallion == STATE.avail ?
@@ -1187,7 +1190,7 @@ logic = {
                 key = items.key10.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = entry && canClimb && hookshot && bigKey && key >= 1 ?
                     key == 4 ?
@@ -1340,7 +1343,7 @@ logic = {
                 key = items.key11.val
                 ;
 
-            if (settings.keyMode == 1) {
+            if (keysanity()) {
 
 
                 boss = entry && sword && key == 2 ?
