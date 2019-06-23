@@ -1,3 +1,6 @@
+function retro() {
+	return (settings.keyMode == 2);
+}
 function inverted() {
     return settings.openMode==2;
 }
@@ -219,7 +222,7 @@ logic = {
         34: function () { return 1; }, // Sanctuary
         35: function () { // Sewers - Secret Room
 
-            if (settings.keyMode == 2) {
+            if (retro()) {
                 maxKey = items.keyAny.val;
                 minKey = Math.max(0,
                     maxKey -
@@ -237,7 +240,7 @@ logic = {
                 1 :
                 settings.keyMode == 1 ?
                     items.key12.val ? lampTest : 0 :
-                    settings.keyMode == 2 && items.keyShopFound.val == 0 ?
+                    retro() && items.keyShopFound.val == 0 ?
                         maxKey >= 1 ?
                             minKey >= 1 ? lampTest : STATE.maybe :
                             0 :
@@ -392,7 +395,7 @@ logic = {
 
 
         0: function () { // Eastern Palace
-            var bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+            var bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 lamp = items.lamp.val,
                 bigKey = items.bigKey0.val;
 
@@ -434,7 +437,7 @@ logic = {
             var entry = logic.entry1(),
                 glove = items.glove.val,
                 reachLanmo = entry && logic.fire() && glove,
-                bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+                bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 fightLanmo = reachLanmo && (items.hammer.val || items.sword.val >= 1 || bow || logic.cane() || logic.rod()),
                 boots = items.boots.val,
                 key = items.key1.val,
@@ -463,7 +466,7 @@ logic = {
                         key ? 2 : 0) :              // if no glove, need key to get 2 chests (no boss)
                     0;
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {     // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightLanmo ?     // have inventory to fight the boss
@@ -551,7 +554,7 @@ logic = {
 
                 min = light ? max : 0;      //sets min to 0 if had to go through dark
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightMold ?
@@ -617,7 +620,7 @@ logic = {
             var entry = logic.entry3(),
                 lamp = items.lamp.val,
                 hammer = items.hammer.val,
-                bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+                bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 hamBow = hammer && bow,
                 key = items.key3.val,
                 bigKey = items.bigKey3.val,
@@ -660,7 +663,7 @@ logic = {
                     (key >= 5 && bigKey && hamBow ? 1 : 0) :    // boss
                     0;
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightHelm ?  // need for boss
@@ -772,7 +775,7 @@ logic = {
 
                 max = min;                                    // accessible items are the same no matter what
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightArrg ? STATE.avail: STATE.unavail;
@@ -862,7 +865,7 @@ logic = {
 
                 max = min;                  //no variation in availability
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightMoth ? STATE.avail: STATE.unavail;      //boss reqs
 
@@ -914,7 +917,7 @@ logic = {
 
                 max = min;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightBlind ? 1 : 0;      //boss reqs
 
@@ -974,7 +977,7 @@ logic = {
                     (hammer ? 3 : 0) :              // map chest, BK chest, boss
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightKhold ?                   //boss reqs
                     spikeWalk ? STATE.avail: STATE.possbile:             //big key might be past spikes
@@ -1045,7 +1048,7 @@ logic = {
                     (fightVit && bigKey && lamp ? 1 : 0) :    //Boss
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightVit ?
                     medallion == STATE.avail?
@@ -1128,7 +1131,7 @@ logic = {
                     (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
                 //must have a keyshop if accessible?
                 boss = fightTri ?
                     medallion == STATE.avail?
@@ -1248,7 +1251,7 @@ logic = {
                     (key == 0 && fireCane && !hamHook ? 1 : 0) : //I DON'T KNOW
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = entry && canClimb && hookshot ?
                     hamHook && fireCane && boots ?
@@ -1354,7 +1357,7 @@ logic = {
                     (key && light ? 1 : 0) :    //second chest
                     0;
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
 
 
                 if (items.keyShopFound.val) { //infinite key logic
@@ -1464,7 +1467,7 @@ logic = {
 
         stats.clear();
         logic.setPrizes();
-        if (settings.keyMode == 2) { logic.keyShopCheck(); }
+        if (retro()) { logic.keyShopCheck(); }
 
         $.each(logic.chests, function (id, test) {
 
