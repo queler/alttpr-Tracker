@@ -249,10 +249,8 @@ map = {
 			$("#map" + dungeon.world).append("<div class='chest dungeonChest' onclick=toggle.dungeonChest(" + id + ") id=dungeonChest" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1200 - id) + ">" + dungeon["chests" + settings.keyMode] + "</div>");
 		});
 
-		$('.dungeonChest').mousedown(function (event) {	//adds right-click functionality to dungeon chest counters
-			if (event.which == 3) {
+		$('.dungeonChest').contextmenu(function (event) {	//adds right-click functionality to dungeon chest counters
 				toggle.dungeonChest((this.id.replace(/\D/g, '')), true);
-			}
 		});
 
 		$("#dungeon10").css({ 'background-image': 'none' }).html("GT");	//replaces prize icons with text for these dungeons

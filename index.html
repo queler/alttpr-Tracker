@@ -459,16 +459,12 @@
 			}
 		);
 
-		$('.icon').mousedown(function (event) {					//adds listener for right-click on icons
-			if (event.which == 3) {
+		$('.icon').contextmenu(function (event) {					//adds listener for right-click on icons
 				toggle.icon(this, true);
-			};
 		});
 
-		$('#timer').mousedown(function (event) {					//adds listener for right-click on icons
-			if (event.which == 3) {
+		$('#timer').contextmenu(function (event) {					//adds listener for right-click on icons
 				resetTimer();
-			};
 		});
 
 
