@@ -73,9 +73,9 @@ logic = {
             (this.lightWorld() && items.pearl.val)
         );
     },
-    DMlight: function () { return (items.lamp.val || items.flute.val); }, //used to determine if DM chests require dark
+    DMlight: function () { return (items.lamp.val || canFly()); }, //used to determine if DM chests require dark
     DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
-    climbDM: function () { return (items.glove.val || items.flute.val); }, //can get up Death Mountain
+    climbDM: function () { return (items.glove.val || canFly()); }, //can get up Death Mountain
     eastDM: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
     darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
     cane: function () { return items.somaria.val || items.byrna.val; }, //the canes work against certain bosses
