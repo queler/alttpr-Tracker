@@ -15,11 +15,11 @@ function traverse(obj,func,parents, desc){
    else { 
       func(obj,desc);
       var newP=parents.concat(obj);
-      traverse(obj.children,
+      traverse(obj.children||[],
          func,
          newP,
          "child") ;
-      traverse(obj.sections,
+      traverse(obj.sections||[],
       func,
       newP,
       'section') 
