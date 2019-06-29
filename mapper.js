@@ -1,6 +1,8 @@
 'use strict' ;
 var fs=require('fs');
 var j=JSON.parse(fs.readFileSync('owinv.json'));
+
+const{ parse} =require('json2csv') ;
 var reg=JSON.parse(fs.readFileSync('owreg.json'));
 function traverse(obj,func,parents, desc){
 //func(obj, parents, desc)
@@ -37,5 +39,10 @@ traverse(j,(o,p, d) =>{
       it.rule=(o.access_rules||[] ).join(" || ");
       fi.push(it);
    } 
-});
+});try {
+  const csv = parse(fi );
+  console.log(csv);
+} catch (err) {
+  console.error(err);
+}
 console.log(fi);
