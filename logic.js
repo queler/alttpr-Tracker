@@ -55,7 +55,7 @@ logic = {
         return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
             (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
     },
-	lightWorld: function (){
+	lightWorldBunny: function (){
 		return !inverted() || (
 		   items.boss11.val ||//aga1
            (
@@ -66,6 +66,7 @@ logic = {
            )
         );
 	},
+	   lightWorldLink: function() {return !inverted || (lightWorldBunny && items.pearl.val); } , 
 	canFly: function () {
         return items.flute.val &&
         (
