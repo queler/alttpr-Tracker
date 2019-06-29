@@ -1,5 +1,6 @@
+"use strict";
 function keysanity() {
-	return (settings.keyMode == 1);
+	return (settings.keyMode ==1);
 }
 function retro() {
 	return (settings.keyMode == 2);
@@ -7,7 +8,10 @@ function retro() {
 function inverted() {
     return settings.openMode==2;
 }
-STATE={
+function std() {
+    return settings.openMode===0;
+}
+var STATE={
       unavail:0,
       avail:1,
       dark:2,
@@ -15,7 +19,7 @@ STATE={
       visible:4
 };
 
-logic = {
+var logic = {
     //these functions return true or false
 
     darkWorldNWReg: function (){
@@ -66,7 +70,7 @@ logic = {
            )
         );
 	},
-	   lightWorldLink: function() {return !inverted || (lightWorldBunny && items.pearl.val);},
+    lightWorldLink: function() {return !inverted() || (logic.lightWorldBunny && items.pearl.val);},
 	canFly: function () {
         return items.flute.val &&
         (
@@ -74,16 +78,18 @@ logic = {
             (this.lightWorld() && items.pearl.val)
         );
     },
-    DMlight: function () { return (items.lamp.val || canFly()); }, //used to determine if DM chests require dark
+    DMlight: function () { return (items.lamp.val || logic.canFly()); }, //used to determine if DM chests require dark
     DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
-    climbDM: function () { return (items.glove.val || canFly()); }, //can get up Death Mountain
-    eastDM: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
+    climbDM: function () { return (items.glove.val || logic.canFly()); }, //can get up Death Mountain, all below spec rock
+    eastDMReg: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
+	eastDMInv: function () {return logic.climbDM() && ((items.hookshot.val && items.pearl.val) || (items.glove.val>=2));},
+	eastDM: function () {return !inverted() ? logic.eastDMReg() : logic.eastDMInv();},
     darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
     cane: function () { return items.somaria.val || items.byrna.val; }, //the canes work against certain bosses
     rod: function () { return items.firerod.val || items.icerod.val; }, //the rods work against certain bosses
     fire: function () { return items.lamp.val || items.firerod.val; }, //can light torches
     //Dungeon entry
-    entry0: function () { return true; },
+    entry0: function () {return !inverted() || (logic.lightWorldLink()); },
     entry1: function () { return items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
     entry2: function () { return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val); },
     entry3: function () { return logic.darkWorldEast(); },
@@ -101,7 +107,7 @@ logic = {
     // 3 = possibly available
     medallion: function (id) { //check for the correct MM/TR medallions; id is the dungeon id (8 = MM, 9 = TR)
 
-        medal = items["medal" + id].val; //identifies what medallion we want; 0 = unknown, 1 = bombos, 2 = ether, 3 = quake
+        var medal = items["medal" + id].val; //identifies what medallion we want; 0 = unknown, 1 = bombos, 2 = ether, 3 = quake
 
         return items.sword.val >= 1 ? //need a sword
             medal == 0 ?
@@ -117,10 +123,10 @@ logic = {
     //this sets the prizes in the item tracker based on completed dungeons
     setPrizes: function () {
 
-        counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }; //tally of each type of prize;
+        var counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }; //tally of each type of prize;
         // 0 = unknown, 1 = red/blue pend, 2 = green pend, 3 = blue crystal, 4 = red crystal
 
-        for (i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
+        for (var i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
             if (dungeons[i].completed) {
                 counts[dungeons[i].prize]++;
                 counts.total++;
@@ -225,7 +231,8 @@ logic = {
         33: function () { return items.shovel.val; }, // Flute Spot
         34: function () { return 1; }, // Sanctuary
         35: function () { // Sewers - Secret Room
-
+			var maxKey;
+			var minKey;
             if (retro()) {
                 maxKey = items.keyAny.val;
                 minKey = Math.max(0,
@@ -238,9 +245,9 @@ logic = {
                 );
             }
 
-            lampTest = items.lamp.val ? 1 : 2;
+            var lampTest = items.lamp.val ? 1 : 2;
 
-            return settings.openMode == 0 || items.glove.val ?
+            return std() || items.glove.val ?
                 1 :
                 keysanity() ?
                     items.key12.val ? lampTest : 0 :
@@ -254,7 +261,7 @@ logic = {
 
         },
         36: function () { // Sewers - Dark Cross
-            return settings.openMode == 0 || items.lamp.val ? 1 : 2;
+            return std() || items.lamp.val ? 1 : 2;
         },
         37: function () { return 1; }, // Hyrule Castle
         38: function () { return 1; }, // Link's Uncle
@@ -399,7 +406,10 @@ logic = {
 
 
         0: function () { // Eastern Palace
-            var bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+            var boss;
+			var min;
+			var max;
+			var bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 lamp = items.lamp.val,
                 bigKey = items.bigKey0.val;
 
@@ -437,7 +447,9 @@ logic = {
             return { boss: boss, max: max, min: min };
         },
         1: function () { //Desert Palace
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry1(),
                 glove = items.glove.val,
                 reachLanmo = entry && logic.fire() && glove,
@@ -488,8 +500,8 @@ logic = {
 
                 } else {     // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val - (settings.openMode == 0 ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var maxKey = items.keyAny.val - (std() ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val -
                         1 -                        //Hyrule Castle
                         (logic.entry2() ? 1 : 0) - //Tower of Hera
@@ -535,7 +547,9 @@ logic = {
             return { boss: boss, max: max, min: min };
         },
         2: function () { //Tower of Hera
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry2(),
                 fightMold = entry && (items.sword.val >= 1 || items.hammer.val),
                 fire = logic.fire(),
@@ -576,8 +590,8 @@ logic = {
 
                 } else {    // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val - (settings.openMode == 0 ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var maxKey = items.keyAny.val - (std() ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val -
                         1 -                        // Hyrule Castle
                         (logic.entry1() ? 1 : 0) - // Desert Palace
@@ -620,7 +634,9 @@ logic = {
             return { boss: boss, max: max, min: min };
         },
         3: function () { //Palace of Darkness
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry3(),
                 lamp = items.lamp.val,
                 hammer = items.hammer.val,
@@ -688,11 +704,11 @@ logic = {
 
                 } else {    // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val
-                        - (settings.openMode == 0 ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
+                    var maxKey = items.keyAny.val
+                        - (std() ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
                         - 2; // if less than 5 shops accessible, must have come via Agahnim
 
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val
                         - 1                         // Hyrule Castle
                         - (logic.entry1() ? 1 : 0)  // Desert Palace
@@ -756,7 +772,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         4: function () { //Swamp Palace
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry4(),
                 hammer = items.hammer.val,
                 hookshot = items.hookshot.val,
@@ -797,11 +815,11 @@ logic = {
 
                 } else {    // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val
-                        - (settings.openMode == 0 ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
+                    var maxKey = items.keyAny.val
+                        - (std() ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
                         - 2; // if less than 5 shops accessible, must have come via Agahnim
 
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val
                         - 1                         // Hyrule Castle
                         - (logic.entry1() ? 1 : 0)  // Desert Palace
@@ -847,7 +865,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         5: function () { // Skull Woods
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry5(),
                 firerod = items.firerod.val,
                 sword = items.sword.val >= 1,
@@ -900,7 +920,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         6: function () { // Thieves Town
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry6(),
                 hammer = items.hammer.val,
                 fightBlind = entry && (items.sword.val >= 1 || hammer || logic.cane()),
@@ -950,7 +972,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         7: function () { //Ice Palace
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry7(),
                 hookshot = items.hookshot.val,
                 hammer = items.hammer.val,
@@ -1016,7 +1040,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         8: function () { //Misery Mire
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry8(),
                 lamp = items.lamp.val,
                 somaria = items.somaria.val,
@@ -1092,6 +1118,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         9: function () { //Turtle Rock
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry9(),
                 medallion = logic.medallion(9),
                 firerod = items.firerod.val,
@@ -1175,7 +1204,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         10: function () { //Ganon's Tower
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry10(),
                 bigKey = items.bigKey10.val,
                 canClimb = items.bow.val >= 2 && logic.fire() && (bigKey || settings.keyMode !== 1),
@@ -1337,7 +1368,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         11: function () { //Agahnim's Tower
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry11(),
                 sword = items.sword.val >= 1,
                 light = items.lamp.val,
@@ -1378,8 +1411,8 @@ logic = {
 
                 } else {    //limited key logic
 
-                    maxKey = items.keyAny.val;
-                    minKey = Math.max(0,
+                    var maxKey = items.keyAny.val;
+                    var minKey = Math.max(0,
                         maxKey -
                         1 -
                         (logic.entry1() ? 1 : 0) -
@@ -1387,7 +1420,7 @@ logic = {
                         (logic.entry3() ? 6 : 0) -
                         (logic.entry4() ? 1 : 0)
                     );
-                    maxKey -= (settings.openMode == 0 ? 1 : 0);
+                    maxKey -= (std() ? 1 : 0);
 
                     boss = entry && maxKey >= 2 && sword ?
                         minKey >= 2 ?
@@ -1475,21 +1508,21 @@ logic = {
 
         $.each(logic.chests, function (id, test) {
 
-            status = chests[id].opened ? null : test(); //if the chest's not open, it is tested
+            var status = chests[id].opened ? null : test(); //if the chest's not open, it is tested
             chests[id].status = status;                 //sets chest's status according to what the test found
 
             logic.colour("#chest" + id, status);         //colours the chest on the map
         });
 
         $.each(logic.dungeons, function (id, test) {
-            dStatus = test();
+            var dStatus = test();
 
             dStatus.boss = dungeons[id].completed ? null : dStatus.boss;
             dungeons[id].status = dStatus.boss;              //applies the test result to the dungeons object
             logic.colour("#dungeon" + id, dStatus.boss);    //colours the boss by its status
             setState($("#dungeon"+id)[0],dungeons[id].prize);
-            total = dungeons[id]["chests" + settings.keyMode];
-            opened = dungeons[id].openChests;
+            var total = dungeons[id]["chests" + settings.keyMode];
+            var opened = dungeons[id].openChests;
 
             dStatus.chest =             //figures out status of next chest based on how many opened so far & max/min available
                 opened == total ? "null"
@@ -1501,8 +1534,8 @@ logic = {
             $("#dungeonChest" + id).html(total - opened);
 
             logic.colour("#dungeonChest" + id, dStatus.chest);
-
-            for (chest = 1; chest <= total; chest++) {  //colours each chest pip based on amount opened and max/min
+			var pipStatus;
+            for (var chest = 1; chest <= total; chest++) {  //colours each chest pip based on amount opened and max/min
                 pipStatus =
                     chest > (total - opened) ? "null"
                         : chest > (total - dStatus.min) ? 1
