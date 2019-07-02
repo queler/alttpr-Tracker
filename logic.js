@@ -988,7 +988,7 @@ var logic = {
             if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightKhold ?
-                    bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? STATE.avail: STATE.possbile : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
+                    bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key ==2) || (somaria && key == 2)) ? STATE.avail: STATE.maybe : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
                     0;
 
                 min = entry ?
@@ -1008,7 +1008,7 @@ var logic = {
             } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightKhold ?                   //boss reqs
-                    spikeWalk ? STATE.avail: STATE.possbile:             //big key might be past spikes
+                    spikeWalk ? STATE.avail: STATE.maybe:             //big key might be past spikes
                     0;
 
                 min = entry ?
@@ -1025,7 +1025,7 @@ var logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightKhold ?
-                    hookshot ? STATE.avail: STATE.possbile :            // big key might be past spikes
+                    hookshot ? STATE.avail: STATE.maybe:            // big key might be past spikes
                     0;
 
                 min = entry ?
@@ -1139,7 +1139,7 @@ var logic = {
                     medallion == STATE.avail ?
                         key == 4 ?
                             light ? STATE.avail : STATE.dark:
-                            STATE.possbile:
+                            STATE.maybe:
                         medallion :
                     STATE.unavail;
 
@@ -1227,7 +1227,7 @@ var logic = {
                 boss = entry && canClimb && hookshot && bigKey && key >= 1 ?
                     key == 4 ?
                         logic.DMlight() ? STATE.avail : STATE.dark:
-                        STATE.possbile :
+                        STATE.maybe :
                     STATE.unavail;
 
                 max = entry ?
@@ -1334,7 +1334,7 @@ var logic = {
                 boss = entry && canClimb && hookshot ?
                     hamHook && fireCane && boots ?
                         logic.DMlight() ? STATE.avail : STATE.dark:
-                        STATE.possbile :
+                        STATE.maybe :
                     STATE.unavail;
 
                 min = entry ?
@@ -1425,7 +1425,7 @@ var logic = {
                     boss = entry && maxKey >= 2 && sword ?
                         minKey >= 2 ?
                             light ? STATE.avail : STATE.dark:
-                            STATE.possbile:
+                            STATE.maybe:
                         STATE.unavail;
 
                     max = entry ?
