@@ -9,7 +9,7 @@ function inverted() {
     return settings.openMode==2;
 }
 function std() {
-    return settings.openMode===0;
+    return settings.openMode==0;
 }
 var STATE={
       unavail:0,
@@ -1070,7 +1070,7 @@ var logic = {
                     (fightVit && bigKey ? 1 : 0) :     //Boss
                     0;
 
-                min = entry && medallion ===1 ?
+                min = entry && medallion ==1 ?
                     3 +			                            //Bridge Chest, Map Chest, Main Room
                     (spikeWalk ? 1 : 0) +                   //Spike Chest
                     (fire ? 2 : 0) +                        //Compass Chest, Big Key Chest
