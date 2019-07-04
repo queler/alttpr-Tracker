@@ -70,7 +70,7 @@ var logic = {
            )
         );
 	},
-    lightWorldLink: function() {return !inverted() || (logic.lightWorldBunny && items.pearl.val);},
+    lightWorldLink: function() {return !inverted() || (logic.lightWorldBunny() && items.pearl.val);},
 	canFly: function () {
         return items.flute.val &&
         (
@@ -90,7 +90,7 @@ var logic = {
     fire: function () { return items.lamp.val || items.firerod.val; }, //can light torches
     //Dungeon entry
     entry0: function () {return !inverted() || (logic.lightWorldLink()); },
-    entry1: function () { return items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
+    entry1: function () { return inverted()? logic.lightWorldLink() && items.book.val :items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
     entry2: function () { return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val); },
     entry3: function () { return logic.darkWorldEast(); },
     entry4: function () { return logic.darkWorldSouth() && items.mirror.val && items.flippers.val; },
