@@ -49,35 +49,37 @@ var logic = {
                 items.glove.val >= 2 && items.flippers.val //kakariko portal then river crossing
             ); //
     },
-    darkWorldEast: function (){ //check for access to this whole region
-        return inverted()?this.darkWorldEastInv():this.darkWorldEastReg();
-    },
-    darkWorldSouth: function () {
-        return inverted()? true:logic.darkWorldSouthReg();
-    },
-    darkWorldSouthReg: function () { //check for access to this whole region
-        return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
-            (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
-    },
-	lightWorldBunny: function (){
-		return !inverted() || (
-		   items.boss11.val ||//aga1
-           (
-              (
-                 items.glove.val >=2 ||
-                 (items.hammer.val && items.glove.val)
-              ) && items.pearl.val
-           )
-        );
-	},
-    lightWorldLink: function() {return !inverted() || (logic.lightWorldBunny() && items.pearl.val);},
-	canFly: function () {
-        return items.flute.val &&
-        (
-            !inverted() ||
-            (this.lightWorld() && items.pearl.val)
-        );
-    },
+    darkWorldEast: function () { //check for access to this whole region
+            return inverted() ? this.darkWorldEastInv() : this.darkWorldEastReg();
+        },
+        darkWorldSouth: function () {
+            return inverted() ? true : logic.darkWorldSouthReg();
+        },
+        darkWorldSouthReg: function () { //check for access to this whole region
+            return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
+                (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
+        },
+        lightWorldBunny: function () {
+            return !inverted() || (
+                items.boss11.val || //aga1
+                (
+                    (
+                        items.glove.val >= 2 ||
+                        (items.hammer.val && items.glove.val)
+                    ) && items.pearl.val
+                )
+            );
+        },
+        lightWorldLink: function () {
+            return !inverted() || (logic.lightWorldBunny() && items.pearl.val);
+        },
+        canFly: function () {
+            return items.flute.val &&
+                (
+                    !inverted() ||
+                    (this.lightWorld() && items.pearl.val)
+                );
+        },
     DMlight: function () { return (items.lamp.val || logic.canFly()); }, //used to determine if DM chests require dark
     DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
     climbDM: function () { return (items.glove.val || logic.canFly()); }, //can get up Death Mountain, all below spec rock
@@ -91,7 +93,14 @@ var logic = {
     //Dungeon entry
     entry0: function () {return !inverted() || (logic.lightWorldLink()); },
     entry1: function () { return inverted()? logic.lightWorldLink() && items.book.val :items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
-    entry2: function () { return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val); },
+    entry2: function () {
+        if (inverted()) {
+            return logic.eastDM() && items.pearl.val && items.hammer.val;	  			
+        } 
+        else {
+            return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val);
+        } 
+	},
     entry3: function () { return logic.darkWorldEast(); },
     entry4: function () { return logic.darkWorldSouth() && items.mirror.val && items.flippers.val; },
     entry5: function () { return logic.darkWorldNW(); },
