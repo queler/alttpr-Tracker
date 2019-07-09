@@ -77,7 +77,7 @@ var logic = {
             return items.flute.val &&
                 (
                     !inverted() ||
-                    (this.lightWorld() && items.pearl.val)
+                    (this.lightWorldLink())
                 );
         },
     DMlight: function () { return (items.lamp.val || logic.canFly()); }, //used to determine if DM chests require dark
@@ -95,16 +95,27 @@ var logic = {
     entry1: function () { return inverted()? logic.lightWorldLink() && items.book.val :items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
     entry2: function () {
         if (inverted()) {
-            return logic.eastDM() && items.pearl.val && items.hammer.val;	  			
+            return logic.eastDM() && items.pearl.val && items.hammer.val;
         } 
         else {
             return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val);
         } 
-	},
-    entry3: function () { return logic.darkWorldEast(); },
-    entry4: function () { return logic.darkWorldSouth() && items.mirror.val && items.flippers.val; },
+    },
+    //POD
+    entry3: function () { return logic.darkWorldEast(); }, 
+    //SP
+    entry4: function () {
+        if (inverted()) {
+            return this.lightWorldLink() && items.mirror.val && items.flippers.val;
+        } else {
+            return this.darkWorldSouth() && items.mirror.val && items.flippers.val;
+        }
+    },
+    //sw
     entry5: function () { return logic.darkWorldNW(); },
+    //tt
     entry6: function () { return logic.darkWorldNW(); },
+    //IP
     entry7: function () { return items.pearl.val && items.glove.val >= 2 && items.flippers.val && (items.firerod.val || (items.bombos.val && items.sword.val >= 1)); },
     entry8: function () { return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val); },
     entry9: function () { return logic.darkEastDM() && items.hammer.val && items.somaria.val; },
