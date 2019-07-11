@@ -184,10 +184,17 @@ var logic = {
     // 3 = possibly available
     // 4 = visible/checkable but unattainable
     chests: {
-        0: function () { return 1; },                        // Sahasrahla's Hut
+        0: function () { return  (logic.lightWorldLink()); },                        // Sahasrahla's Hut
         1: function () { return items.greenPendant.val; }, // Sahasrahla
         2: function () {                                     // King Zora
-            return items.flippers.val || items.glove.val ? 1 : 0;
+            if(logic.lightWorldLink() && (items.flippers.val || items.glove.val)) {
+                return STATE.avail;
+            }
+            else if(logic.lightWorldLink()) {
+               return STATE.dark;
+            }else{
+               return STATE.unavail;
+            }
         },
         3: function () { return items.mushroom.val; }, // Potion Shop
         4: function () { return items.flippers.val; }, // Zora's Ledge
