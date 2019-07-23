@@ -444,7 +444,7 @@ var logic = {
 
                 boss = bow && bigKey ?          // need these to reach
                     lamp ? STATE.avail : STATE.dark :              // boss accessible; light determines status
-                    STATE.unavil;
+                    STATE.unavail;
 
                 min = 3 +                             // base access
                     (lamp ? 1 : 0) +                  // BK chest
