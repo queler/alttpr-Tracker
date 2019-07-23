@@ -1,4 +1,10 @@
 "use strict";
+function swordless() {
+    return true;
+    //todo: replace sword with net
+    // change toggle logic for it.
+
+}
 function keysanity() {
 	return (settings.keyMode ==1);
 }
@@ -18,10 +24,38 @@ var STATE={
       maybe:3,
       visible:4
 };
-
+//0 = unknown, 1 = bombos, 2 = ether, 3 = quake
+var MEDAL={
+    unknown:0,
+    bombos:1,
+    ether:2,
+    quake:3
+};
 var logic = {
     //these functions return true or false
+    canActivatabteTablets: function(){
+        if( swordless()){
+            return items.hammer.val;
+        }else{
+            return items.sword.val>=2;
+        }
+    },
 
+    canUseMedallions: function(){
+        if( swordless()){
+            return 1
+        }else{
+            return items.sword.val>0;
+        }
+    },
+
+    canRemoveCurtains: function(){
+        if( swordless()){
+            return 1
+        }else{
+            return items.sword.val>0;
+        }
+    },
     darkWorldNWReg: function (){
         return items.pearl.val && //need this of course
             (items.glove.val >= 2 || //kakariko portal
@@ -96,13 +130,13 @@ var logic = {
     entry2: function () {
         if (inverted()) {
             return logic.eastDM() && items.pearl.val && items.hammer.val;
-        } 
+        }
         else {
             return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val);
-        } 
+        }
     },
     //POD
-    entry3: function () { return logic.darkWorldEast(); }, 
+    entry3: function () { return logic.darkWorldEast(); },
     //SP
     entry4: function () {
         if (inverted()) {
@@ -116,11 +150,23 @@ var logic = {
     //tt
     entry6: function () { return logic.darkWorldNW(); },
     //IP
-    entry7: function () { return items.pearl.val && items.glove.val >= 2 && items.flippers.val && (items.firerod.val || (items.bombos.val && items.sword.val >= 1)); },
-    entry8: function () { return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val); },
-    entry9: function () { return logic.darkEastDM() && items.hammer.val && items.somaria.val; },
-    entry10: function () { return items.crystal.val >= 7 && logic.darkEastDM(); },
-    entry11: function () { return items.sword.val >= 2 || items.cape.val; },
+// these haven't been updated for inverted
+    entry7: function () {
+            return items.pearl.val && items.glove.val >= 2 && items.flippers.val &&
+                (items.firerod.val || (items.bombos.val && logic.canUseMedallions()));
+        },
+        entry8: function () {
+            return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val);
+        },
+        entry9: function () {
+            return logic.darkEastDM() && items.hammer.val && items.somaria.val;
+        },
+        entry10: function () {
+            return items.crystal.val >= 7 && logic.darkEastDM();
+        },
+    // end
+    entry11: function () { return swordless()?items.hammer.val:(items.sword.val >= 2) || items.cape.val; },
+
     //this function returns 0, 1, or 3
     // 0 = unavailable
     // 1 = available
@@ -129,15 +175,16 @@ var logic = {
 
         var medal = items["medal" + id].val; //identifies what medallion we want; 0 = unknown, 1 = bombos, 2 = ether, 3 = quake
 
-        return items.sword.val >= 1 ? //need a sword
+        return logic.canUseMedallions() ? //need a sword
             medal == 0 ?
                 items.bombos.val && items.ether.val && items.quake.val ?                 //medallion is unknown
-                    1 :                                                                  //has all medallions so check is automatically passed
-                    items.bombos.val || items.ether.val || items.quake.val ? 3 : 0 :     //if at least one medallion, maybe ok; otherwise nope
-                medal == 1 && items.bombos.val || medal == 2 && items.ether.val || medal == 3 && items.quake.val ? //medallion is known and we need a specific one
-                    1 : //has the specific matching medallion
-                    0 : //does not have the matching medallion
-            0; //no sword, cannot use any medallions
+                    STATE.avail :                                                                  //has all medallions so check is automatically passed
+                    items.bombos.val || items.ether.val || items.quake.val ? STATE.maybe : STATE.unavail:     //if at least one medallion, maybe ok; otherwise nope
+                medal == MEDAL.bombos && items.bombos.val || medal == MEDAL.ether &&
+                            items.ether.val || medal == MEDAL.quake && items.quake.val ? //medallion is known and we need a specific one
+                    STATE.avail : //has the specific matching medallion
+                    STATE.unavail: //does not have the matching medallion
+            STATE.unavail; //no sword, cannot use any medallions
 
     },
     //this sets the prizes in the item tracker based on completed dungeons
@@ -234,8 +281,8 @@ var logic = {
         25: function () { return items.flippers.val; }, // Hobo
         26: function () { // Bombos Tablet
             return items.book.val && items.mirror.val && logic.darkWorldSouth() ?
-                items.sword.val >= 2 ? 1 : STATE.visible :
-                0;
+                logic.canActivatabteTablets() ? STATE.avail : STATE.visible :
+                STATE.unavail;
         },
         27: function () { // Cave 45
             return items.mirror.val &&
@@ -304,7 +351,7 @@ var logic = {
         },
         41: function () { // Ether Tablet
             return items.book.val && logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) ?
-                items.sword.val >= 2 ?
+                logic.canActivatabteTablets() ?
                     logic.DMlightAorD() :
                     STATE.visible :
                 0;
@@ -897,7 +944,7 @@ var logic = {
 			var max;
             var entry = logic.entry5(),
                 firerod = items.firerod.val,
-                sword = items.sword.val >= 1,
+                sword = logic.canRemoveCurtains(),
                 fightMoth = entry && firerod && sword,
                 key = items.key5.val,
                 bigKey = items.bigKey5.val
@@ -1399,7 +1446,7 @@ var logic = {
 			var min;
 			var max;
             var entry = logic.entry11(),
-                sword = items.sword.val >= 1,
+                curtainAndFight = logic.canRemoveCurtains() && (items.sword.val>=1 || items.hammer.val ),//will need to use sword for net
                 light = items.lamp.val,
                 key = items.key11.val
                 ;
@@ -1407,7 +1454,7 @@ var logic = {
             if (keysanity()) {
 
 
-                boss = entry && sword && key == 2 ?
+                boss = entry && curtainAndFight && key == 2 ?
                     light ? STATE.avail : STATE.dark:
                     STATE.unavail;
 
@@ -1426,7 +1473,7 @@ var logic = {
 
                 if (items.keyShopFound.val) { //infinite key logic
 
-                    boss = entry && sword ?
+                    boss = entry && curtainAndFight ?
                         light ? STATE.avail : STATE.dark:
                         STATE.unavail;
 
@@ -1449,7 +1496,7 @@ var logic = {
                     );
                     maxKey -= (std() ? 1 : 0);
 
-                    boss = entry && maxKey >= 2 && sword ?
+                    boss = entry && maxKey >= 2 && curtainAndFight ?
                         minKey >= 2 ?
                             light ? STATE.avail : STATE.dark:
                             STATE.maybe:
@@ -1467,7 +1514,7 @@ var logic = {
                 }
 
             } else {
-                boss = entry && sword ?
+                boss = entry && curtainAndFight ?
                     light ? STATE.avail : STATE.dark:
                     STATE.unavail;
 
