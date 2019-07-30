@@ -1,6 +1,6 @@
 "use strict";
 function swordless() {
-    return true;
+    return false;
     //todo: replace sword with net
     // change toggle logic for it.
 
