@@ -458,7 +458,20 @@
 
 			}
 		);
+		$(".icon").focus(
+			function () {
+				stats.find(this);
+			});
+		$(".icon").blur( function () {
 
+				if (settings.predictor == 0) {
+					stats.clear();
+				} else {
+					stats.find("boss10");
+				}
+
+			}
+		);
 		$('.icon').contextmenu(function (event) {					//adds listener for right-click on icons
 				toggle.icon(this, true);
 		});
