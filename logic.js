@@ -243,8 +243,16 @@ var logic = {
                return STATE.unavail;
             }
         },
-        3: function () { return items.mushroom.val; }, // Potion Shop
-        4: function () { return items.flippers.val; }, // Zora's Ledge
+        3: function () { return logic.lightWorldLink() && items.mushroom.val; }, // Potion Shop
+        4: function () {
+            if (logic.lightWorldLink() && items.flippers.val) {
+                return STATE.avail;
+            }else if (logic.lightWorldLink()) {
+                return STATE.visible;
+            }else{
+                return STATE.unavail;
+            }
+        }, // Zora's Ledge
         5: function () { return items.flippers.val; }, // Waterfall Fairy
         6: function () {                            // Master Sword Pedestal
             return (items.pendant.val == 3) ?
