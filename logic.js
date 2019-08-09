@@ -244,7 +244,7 @@ var logic = {
             }
         },
         3: function () { return logic.lightWorldLink() && items.mushroom.val; }, // Potion Shop
-        4: function () {
+        4: function () {                             // Zora's Ledge
             if (logic.lightWorldLink() && items.flippers.val) {
                 return STATE.avail;
             }else if (logic.lightWorldLink()) {
@@ -252,8 +252,16 @@ var logic = {
             }else{
                 return STATE.unavail;
             }
-        }, // Zora's Ledge
-        5: function () { return items.flippers.val; }, // Waterfall Fairy
+        },
+        5: function () {                            // Waterfall Fairy
+            if (logic.lightWorldLink() && items.flippers.val) {
+                return STATE.avail;
+            } else if (logic.lightWorldLink() && (items.boots.val || items.pearl.val)){
+                return STATE.dark;
+            }else{
+                return STATE.unavail;
+            }
+         },
         6: function () {                            // Master Sword Pedestal
             return (items.pendant.val == 3) ?
                 1 :
