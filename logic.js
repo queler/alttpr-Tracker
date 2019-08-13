@@ -270,8 +270,8 @@ var logic = {
         },
         7: function () {                                                // King's Tomb
             return items.boots.val &&
-                (items.glove.val >= 2 ||
-                    (logic.darkWorldNW() && items.mirror.val))?
+                (items.glove.val >= 2 && logic.lightWorldLink() ||
+                    (logic.darkWorldNW() && items.mirror.val && !inverted()))?
 						1 : 0;
         },
         8: function () { return 1; }, // Kakariko Tavern
