@@ -263,9 +263,10 @@ var logic = {
             }
          },
         6: function () {                            // Master Sword Pedestal
-            return (items.pendant.val == 3) ?
+            return (items.pendant.val == 3) && logic.lightWorldBunny() ?
                 1 :
-                items.book.val ? STATE.visible : 0;
+                items.book.val && logic.lightWorldBunny() ? STATE.visible 
+                : STATE.unavail;
         },
         7: function () {                                                // King's Tomb
             return items.boots.val &&
