@@ -124,6 +124,13 @@ var logic = {
     cane: function () { return items.somaria.val || items.byrna.val; }, //the canes work against certain bosses
     rod: function () { return items.firerod.val || items.icerod.val; }, //the rods work against certain bosses
     fire: function () { return items.lamp.val || items.firerod.val; }, //can light torches
+    bunnyMaybe: function() {
+      return logic.lightWorldLink()
+         ? STATE.avail
+         : logic.lightWorldBunny()
+            ? STATE.maybe
+            : STATE.unavail;
+    },
     //Dungeon entry
     entry0: function () {return !inverted() || (logic.lightWorldLink()); },
     entry1: function () { return inverted()? logic.lightWorldLink() && items.book.val :items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
@@ -274,19 +281,27 @@ var logic = {
                     (logic.darkWorldNW() && items.mirror.val && !inverted()))?
 						1 : 0;
         },
-        8: function () { return 1; }, // Kakariko Tavern
-        9: function () { return 1; }, // Chicken House
-        10: function () { return 1; }, // Kakariko Well
-        11: function () { return 1; }, // Blind's Hideout
-        12: function () { return items.boots.val; }, // Pegasus Rocks
-        13: function () { return 1; }, // Bottle Merchant
+        8: function () { return logic.lightWorldLink(); }, // Kakariko Tavern
+        9: function () { return logic.lightWorldLink(); }, // Chicken House
+        10: function () { return logic.bunnyMaybe(); }, // Kakariko Well
+        11: function () { return logic.bunnyMaybe(); }, // Blind's Hideout
+        12: function () { return items.boots.val && logic.lightWorldLink(); }, // Pegasus Rocks
+        13: function () { return logic.lightWorldBunny(); }, // Bottle Merchant
         14: function () {           // Magic Bat
-            return items.powder.val &&
-                (items.hammer.val || logic.darkWorldNW() &&
-                    items.mirror.val);
+            var batCave=inverted()
+              ?logic.lightWorldLink() && items.hammer.val
+              : items.hammer.val  ||
+                 (items.glove.val>=2 && items.pearl.val && items.mirror.val) ;
+            if(items.powder.val && batCave){
+               return STATE.avail;
+            }else if(batCave && items.somaria.val && items.mushroom.val){
+               return STATE.dark;
+            }else{
+               return STATE.unavail;
+            }
         },
-        15: function () { return items.bottle.val >= 1 ? 1 : 0; }, // Sick Kid
-        16: function () { return 1; }, // Lost Woods Hideout
+        15: function () { return items.bottle.val >= 1 && logic.lightWorldBunny() }, // Sick Kid
+        16: function () { return logic.lightWorldLink(); }, // Lost Woods Hideout
         17: function () { return items.boss11.val && items.boots.val ? 1 : STATE.visible; }, // Lumberjack Tree
         18: function () { return logic.darkWorldNW() && items.mirror.val ? 1 : 0; }, // Graveyard Ledge
         19: function () { return 1; }, // Mushroom
