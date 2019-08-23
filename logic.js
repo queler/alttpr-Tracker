@@ -294,7 +294,7 @@ var logic = {
                  (items.glove.val>=2 && items.pearl.val && items.mirror.val) ;
             if(items.powder.val && batCave){
                return STATE.avail;
-            }else if(batCave && items.somaria.val && items.mushroom.val){
+            }else if(batCave && items.somaria.val && items.mushroom.val && !chests[3].opened){
                return STATE.dark;
             }else{
                return STATE.unavail;
