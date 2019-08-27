@@ -362,15 +362,28 @@ var logic = {
                      ? STATE.avail
                      : STATE.visible
              ;}, // Library
-        30: function () { return 1; }, // Maze Race
+        30: function () { return logic.lightWorldLink(); }, // Maze Race
         31: function () { // Desert Ledge
-            return logic.entry1() ? 1 : STATE.visible;
+            return logic.entry1()
+               ? STATE.avail
+               : logic.lightWorldBunny()
+                  ? STATE.visible
+                  : 0;
         },
         32: function () { // Lake Hylia Island
-            return items.flippers.val ?
-                items.pearl.val && items.mirror.val && (items.boss11.val || items.glove.val >= 2 || items.glove.val && items.hammer.val) ?
-                    1 : STATE.visible :
-                STATE.visible;
+            return (
+               inverted()
+                  ? logic.lightWorldLink()
+                  : items.pearl.val && items.mirror.val
+                     && (items.boss11.val || items.glove.val >= 2
+                        || items.glove.val && items.hammer.val)
+                )
+                   ? items.flippers.val
+                      ? STATE.avail
+                      : STATE.dark
+                   : logic.lightWorldBunny()
+                      ? STATE.visible
+                      : STATE.unavail;
         },
         33: function () { return items.shovel.val; }, // Flute Spot
         34: function () { return 1; }, // Sanctuary
