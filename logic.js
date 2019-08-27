@@ -385,8 +385,8 @@ var logic = {
                       ? STATE.visible
                       : STATE.unavail;
         },
-        33: function () { return items.shovel.val; }, // Flute Spot
-        34: function () { return 1; }, // Sanctuary
+        33: function () { return logic.lightWorldLink() && items.shovel.val; }, // Flute Spot
+        34: function () { return logic.lightWorldLink(); }, // Sanctuary
         35: function () { // Sewers - Secret Room
 			var maxKey;
 			var minKey;
@@ -404,16 +404,24 @@ var logic = {
 
             var lampTest = items.lamp.val ? 1 : 2;
 
-            return std() || items.glove.val ?
-                1 :
-                keysanity() ?
-                    items.key12.val ? lampTest : 0 :
-                    retro() && items.keyShopFound.val == 0 ?
-                        maxKey >= 1 ?
-                            minKey >= 1 ? lampTest : STATE.maybe :
-                            0 :
-                        lampTest
-                ;
+            return ( std() || items.glove.val
+               ? 1
+               : keysanity()
+                  ? items.key12.val
+                     ? lampTest
+                     : 0
+                  : retro() && items.keyShopFound.val == 0
+                     ? maxKey >= 1
+                        ? minKey >= 1
+                           ? lampTest
+                           : STATE.maybe
+                        : 0
+                     : items.glove.val
+                        ? lampTest
+                        : items.lamp.val
+                           ? STATE.maybe
+                           : STATE.dark
+             ) * logic.lightWorldLink();
 
 
         },
