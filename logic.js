@@ -347,9 +347,21 @@ var logic = {
                       ;
         },
         28: function () { // Checkerboard Cave
-            return items.flute.val && items.glove.val >= 2 && items.mirror.val ? 1 : 0;
+            return inverted()
+               ? logic.lightWorldLink() && items.glove.val
+               : items.flute.val && items.glove.val >= 2 && items.mirror.val ? 1 : 0;
         },
-        29: function () { return items.boots.val ? 1 : STATE.visible; }, // Library
+        29: function () {
+               return inverted()
+                  ? logic.lightWorldBunny()
+                     ? items.boots.val && items.pearl.val
+                        ? STATE.avail
+                        : STATE.visible
+                     : STATE.unavail
+                  : items.boots.val
+                     ? STATE.avail
+                     : STATE.visible
+             ;}, // Library
         30: function () { return 1; }, // Maze Race
         31: function () { // Desert Ledge
             return logic.entry1() ? 1 : STATE.visible;
