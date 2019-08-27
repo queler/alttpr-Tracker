@@ -302,14 +302,22 @@ var logic = {
         },
         15: function () { return items.bottle.val >= 1 && logic.lightWorldBunny() }, // Sick Kid
         16: function () { return logic.lightWorldLink(); }, // Lost Woods Hideout
-        17: function () { return items.boss11.val && items.boots.val ? 1 : STATE.visible; }, // Lumberjack Tree
-        18: function () { return logic.darkWorldNW() && items.mirror.val ? 1 : 0; }, // Graveyard Ledge
-        19: function () { return 1; }, // Mushroom
-        20: function () { return 1; }, // Dam
-        21: function () { return 1; }, // Link's House
-        22: function () { return 1; }, // Aginah's Cave
-        23: function () { return 1; }, // Mini Moldorm Cave
-        24: function () { return 1; }, // Ice Rod Cave
+        17: function () { return logic.lightWorldLink()
+             ? items.boss11.val && items.boots.val
+                ? STATE.avail
+                : STATE.visible
+             : STATE.unavail; }, // Lumberjack Tree
+        18: function () { return !inverted()
+              ? logic.darkWorldNW() && items.mirror.val
+                 ? 1
+                 : 0
+              : logic.lightWorldLink(); }, // Graveyard Ledge
+        19: function () { return logic.lightWorldLink(); }, // Mushroom
+        20: function () { return logic.lightWorldLink(); }, // Dam
+        21: function () { return STATE.avail; }, // Link's House
+        22: function () { return logic.lightWorldLink();}, // Aginah's Cave
+        23: function () { return logic.lightWorldLink(); }, // Mini Moldorm Cave
+        24: function () { return logic.lightWorldLink(); }, // Ice Rod Cave
         25: function () { return items.flippers.val; }, // Hobo
         26: function () { // Bombos Tablet
             return items.book.val && items.mirror.val && logic.darkWorldSouth() ?
