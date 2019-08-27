@@ -318,11 +318,23 @@ var logic = {
         22: function () { return logic.lightWorldLink();}, // Aginah's Cave
         23: function () { return logic.lightWorldLink(); }, // Mini Moldorm Cave
         24: function () { return logic.lightWorldLink(); }, // Ice Rod Cave
-        25: function () { return items.flippers.val; }, // Hobo
+        25: function () {
+           return logic.lightWorldLink()
+              ? items.flippers.val
+                 ? STATE.avail
+                 : STATE.dark
+              : STATE.unavail;
+           }, // Hobo
         26: function () { // Bombos Tablet
-            return items.book.val && items.mirror.val && logic.darkWorldSouth() ?
-                logic.canActivatabteTablets() ? STATE.avail : STATE.visible :
-                STATE.unavail;
+            return items.book.val && (
+                  inverted()
+                     ? logic.lightWorldBunny()
+                     : items.mirror.val && logic.darkWorldSouth()
+                  )
+               ? logic.canActivatabteTablets()
+                  ? STATE.avail
+                  : STATE.visible
+               : STATE.unavail;
         },
         27: function () { // Cave 45
             return items.mirror.val &&
