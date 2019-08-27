@@ -337,8 +337,14 @@ var logic = {
                : STATE.unavail;
         },
         27: function () { // Cave 45
-            return items.mirror.val &&
-                (logic.darkWorldNW() || items.boss11.val && items.pearl.val && items.hammer.val) ? 1 : 0;
+            return inverted()
+               ? logic.lightWorldLink()
+               : items.mirror.val &&
+                   (logic.darkWorldNW()
+                      || items.boss11.val
+                      && items.pearl.val
+                      && items.hammer.val) 
+                      ;
         },
         28: function () { // Checkerboard Cave
             return items.flute.val && items.glove.val >= 2 && items.mirror.val ? 1 : 0;
