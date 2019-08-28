@@ -426,13 +426,14 @@ var logic = {
 
         },
         36: function () { // Sewers - Dark Cross
-            return std() || items.lamp.val ? 1 : 2;
+            return (std() || items.lamp.val ? 1 : 2)
+               * logic.lightWorldLink();
         },
-        37: function () { return 1; }, // Hyrule Castle
-        38: function () { return 1; }, // Link's Uncle
+        37: function () { return logic.lightWorldLink(); }, // Hyrule Castle
+        38: function () { return logic.lightWorldLink(); }, // Link's Uncle
         39: function () { // Old Man
             return logic.climbDM() ?
-                items.lamp.val ? 1 : 2 :
+                items.lamp.val ? 1 : STATE.dark:
                 0;
         },
         40: function () { // Spectacle Rock Cave
