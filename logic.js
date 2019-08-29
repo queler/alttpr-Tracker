@@ -343,7 +343,7 @@ var logic = {
                    (logic.darkWorldNW()
                       || items.boss11.val
                       && items.pearl.val
-                      && items.hammer.val) 
+                      && items.hammer.val)
                       ;
         },
         28: function () { // Checkerboard Cave
@@ -449,11 +449,19 @@ var logic = {
                 0;
         },
         42: function () { // Spectacle Rock
-            return logic.climbDM() ?
-                items.mirror.val ?
-                    logic.DMlightAorD() :
-                    STATE.visible :
-                0;
+            var av=null;
+            if (inverted()){
+               av=logic.eastDM()
+                  && items.hammer.val
+                  && items.pearl.val;
+            } else{
+               av=logic.climbDM() && items.mirror.val;
+            }
+            return av
+               ? logic.DMlightAorD()
+               : logic.climbDM()
+                 ? STATE.visible
+                 : STATE.unavail;
         },
         43: function () { // Spiral Cave
             return logic.eastDM() ?
