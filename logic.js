@@ -121,6 +121,14 @@ var logic = {
 	eastDMInv: function () {return logic.climbDM() && ((items.hookshot.val && items.pearl.val) || (items.glove.val>=2));},
 	eastDM: function () {return !inverted() ? logic.eastDMReg() : logic.eastDMInv();},
     darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
+    heraArea: function () {
+        if (inverted()) {
+            return logic.eastDM() && items.pearl.val && items.hammer.val;
+        }
+        else {
+            return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val);
+        }
+    },
     cane: function () { return items.somaria.val || items.byrna.val; }, //the canes work against certain bosses
     rod: function () { return items.firerod.val || items.icerod.val; }, //the rods work against certain bosses
     fire: function () { return items.lamp.val || items.firerod.val; }, //can light torches
@@ -134,14 +142,7 @@ var logic = {
     //Dungeon entry
     entry0: function () {return !inverted() || (logic.lightWorldLink()); },
     entry1: function () { return inverted()? logic.lightWorldLink() && items.book.val :items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
-    entry2: function () {
-        if (inverted()) {
-            return logic.eastDM() && items.pearl.val && items.hammer.val;
-        }
-        else {
-            return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val);
-        }
-    },
+    entry2: function () { return logic.heraArea(); },
     //POD
     entry3: function () { return logic.darkWorldEast(); },
     //SP
@@ -442,18 +443,16 @@ var logic = {
                 0;
         },
         41: function () { // Ether Tablet
-            return items.book.val && logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) ?
-                logic.canActivatabteTablets() ?
-                    logic.DMlightAorD() :
-                    STATE.visible :
-                0;
+            return items.book.val && logic.heraArea()
+               ? logic.canActivatabteTablets()
+                  ? logic.DMlightAorD()
+                  : STATE.visible
+                  : 0;
         },
         42: function () { // Spectacle Rock
             var av=null;
             if (inverted()){
-               av=logic.eastDM()
-                  && items.hammer.val
-                  && items.pearl.val;
+               av=logic.heraArea();
             } else{
                av=logic.climbDM() && items.mirror.val;
             }
