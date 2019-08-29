@@ -468,20 +468,24 @@ var logic = {
                 0;
         },
         44: function () { // Mimic Cave
-
-            return !(keysanity() && items.key9.val < 2) &&
-                items.pearl.val &&
-                items.hammer.val &&
-                items.glove.val >= 2 &&
-                items.somaria.val &&
-                items.mirror.val ?
-                logic.medallion(9) !== 1 ?
-                    logic.medallion(9) :
-                    items.firerod.val ?
-                        logic.DMlightAorD() :
-                        STATE.maybe :
-                0;
-
+           if(inverted()){
+              return logic.eastDM()
+                 && items.hammer.val
+                 && items.pearl.val;
+           }else{
+              return !(keysanity() && items.key9.val < 2) &&
+                  items.pearl.val &&
+                  items.hammer.val &&
+                  items.glove.val >= 2 &&
+                  items.somaria.val &&
+                  items.mirror.val ?
+                  logic.medallion(9) !== 1 ?
+                      logic.medallion(9) :
+                      items.firerod.val ?
+                          logic.DMlightAorD() :
+                          STATE.maybe :
+                  0;
+            }
         },
         45: function () { // Paradox Cave
             return logic.eastDM() ?
