@@ -497,11 +497,12 @@ var logic = {
                : STATE.unavail;
         },
         46: function () { // Floating Island
-            return logic.eastDM() ?
-                items.mirror.val && items.pearl.val && items.glove.val >= 2 ?
-                    logic.DMlightAorD() :
-                    STATE.visible :
-                0;
+            return logic.eastDM()
+               ? (!inverted() && items.mirror.val && items.pearl.val && items.glove.val >= 2)
+                  || (inverted())
+                  ?  logic.DMlightAorD()
+                  :  STATE.visible
+               : 0;
         },
         47: function () { // Superbunny Cave
 //update for tr portal w/o pearl
