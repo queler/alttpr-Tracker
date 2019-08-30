@@ -519,19 +519,25 @@ var logic = {
            }
         },
         48: function () { // Hookshot Cave
-            return items.pearl.val && items.glove.val >= 2 && items.hookshot.val ?
-                logic.DMlightAorD() :
-                0;
+            return (inverted()
+               ? logic.climbDM() && items.hookshot.val
+               : items.pearl.val && items.glove.val >= 2 && items.hookshot.val
+            )
+            ? logic.DMlightAorD()
+            : 0;
         },
         49: function () { // Hookshot Cave - Bottom Chest
-            return items.pearl.val && items.glove.val >= 2 && (items.hookshot.val || (items.mirror.val && items.hammer.val && items.boots.val)) ?
-                logic.DMlightAorD() :
-                0;
+            return (inverted()
+               ? logic.climbDM() && (items.hookshot.val || items.boots.val)
+               : items.pearl.val && items.glove.val >= 2 && (items.hookshot.val || (items.mirror.val && items.hammer.val && items.boots.val))
+              )
+            ? logic.DMlightAorD()
+            : 0;
         },
         50: function () { // Spike Cave
-            return items.pearl.val && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val) ?
-                logic.DMlightAorD() :
-                0;
+            return (items.pearl.val || inverted()) && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val || items.bottle.val)
+              ? logic.DMlightAorD()
+              : 0;
         },
         51: function () { // Catfish"
             return logic.darkWorldEast() && items.glove.val ? 1 : 0;
