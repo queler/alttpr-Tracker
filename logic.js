@@ -544,12 +544,14 @@ var logic = {
         },
         52: function () { // Pyramid
 
-            return items.boss11.val || logic.darkWorldEast() ? 1 : 0;
+            return (!inverted() && items.boss11.val) || logic.darkWorldEast() ? 1 : 0;
 
         },
         53: function () { // Pyramid Fairy
 
-            return items.redCrystal.val >= 2 && (items.boss11.val || logic.darkWorldEast()) ? 1 : 0;
+            return inverted()
+               ? (items.redCrystal.val >= 2) && logic.lightWorldBunny()
+               : (items.redCrystal.val >= 2 && (items.boss11.val || logic.darkWorldEast()));
 
         },
         54: function () { // Brewery
