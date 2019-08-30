@@ -141,7 +141,10 @@ var logic = {
     },
     //Dungeon entry
     entry0: function () {return !inverted() || (logic.lightWorldLink()); },
-    entry1: function () { return inverted()? logic.lightWorldLink() && items.book.val :items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
+    entry1: function () {
+       return inverted()
+       ? logic.lightWorldLink() && items.book.val
+       : items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
     entry2: function () { return logic.heraArea(); },
     //POD
     entry3: function () { return logic.darkWorldEast(); },
@@ -163,17 +166,22 @@ var logic = {
             return items.pearl.val && items.glove.val >= 2 && items.flippers.val &&
                 (items.firerod.val || (items.bombos.val && logic.canUseMedallions()));
         },
-        entry8: function () {
+        entry8: function () {//mm access no medal
             return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val);
         },
-        entry9: function () {
+        entry9: function () {//tr no medal
             return logic.darkEastDM() && items.hammer.val && items.somaria.val;
         },
         entry10: function () {
             return items.crystal.val >= 7 && logic.darkEastDM();
         },
     // end
-    entry11: function () { return swordless()?items.hammer.val:(items.sword.val >= 2) || items.cape.val; },
+    entry11: function () { if(inverted()){
+          return logic.climbDM();
+       }else{
+          return (swordless()?items.hammer.val:(items.sword.val >= 2)) || items.cape.val;
+       }
+    },
 
     //this function returns 0, 1, or 3
     // 0 = unavailable
@@ -664,7 +672,7 @@ var logic = {
                 max = 3;      // always possible for the first three chests to have items
             }
 
-            return { boss: boss, max: max, min: min };
+            return { boss: boss*logic.entry0(), max: max*logic.entry0(), min: min*logic.entry0() };
         },
         1: function () { //Desert Palace
             var boss;
