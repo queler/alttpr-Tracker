@@ -595,10 +595,10 @@ var logic = {
                :items.pearl.val && items.glove.val >= 2;
         },
         60: function () { // Purple Chest
-            return items.pearl.val && items.glove.val >= 2 ? 1 : 0;
+            return logic.chests[59]();
         },
         61: function () { // Hype Cave
-            return logic.darkWorldSouth() ? 1 : 0;
+            return logic.darkWorldSouth();
         },
         62: function () { // Stumpy
             return logic.darkWorldSouth() ? 1 : 0;
@@ -607,7 +607,10 @@ var logic = {
             return logic.darkWorldSouth() ? 1 : 0;
         },
         64: function () { // Mire Shed
-            return items.pearl.val && items.flute.val && items.glove.val >= 2 ? 1 : 0;
+            return inverted()
+               ? logic.canFly() ||
+               (logic.lightWorldBunny() && items.mirror.val)
+               :items.pearl.val && items.flute.val && items.glove.val >= 2;
         }
     },
 
