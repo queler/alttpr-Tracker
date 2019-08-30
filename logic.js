@@ -563,8 +563,20 @@ var logic = {
         56: function () { // Chest Game
             return logic.darkWorldNW() ? 1 : 0;
         },
+        /*
+  inverted()
+               ? 
+               : (     
+               */
         57: function () { // Hammer Pegs
-            return items.pearl.val && items.glove.val >= 2 && items.hammer.val ? 1 : 0;
+            return inverted()
+               ? items.hammer.val &&
+                  ( items.glove.val>=2 
+                     || (logic.lightWorldBunny() 
+                        && items.mirror.val) 
+                  
+                  )
+               : items.pearl.val && items.glove.val >= 2 && items.hammer.val;
         },
         58: function () { // Bumper Cave
             return logic.darkWorldNW() ?
