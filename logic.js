@@ -589,7 +589,10 @@ var logic = {
                   :0;
         },
         59: function () { // BlackSmith
-            return items.pearl.val && items.glove.val >= 2 ? 1 : 0;
+            return inverted()
+               ? logic.lightWorldBunny() &&
+                  (items.glove.val>=2 || items.mirror.val)
+               :items.pearl.val && items.glove.val >= 2;
         },
         60: function () { // Purple Chest
             return items.pearl.val && items.glove.val >= 2 ? 1 : 0;
