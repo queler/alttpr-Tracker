@@ -506,10 +506,17 @@ var logic = {
         },
         47: function () { // Superbunny Cave
 //update for tr portal w/o pearl
-            return  items.glove.val >= 2 && logic.eastDM() ?
-                logic.DMlightAorD() :
-                0;
-
+           if(inverted()){
+              return logic.climbDM()
+                 ? logic.DMlightAorD()
+                 : STATE.unavail;
+           } else{
+              return  items.glove.val >= 2 && logic.eastDM()
+              ? items.pearl.val
+                 ? logic.DMlightAorD()
+                 : STATE.dark
+              : 0;
+           }
         },
         48: function () { // Hookshot Cave
             return items.pearl.val && items.glove.val >= 2 && items.hookshot.val ?
