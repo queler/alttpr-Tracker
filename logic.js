@@ -579,9 +579,14 @@ var logic = {
                : items.pearl.val && items.glove.val >= 2 && items.hammer.val;
         },
         58: function () { // Bumper Cave
-            return logic.darkWorldNW() ?
-                items.glove.val && items.cape.val ? 1 : STATE.visible :
-                0;
+              return logic.darkWorldNW() ?
+                  items.glove.val && items.cape.val &&
+                  (!inverted || (logic.lightWorldLink()
+                        && items.mirror.val)
+                  )
+                     ? STATE.avail
+                     : STATE.visible
+                  :0;
         },
         59: function () { // BlackSmith
             return items.pearl.val && items.glove.val >= 2 ? 1 : 0;
