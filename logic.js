@@ -114,7 +114,7 @@ var logic = {
                     (this.lightWorldLink())
                 );
         },
-    DMlight: function () { return (items.lamp.val || logic.canFly()); }, //used to determine if DM chests require dark
+    DMlight: function () { return (items.lamp.val || logic.canFly() || chests[39].opened); }, //used to determine if DM chests require dark
     DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
     climbDM: function () { return (items.glove.val || logic.canFly()); }, //can get up Death Mountain, all below spec rock
     eastDMReg: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
@@ -447,7 +447,7 @@ var logic = {
                ? logic.canActivatabteTablets()
                   ? logic.DMlightAorD()
                   : STATE.visible
-                  : 0;
+               : 0;
         },
         42: function () { // Spectacle Rock
             var av=null;
@@ -488,9 +488,13 @@ var logic = {
             }
         },
         45: function () { // Paradox Cave
-            return logic.eastDM() ?
-                logic.DMlightAorD() :
-                0;
+            return logic.eastDM()
+              ? (!inverted() || items.pearl.val)
+                  ? logic.DMlightAorD()
+                  : items.sword.val>=2
+                     ? STATE.maybe
+                     : STATE.unavail
+               : STATE.unavail;
         },
         46: function () { // Floating Island
             return logic.eastDM() ?
