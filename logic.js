@@ -139,6 +139,12 @@ var logic = {
             ? STATE.maybe
             : STATE.unavail;
     },
+    mireArea: function() {
+       return inverted()
+               ? logic.canFly() ||
+               (logic.lightWorldBunny() && items.mirror.val)
+               :items.pearl.val && items.flute.val && items.glove.val >= 2;
+    },
     //Dungeon entry
     entry0: function () {return !inverted() || (logic.lightWorldLink()); },
     entry1: function () {
@@ -162,18 +168,18 @@ var logic = {
     entry6: function () { return logic.darkWorldNW(); },
     //IP
 // these haven't been updated for inverted
-    entry7: function () {
+   /* entry7: function () {
             return items.pearl.val && items.glove.val >= 2 && items.flippers.val &&
                 (items.firerod.val || (items.bombos.val && logic.canUseMedallions()));
-        },
+        }, */
         entry8: function () {//mm access no medal
-            return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val);
+            return logic.mireArea() && (items.boots.val || items.hookshot.val);
         },
-        entry9: function () {//tr no medal
+        entry9: function () {//tr no medal light only
             return logic.darkEastDM() && items.hammer.val && items.somaria.val;
         },
         entry10: function () {
-            return items.crystal.val >= 7 && logic.darkEastDM();
+            return items.crystal.val >= 7 && (inverted()?logic.lightWorldLink():logic.darkEastDM()) ;
         },
     // end
     entry11: function () { if(inverted()){
@@ -281,7 +287,7 @@ var logic = {
         6: function () {                            // Master Sword Pedestal
             return (items.pendant.val == 3) && logic.lightWorldBunny() ?
                 1 :
-                items.book.val && logic.lightWorldBunny() ? STATE.visible 
+                items.book.val && logic.lightWorldBunny() ? STATE.visible
                 : STATE.unavail;
         },
         7: function () {                                                // King's Tomb
@@ -571,18 +577,12 @@ var logic = {
         56: function () { // Chest Game
             return logic.darkWorldNW() ? 1 : 0;
         },
-        /*
-  inverted()
-               ? 
-               : (     
-               */
         57: function () { // Hammer Pegs
             return inverted()
                ? items.hammer.val &&
-                  ( items.glove.val>=2 
-                     || (logic.lightWorldBunny() 
-                        && items.mirror.val) 
-                  
+                  ( items.glove.val>=2
+                     || (logic.lightWorldBunny()
+                        && items.mirror.val)
                   )
                : items.pearl.val && items.glove.val >= 2 && items.hammer.val;
         },
@@ -615,10 +615,7 @@ var logic = {
             return logic.darkWorldSouth() ? 1 : 0;
         },
         64: function () { // Mire Shed
-            return inverted()
-               ? logic.canFly() ||
-               (logic.lightWorldBunny() && items.mirror.val)
-               :items.pearl.val && items.flute.val && items.glove.val >= 2;
+            return logic.mireArea();
         }
     },
 
@@ -1000,9 +997,9 @@ var logic = {
             return { boss: boss, max: max, min: min }
         },
         4: function () { //Swamp Palace
-            var boss;
-			var min;
-			var max;
+           var boss;
+		         	var min;
+         			var max;
             var entry = logic.entry4(),
                 hammer = items.hammer.val,
                 hookshot = items.hookshot.val,
@@ -1201,26 +1198,39 @@ var logic = {
         },
         7: function () { //Ice Palace
             var boss;
-			var min;
-			var max;
-            var entry = logic.entry7(),
-                hookshot = items.hookshot.val,
+            var min;
+            var max;
+            var entry = (
+               (items.pearl.val && items.glove.val >= 2)
+                  || inverted()
+               )  &&
+               (items.firerod.val || (items.bombos.val && logic.canUseMedallions()))
+                  ? items.flippers.val
+                     ? STATE.avail
+                     : STATE.dark
+                  :STATE.unavail;
+
+            var hookshot = items.hookshot.val,
                 hammer = items.hammer.val,
                 somaria = items.somaria.val,
                 spikeWalk = items.byrna.val || items.cape.val || hookshot,
-                fightKhold = entry && hammer,
+                fightKhold = entry && hammer && items.glove.val,
                 key = items.key7.val,
                 bigKey = items.bigKey7.val
                 ;
 
             if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = fightKhold ?
-                    bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key ==2) || (somaria && key == 2)) ? STATE.avail: STATE.maybe : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
-                    0;
+                boss = fightKhold
+                   ? bigKey && key >= 1
+                         && ((spikeWalk && somaria)
+                         || (spikeWalk && key ==2) || (somaria && key == 2))
+                      ? entry
+                      : STATE.maybe
+                   : 0;//boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
 
-                min = entry ?
-                    3 +                                                                               // compass chest, freezor chest, ice T chest
+                min = entry===STATE.avail
+                   ? 3 +                                                                               // compass chest, freezor chest, ice T chest
                     (bigKey ? 1 : 0) +                                                                   // big chest
                     ((key == 0 && hookshot) || (key >= 1 && spikeWalk) ? 1 : 0) +                     // spike chest -- specifically need hookshot if 0 keys, otherwise any spike safety will do
                     (hammer && ((key == 0 && hookshot) || (key >= 1 && spikeWalk)) ? 2 : 0) +       // map chest, BK chest -- specifically need hookshot if 0 keys, otherwise any spike safety will do
