@@ -120,7 +120,9 @@ var logic = {
     eastDMReg: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
 	eastDMInv: function () {return logic.climbDM() && ((items.hookshot.val && items.pearl.val) || (items.glove.val>=2));},
 	eastDM: function () {return !inverted() ? logic.eastDMReg() : logic.eastDMInv();},
-    darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
+    darkEastDM: function () { return inverted()
+      ? logic.climbDM()
+      :logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
     heraArea: function () {
         if (inverted()) {
             return logic.eastDM() && items.pearl.val && items.hammer.val;
@@ -1317,8 +1319,7 @@ var logic = {
                     0;
 
             } else if (retro()) {    // RETRO LOGIC
-
-                boss = fightVit ?
+                 boss = fightVit ?
                     medallion == STATE.avail?
                         lamp ? STATE.avail : STATE.dark :
                         medallion :
@@ -1411,7 +1412,7 @@ var logic = {
                 max=Math.max(max, back*4 + (boss?1:0) + ((back && items.somaria.val)?5:0) +  (back && items.somaria.val&&firerod ? 2 : 0) );//close enough
 
             } else if (retro()) {    // RETRO LOGIC
-                //must have a keyshop if accessible?
+                //must have a keyshop if accessible
                 boss = fightTri ?
                     medallion == STATE.avail?
                         lamp ? STATE.avail : STATE.dark :
@@ -1698,9 +1699,9 @@ var logic = {
         },
     },
     keyShops: {
-        0: function () { return 1 },  //LW Lake Hylia
-        1: function () { return 1 },  //Kakariko
-        2: function () { return logic.eastDM() ? logic.DMlightAorD() : 0; },  //Death Mountain
+        0: function () { return logic.lightWorldBunny() },  //LW Lake Hylia
+        1: function () { return logic.lightWorldBunny() },  //Kakariko
+        2: function () { return (logic.eastDM()&&(!inverted() || items.pearl.val)) ? logic.DMlightAorD() : 0; },  //Death Mountain
         3: function () { return logic.darkWorldSouth() ? 1 : 0; },  //DW Lake Hylia
         4: function () { return logic.darkEastDM() ? logic.DMlightAorD() : 0; },  //Dark EDM
         5: function () { return logic.darkWorldNW() && items.hammer.val ? 1 : 0; },  //Outcasts
