@@ -1357,9 +1357,12 @@ var logic = {
         },
         9: function () { //Turtle Rock
             var boss;
-			var min;
-			var max;
-            var entry = logic.entry9(),
+            var min;
+            var max;
+            var entry = inverted()
+                   ? logic.climbDM()
+                   : logic.entry9(),
+                back = inverted() && logic.eastDM()&&items.mirror.val,
                 medallion = logic.medallion(9),
                 firerod = items.firerod.val,
                 icerod = items.icerod.val,
@@ -1368,19 +1371,23 @@ var logic = {
                 lamp = items.lamp.val,
                 fightTri = entry && firerod && items.icerod.val,
                 key = items.key9.val,
-                bigKey = items.bigKey9.val
-                ;
+                bigKey = items.bigKey9.val;
 
             if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = fightTri && bigKey && key >= 3 ?
-                    medallion == STATE.avail ?
-                        key == 4 ?
-                            light ? STATE.avail : STATE.dark:
-                            STATE.maybe:
-                        medallion :
-                    STATE.unavail;
-
+                boss = fightTri && bigKey && key >= 3
+                   ? medallion == STATE.avail
+                      ? key == 4
+                         ? lamp
+                            ? STATE.avail
+                            : STATE.dark
+                         : STATE.maybe
+                      : medallion
+                   : STATE.unavail;
+            if(boss!=STATE.avail && back &
+               fightTri && bigKey && key >= 1) {
+               boss=STATE.avail;
+            }
                 min = entry && light && 1 == medallion ?
                     1 +                             // compass Chest
                     (firerod ? 2 : 0) +          	//Spike Roller Chests
@@ -1388,7 +1395,7 @@ var logic = {
                     (key >= 2 ? 1 : 0) +         // BK chest
                     (key >= 2 && bigKey ? 2 : 0) +  //big chest and crystaroller chest
                     (key == 3 && bigKey ? -1 : 0) +  // must leave 1 behind-- either BK chest or boss
-                    (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
+                    (((key >= 3 && bigKey && lamp && safety)||back) ? 4 : 0) + // laser bridge
                     (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
                     0;
 
@@ -1401,6 +1408,7 @@ var logic = {
                     (key >= 3 && bigKey ? 1 : 0) +  // big chest
                     (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
                     0;
+                max=Math.max(max, back*4 + (boss?1:0) + ((back && items.somaria.val)?5:0) +  (back && items.somaria.val&&firerod ? 2 : 0) );//close enough
 
             } else if (retro()) {    // RETRO LOGIC
                 //must have a keyshop if accessible?
