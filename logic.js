@@ -1413,11 +1413,13 @@ var logic = {
 
             } else if (retro()) {    // RETRO LOGIC
                 //must have a keyshop if accessible
-                boss = fightTri ?
-                    medallion == STATE.avail?
-                        lamp ? STATE.avail : STATE.dark :
-                        medallion :
-                    STATE.unavail;
+                boss = fightTri
+                   ? medallion == STATE.avail
+                       ? back || !inverted()
+                          ? lamp ? STATE.avail : STATE.dark
+                          : STATE.maybe
+                       : medallion
+                   : STATE.unavail;
 
                 min = entry && light && medallion == 1 ?
                     2 +
