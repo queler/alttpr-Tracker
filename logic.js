@@ -178,7 +178,7 @@ var logic = {
             return logic.mireArea() && (items.boots.val || items.hookshot.val);
         },
         entry9: function () {//tr no medal light only
-            return logic.darkEastDM() && items.hammer.val && items.somaria.val;
+            throw "entry";
         },
         entry10: function () {
             return items.crystal.val >= 7 && (inverted()?logic.lightWorldLink():logic.darkEastDM()) ;
@@ -1360,24 +1360,24 @@ var logic = {
             var boss;
             var min;
             var max;
-            var entry = inverted()
-                   ? logic.climbDM()
-                   : logic.entry9(),
+            var medallion = logic.medallion(9),
+                front=(logic.darkEastDM() && (inverted() || items.hammer.val) && items.somaria.val)
+                       * medallion,
+                entry=front, //just to prevent crashing til revamp of inv-keysan
                 back = inverted() && logic.eastDM()&&items.mirror.val,
-                medallion = logic.medallion(9),
                 firerod = items.firerod.val,
                 icerod = items.icerod.val,
                 safety = items.byrna.val || items.shield.val >= 3 || items.cape.val,
                 light = logic.DMlight(),
                 lamp = items.lamp.val,
-                fightTri = entry && firerod && items.icerod.val,
+                fightTri = firerod && items.icerod.val,
                 key = items.key9.val,
                 bigKey = items.bigKey9.val;
 
             if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightTri && bigKey && key >= 3
-                   ? medallion == STATE.avail
+                   ? front == STATE.avail
                       ? key == 4
                          ? lamp
                             ? STATE.avail
@@ -1385,10 +1385,12 @@ var logic = {
                          : STATE.maybe
                       : medallion
                    : STATE.unavail;
-            if(boss!=STATE.avail && back &
-               fightTri && bigKey && key >= 1) {
-               boss=STATE.avail;
-            }
+              if(boss!=STATE.avail && back &&
+                 fightTri && bigKey && key >= 1) {
+                    key>=4
+                       ? boss=STATE.avail
+                       : boss=STATE.maybe;
+              }
                 min = entry && light && 1 == medallion ?
                     1 +                             // compass Chest
                     (firerod ? 2 : 0) +          	//Spike Roller Chests
