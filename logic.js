@@ -1437,11 +1437,13 @@ var logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = fightTri ?
-                    medallion == STATE.avail ?
-                        lamp ? STATE.avail : STATE.dark :
-                        medallion :
-                    STATE.unavail;
+                boss = fightTri && back
+                   ? entry == STATE.avail
+                      ? lamp
+                         ? STATE.avail
+                         : STATE.dark
+                      : entry
+                   : STATE.unavail;
 
                 max = entry && medallion !== 0 ? 5 : 0;
 
