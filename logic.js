@@ -1437,21 +1437,45 @@ var logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = fightTri && back
-                   ? entry == STATE.avail
+                boss = fightTri
+                   ? front == STATE.avail
                       ? lamp
                          ? STATE.avail
                          : STATE.dark
-                      : entry
+                      : front
                    : STATE.unavail;
+                if (inverted()){
+                   boss=boss===STATE.avail
+                   ? back?STATE.avail:STATE.maybe
+                   : boss===STATE.maybe
+                   ? STATE.maybe
+                   : boss===STATE.dark
+                   ? back?STATE.maybe:STATE.dark
+                   //unavail
+                   : back
+                   ? STATE.maybe
+                   : STATE.unavail
+                }
 
-                max = entry && medallion !== 0 ? 5 : 0;
+                max = front !== 0 ? 5 :
+                       back
+                         ? items.somaria.val
+                            ? 5
+                            : 4
+                         :0;
 
-                min = entry && light && firerod && medallion == 1 ?
-                    1 +
-                    (safety ? 3 : 0) +
-                    (safety && icerod ? 1 : 0) :
+                if(inverted ()) {
+                   min=light && firerod && front == 1 
+                      ? 1 :0;
+                   min+=(safety && (min || back) ? 3 : 0) +
+                       (boss ? 1 : 0);
+                } else {
+                  min = light && firerod && front == 1
+                    ? 1 +
+                       (safety ? 3 : 0) +
+                       (safety && icerod ? 1 : 0) :
                     0;
+                } 
             }
 
             return { boss: boss, max: max, min: min }
