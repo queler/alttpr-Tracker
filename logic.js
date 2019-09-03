@@ -1452,7 +1452,7 @@ var logic = {
                    : boss===STATE.dark
                    ? back?STATE.maybe:STATE.dark
                    //unavail
-                   : back
+                   : back && fightTri
                    ? STATE.maybe
                    : STATE.unavail
                 }
