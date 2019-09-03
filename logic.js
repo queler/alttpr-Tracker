@@ -1356,10 +1356,17 @@ var logic = {
 
             return { boss: boss, max: max, min: min }
         },
-        9: function () { //Turtle Rock
+        9: function() {
+              if (inverted()) {
+                 return logic.dungeons["9i"]
+              } else {
+                 return logic.dungeons["9r"]();
+              }
+        },
+        "9r": function () { //Turtle Rock reg
             var boss;
-			var min;
-			var max;
+            var min;
+			      var max;
             var entry = logic.entry9(),
                 medallion = logic.medallion(9),
                 firerod = items.firerod.val,
@@ -1372,7 +1379,7 @@ var logic = {
                 bigKey = items.bigKey9.val
                 ;
 
-            if (keysanity()) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC reg
 
                 boss = fightTri && bigKey && key >= 3 ?
                     medallion == STATE.avail ?
@@ -1403,7 +1410,7 @@ var logic = {
                     (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
                     0;
 
-            } else if (retro()) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC reg
                 //must have a keyshop if accessible
                 boss = fightTri ?
                     medallion == STATE.avail?
@@ -1423,7 +1430,7 @@ var logic = {
                     (firerod ? 1 : 0) :
                     0;
 
-            } else {    // REGULAR LOGIC
+            } else {    // REGULAR LOGIC reg
 
                 boss = fightTri ?
                     medallion == STATE.avail ?
@@ -1440,6 +1447,92 @@ var logic = {
                     0;
             }
 
+            return { boss: boss, max: max, min: min }
+        },
+        "9i": function () { //Turtle Rock
+            var boss;
+            var min;
+			      var max;
+            var entry = logic.entry9(),
+                medallion = logic.medallion(9),
+                firerod = items.firerod.val,
+                icerod = items.icerod.val,
+                safety = items.byrna.val || items.shield.val >= 3 || items.cape.val,
+                light = logic.DMlight(),
+                lamp = items.lamp.val,
+                fightTri = entry && firerod && items.icerod.val,
+                key = items.key9.val,
+                bigKey = items.bigKey9.val
+                ;
+
+            if (keysanity()) {    // KEY-SANITY LOGIC inverted
+
+                boss = fightTri && bigKey && key >= 3 ?
+                    medallion == STATE.avail ?
+                        key == 4 ?
+                            light ? STATE.avail : STATE.dark:
+                            STATE.maybe:
+                        medallion :
+                    STATE.unavail;
+
+                min = entry && light && 1 == medallion ?
+                    1 +                             // compass Chest
+                    (firerod ? 2 : 0) +          	//Spike Roller Chests
+                    (key >= 1 ? 1 : 0) +          // chomp room
+                    (key >= 2 ? 1 : 0) +         // BK chest
+                    (key >= 2 && bigKey ? 2 : 0) +  //big chest and crystaroller chest
+                    (key == 3 && bigKey ? -1 : 0) +  // must leave 1 behind-- either BK chest or boss
+                    (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
+                    (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
+                    0;
+
+                max = entry && medallion !== 0 ?
+                    1 +                             // compass Chest
+                    (firerod ? 2 : 0) +                               // compass Chest
+                    (key >= 1 ? 1 : 0) +            // chomp room
+                    (key >= 2 ? 1 : 0) +            // BK chest
+                    (key >= 2 && bigKey ? 5 : 0) +  // crystaroller chest and laser bridge
+                    (key >= 3 && bigKey ? 1 : 0) +  // big chest
+                    (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
+                    0;
+
+            } else if (retro()) {    // RETRO LOGIC inverted
+                //must have a keyshop if accessible
+                boss = fightTri ?
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
+                        medallion :
+                    STATE.unavail;
+
+                min = entry && light && medallion == 1 ?
+                    2 +
+                    (firerod ? 2 : 0) +
+                    (firerod && safety ? 4 : 0) +
+                    (firerod && safety && icerod ? 1 : 0) :
+                    0;
+
+                max = entry && medallion !== 0 ?
+                    8 +
+                    (firerod ? 1 : 0) :
+                    0;
+
+            } else {    // REGULAR LOGIC inverted
+
+                boss = fightTri ?
+                    medallion == STATE.avail ?
+                        lamp ? STATE.avail : STATE.dark :
+                        medallion :
+                    STATE.unavail;
+
+                max = entry && medallion !== 0 ? 5 : 0;
+
+                min = entry && light && firerod && medallion == 1 ?
+                    1 +
+                    (safety ? 3 : 0) +
+                    (safety && icerod ? 1 : 0) :
+                    0;
+            }
+//inverted
             return { boss: boss, max: max, min: min }
         },
         10: function () { //Ganon's Tower
@@ -1794,4 +1887,3 @@ var logic = {
         trackables.save();
     },
 };
-
