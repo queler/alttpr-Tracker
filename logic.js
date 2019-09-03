@@ -1358,7 +1358,7 @@ var logic = {
         },
         9: function() {
               if (inverted()) {
-                 return logic.dungeons["9i"]
+                 return logic.dungeons["9i"]();
               } else {
                  return logic.dungeons["9r"]();
               }
