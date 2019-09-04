@@ -1356,14 +1356,8 @@ var logic = {
 
             return { boss: boss, max: max, min: min }
         },
-        9: function() {
-              if (inverted()) {
-                 return logic.dungeons["9i"]();
-              } else {
-                 return logic.dungeons["9r"]();
-              }
-        },
-        "9r": function () { //Turtle Rock reg
+        9: function () { //Turtle Rock reg
+        if (!inverted()){
             var boss;
             var min;
 			      var max;
@@ -1448,8 +1442,7 @@ var logic = {
             }
 
             return { boss: boss, max: max, min: min }
-        },
-        "9i": function () { //Turtle Rock
+        }else{
             var boss;
             var min;
 			      var max;
@@ -1534,6 +1527,7 @@ var logic = {
             }
 //inverted
             return { boss: boss, max: max, min: min }
+          }
         },
         10: function () { //Ganon's Tower
             var boss;
