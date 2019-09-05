@@ -1360,7 +1360,7 @@ var logic = {
         if (!inverted()){
             var boss;
             var min;
-			      var max;
+            var max;
             var entry = logic.entry9(),
                 medallion = logic.medallion(9),
                 firerod = items.firerod.val,
@@ -1411,13 +1411,13 @@ var logic = {
                         lamp ? STATE.avail : STATE.dark :
                         medallion :
                     STATE.unavail;
-
-                min = entry && light && medallion == 1 ?
-                    2 +
-                    (firerod ? 2 : 0) +
-                    (firerod && safety ? 4 : 0) +
-                    (firerod && safety && icerod ? 1 : 0) :
-                    0;
+//9 total items
+                min = entry && light && medallion == 1 
+                    ? 2 +
+                        (firerod ? 2 : 0) +
+                        (firerod && safety ? 4 : 0) +
+                        (firerod && safety && icerod ? 1 : 0)
+                    : 0;
 
                 max = entry && medallion !== 0 ?
                     8 +
@@ -1442,18 +1442,20 @@ var logic = {
             }
 
             return { boss: boss, max: max, min: min }
-        }else{
+        }else{//inverted
             var boss;
             var min;
-			      var max;
-            var entry = logic.entry9(),
-                medallion = logic.medallion(9),
+            var max;
+            var medallion = logic.medallion(9),
+                front=(logic.darkEastDM()  && items.somaria.val)
+                    * medallion,
+                back = logic.eastDM() && items.mirror.val,
                 firerod = items.firerod.val,
                 icerod = items.icerod.val,
                 safety = items.byrna.val || items.shield.val >= 3 || items.cape.val,
                 light = logic.DMlight(),
                 lamp = items.lamp.val,
-                fightTri = entry && firerod && items.icerod.val,
+                fightTri = firerod && items.icerod.val,
                 key = items.key9.val,
                 bigKey = items.bigKey9.val
                 ;
@@ -1467,7 +1469,7 @@ var logic = {
                             STATE.maybe:
                         medallion :
                     STATE.unavail;
-
+//inverted
                 min = entry && light && 1 == medallion ?
                     1 +                             // compass Chest
                     (firerod ? 2 : 0) +          	//Spike Roller Chests
@@ -1478,7 +1480,7 @@ var logic = {
                     (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
                     (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
                     0;
-
+//inverted
                 max = entry && medallion !== 0 ?
                     1 +                             // compass Chest
                     (firerod ? 2 : 0) +                               // compass Chest
@@ -1488,7 +1490,7 @@ var logic = {
                     (key >= 3 && bigKey ? 1 : 0) +  // big chest
                     (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
                     0;
-
+//inverted
             } else if (retro()) {    // RETRO LOGIC inverted
                 //must have a keyshop if accessible
                 boss = fightTri ?
@@ -1496,27 +1498,33 @@ var logic = {
                         lamp ? STATE.avail : STATE.dark :
                         medallion :
                     STATE.unavail;
-
+//inverted
                 min = entry && light && medallion == 1 ?
                     2 +
                     (firerod ? 2 : 0) +
                     (firerod && safety ? 4 : 0) +
                     (firerod && safety && icerod ? 1 : 0) :
                     0;
-
+//inverted
                 max = entry && medallion !== 0 ?
                     8 +
                     (firerod ? 1 : 0) :
                     0;
-
+//inverted
             } else {    // REGULAR LOGIC inverted
 
-                boss = fightTri ?
-                    medallion == STATE.avail ?
-                        lamp ? STATE.avail : STATE.dark :
-                        medallion :
-                    STATE.unavail;
-
+                boss = fightTri
+                    ? front && back
+                        ? STATE.avail
+                        :  back
+                            ? STATE.maybe
+                            : front
+                    : STATE.unavail;
+                if (boss==STATE.avail && !lamp){
+                    boss=STATE.dark;
+                }
+//inverted
+//12 chests 5 items
                 max = entry && medallion !== 0 ? 5 : 0;
 
                 min = entry && light && firerod && medallion == 1 ?
