@@ -1462,34 +1462,39 @@ var logic = {
 
             if (keysanity()) {    // KEY-SANITY LOGIC inverted
 
-                boss = fightTri && bigKey && key >= 3 ?
-                    medallion == STATE.avail ?
-                        key == 4 ?
-                            light ? STATE.avail : STATE.dark:
-                            STATE.maybe:
-                        medallion :
-                    STATE.unavail;
+                boss = fightTri && bigKey 
+                  ? back & key >=1
+                    ? STATE.avail
+                    : front && key >= 3 
+                       ? front == STATE.avail
+                          ? key == 4
+                              ? light ? STATE.avail : STATE.dark
+                              : STATE.maybe
+                          : front
+                       : STATE.unavail
+                  : STATE.unavail;
 //inverted
-                min = entry && light && 1 == medallion ?
-                    1 +                             // compass Chest
-                    (firerod ? 2 : 0) +          	//Spike Roller Chests
-                    (key >= 1 ? 1 : 0) +          // chomp room
-                    (key >= 2 ? 1 : 0) +         // BK chest
-                    (key >= 2 && bigKey ? 2 : 0) +  //big chest and crystaroller chest
-                    (key == 3 && bigKey ? -1 : 0) +  // must leave 1 behind-- either BK chest or boss
-                    (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
-                    (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
-                    0;
+                min = front==STATE.avail
+                    ? 1 +                             // compass Chest
+                        (firerod ? 2 : 0)         	//Spike Roller Chests
+                    : 0
+                min+=back
+                       ? 4 * safety  //bridge
+                          + (boss==STATE.avail) 
+                          + bigKey
+                          + (bigKey||(lamp&&items.somaria.val)) //crystaroller
+                       :0; //close enough for now
+                if (front && back && key==4) 
+                {
+                   min=
+                      4 +(firerod ? 2 : 0) 
+                   + bigKey
+                   + 4*safety
+                   + (boss==STATE.avail) 
+               } 
+                    
 //inverted
-                max = entry && medallion !== 0 ?
-                    1 +                             // compass Chest
-                    (firerod ? 2 : 0) +                               // compass Chest
-                    (key >= 1 ? 1 : 0) +            // chomp room
-                    (key >= 2 ? 1 : 0) +            // BK chest
-                    (key >= 2 && bigKey ? 5 : 0) +  // crystaroller chest and laser bridge
-                    (key >= 3 && bigKey ? 1 : 0) +  // big chest
-                    (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
-                    0;
+                max = 12* (front || back) 
 //inverted
             } else if (retro()) {    // RETRO LOGIC inverted
                 //must have a keyshop if accessible
@@ -1514,11 +1519,13 @@ var logic = {
             } else {    // REGULAR LOGIC inverted
 
                 boss = fightTri
-                    ? front && back
+                    ? front==STATE.avail && back
                         ? STATE.avail
                         :  back
                             ? STATE.maybe
                             : front
+                               ? STATE.maybe
+                               : STATE.unavail
                     : STATE.unavail;
                 if (boss==STATE.avail && !lamp){
                     boss=STATE.dark;
