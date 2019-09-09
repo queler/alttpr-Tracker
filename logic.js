@@ -301,7 +301,7 @@ var logic = {
         8: function () { return logic.lightWorldLink(); }, // Kakariko Tavern
         9: function () { return logic.lightWorldLink(); }, // Chicken House
         10: function () { return logic.bunnyMaybe(); }, // Kakariko Well
-        11: function () { return logic.bunnyMaybe(); }, // Blind's Hideout
+        11: function () { return logic.lightWorldLink(); }, // Blind's Hideout
         12: function () { return items.boots.val && logic.lightWorldLink(); }, // Pegasus Rocks
         13: function () { return logic.lightWorldBunny(); }, // Bottle Merchant
         14: function () {           // Magic Bat
@@ -365,8 +365,8 @@ var logic = {
         },
         28: function () { // Checkerboard Cave
             return inverted()
-               ? logic.lightWorldLink() && items.glove.val
-               : items.flute.val && items.glove.val >= 2 && items.mirror.val ? 1 : 0;
+               ? logic.lightWorldLink() && items.glove.val>=1
+               : items.flute.val && items.glove.val >= 2 && items.mirror.val;
         },
         29: function () {
                return inverted()
