@@ -1501,7 +1501,7 @@ var logic = {
                     }
                     if (keysLeft>0) {//boss
                         keysLeft--;
-                      if (fightTri) {
+                      if (fightTri && bigKey) {
                         min++;
                       }  
                     }
@@ -1511,7 +1511,7 @@ var logic = {
                     }
                     if (keysLeft>0){
                       keysLeft--;
-                      min+=1+firerod?2:0
+                      min+=1+(firerod?2:0)
                     }
                   }else if (front==STATE.avail && back) {
                     min=4+1+1+firerod?2:0;//at least, not done yet, just a placeholder
