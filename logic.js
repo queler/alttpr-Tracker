@@ -1449,13 +1449,15 @@ var logic = {
             var medallion = logic.medallion(9),
                 front=(logic.darkEastDM()  && items.somaria.val)
                     * medallion,
+	        hook=items.hookshot.val,
+                somaria=items.somaria.val,
                 back = logic.eastDM() && items.mirror.val,
                 firerod = items.firerod.val,
                 icerod = items.icerod.val,
                 safety = items.byrna.val || items.shield.val >= 3 || items.cape.val,
                 light = logic.DMlight(),
                 lamp = items.lamp.val,
-                fightTri = firerod && items.icerod.val,
+                fightTri = firerod && items.icerod.val && somaria,
                 key = items.key9.val,
                 bigKey = items.bigKey9.val
                 ;
@@ -1474,24 +1476,49 @@ var logic = {
                        : STATE.unavail
                   : STATE.unavail;
 //inverted
-                min = front==STATE.avail
-                    ? 1 +                             // compass Chest
-                        (firerod ? 2 : 0)         	//Spike Roller Chests
-                    : 0
-                min+=back
-                       ? 4 * safety  //bridge
-                          + (boss==STATE.avail) 
-                          + bigKey
-                          + (bigKey||(lamp&&items.somaria.val)) //crystaroller
-                       :0; //close enough for now
-                if (front && back && key==4) 
-                {
-                   min=
-                      4 +(firerod ? 2 : 0) 
-                   + bigKey
-                   + 4*safety
-                   + (boss==STATE.avail) 
-               } 
+              var bc;
+              var cr;
+              var keysLeft;
+              if (front==STATE.avail && !back){
+                min =  light && 1 == front ?
+                    1 +                             // compass Chest
+                    (firerod ? 2 : 0) +          	//Spike Roller Chests
+                    (key >= 1 ? 1 : 0) +          // chomp room
+                    (key >= 2 ? 1 : 0) +         // BK chest
+                    (key >= 2 && bigKey ? 2 : 0) +  //big chest and crystaroller chest
+                    (key == 3 && bigKey ? -1 : 0) +  // must leave 1 behind-- either BK chest or boss
+                    (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
+                    (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
+                    0;
+                  }else if (!(front==STATE.avail) && back){
+                    bc=bigKey && (hook ||  somaria);
+                    cr=bc||somaria;
+                    min=5+bc;//laser+chomp + big chests
+                    keysLeft=key+1;
+                    if(cr){//crystaroller can waste a key also
+                      min++;
+                      keysLeft--;
+                    }
+                    if (keysLeft>0) {//boss
+                        keysLeft--;
+                      if (fightTri) {
+                        min++;
+                      }  
+                    }
+                    if (keysLeft>0) {
+                      min++;
+                      keysLeft--; //next inefficient is to use on bk
+                    }
+                    if (keysLeft>0){
+                      keysLeft--;
+                      min+=1+firerod?2:0
+                    }
+                  }else if (front==STATE.avail && back) {
+                    min=4+1+1+firerod?2:0;//at least, not done yet, just a placeholder
+                  }
+                  else {
+                    min=0;
+                  }
                     
 //inverted
                 max = 12* (front || back) 
