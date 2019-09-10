@@ -1463,18 +1463,30 @@ var logic = {
                 ;
 
             if (keysanity()) {    // KEY-SANITY LOGIC inverted
+                if (fightTri && bigKey) {//otherwise no chance
+                    if (back) {//front doesn't change back logic, 0 keys could do, and can't mess up with 4
+                        if (key>=4) {
+                            boss=STATE.avail;
+                        } else {//0-3 keys and back
+                            boss=STATE.maybe;
+                        }
+                    } else {//front only
+                        if (front && key>=3){
+                            if (front==STATE.avail) {
+                                if (key==4) {
+                                    boss=light?STATE.avail:STATE.dark;
+                                } else {
+                                    boss=STATE.maybe;
+                                }
+                            }else{//front is true but not avail
+                                boss=front;
+                            }
+                        }else{
+                            boss=STATE.unavail;
+                        }
 
-                boss = fightTri && bigKey 
-                  ? back & key >=1
-                    ? STATE.avail
-                    : front && key >= 3 
-                       ? front == STATE.avail
-                          ? key == 4
-                              ? light ? STATE.avail : STATE.dark
-                              : STATE.maybe
-                          : front
-                       : STATE.unavail
-                  : STATE.unavail;
+                    }
+                }
 //inverted
               var bc;
               var cr;
