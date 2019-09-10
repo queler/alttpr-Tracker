@@ -1489,7 +1489,7 @@ var logic = {
                 }else{
                     boss=STATE.unavail;
                 }
-//inverted
+//inverted ks
               var bc;
               var cr;
               var keysLeft;
@@ -1504,9 +1504,9 @@ var logic = {
                     (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
                     (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
                     0;
-                  }else if (!(front==STATE.avail) && back && light){
+                  }else if (back && light){
                     bc=bigKey && (hook ||  somaria);
-                    cr=bc||somaria;
+                    cr=bc||(lamp&&somaria);
                     min=4*safety+bc;//laser+chomp + big chests
                     keysLeft=key+1;
                     if(cr){//crystaroller can waste a key also
@@ -1523,20 +1523,47 @@ var logic = {
                       min++;
                       keysLeft--; //next inefficient is to use on bk
                     }
-                    if (keysLeft>0){
+                    if (keysLeft>0||front==STATE.avail) {
                       keysLeft--;
                       min+=1+(firerod?2:0)
                     }
-                  }else if (front==STATE.avail && back) {
-                    min=4+1+1+firerod?2:0;//at least, not done yet, just a placeholder
-                  }
-                  else {
+                  }else {
                     min=0;
                   }
-                    
-//inverted
-                max = 12* (front || back) 
-//inverted
+               if(front && !back){
+  //inverted
+                   max = front !== 0 ?
+                      1 +                             // compass Chest
+                      (firerod ? 2 : 0) +                               // compass Chest
+                      (key >= 1 ? 1 : 0) +            // chomp room
+                      (key >= 2 ? 1 : 0) +            // BK chest
+                      (key >= 2 && bigKey ? 5 : 0) +  // crystaroller chest and laser bridge
+                      (key >= 3 && bigKey ? 1 : 0) +  // big chest
+                      (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
+                      0;
+               } else if (back) {
+                  keysLeft=key+1;
+                    bc=bigKey && (hook ||  somaria);
+                    cr=bc||somaria;
+                  max=5 + bc + cr; //laser + cr bc chomp=7
+                  if(front||key>0){
+                     max+=1+(firerod?2:0);//compass roller=10
+                     if (!front){
+                        keysLeft--;
+                     }
+                     if (keysLeft>0 && boss) {
+                      min++;
+                      keysLeft--; //next inefficient is to use on bk
+                    }
+                  }
+                  if (keysLeft>0) {
+                      max++;
+                      keysLeft--; // bk
+                  }
+               }
+               else{
+                  max=0;
+               } 
             } else if (retro()) {    // RETRO LOGIC inverted
                 //must have a keyshop if accessible
                 boss = fightTri ?
