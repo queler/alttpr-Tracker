@@ -1378,7 +1378,7 @@ var logic = {
                 boss = fightTri && bigKey && key >= 3 ?
                     medallion == STATE.avail ?
                         key == 4 ?
-                            light ? STATE.avail : STATE.dark:
+                            lamp ? STATE.avail : STATE.dark:
                             STATE.maybe:
                         medallion :
                     STATE.unavail;
@@ -1466,7 +1466,7 @@ var logic = {
                 if (fightTri && bigKey) {//otherwise no chance
                     if (back) {//front doesn't change back logic, 0 keys could do, and can't mess up with 4
                         if (key>=4) {
-                            boss=STATE.avail;
+                            boss=logic.DMlightAorD();
                         } else {//0-3 keys and back
                             boss=STATE.maybe;
                         }
@@ -1474,7 +1474,7 @@ var logic = {
                         if (front && key>=3){
                             if (front==STATE.avail) {
                                 if (key==4) {
-                                    boss=light?STATE.avail:STATE.dark;
+                                    boss=lamp?STATE.avail:STATE.dark;
                                 } else {
                                     boss=STATE.maybe;
                                 }
@@ -1486,6 +1486,8 @@ var logic = {
                         }
 
                     }
+                }else{
+                    boss=STATE.unavail;
                 }
 //inverted
               var bc;
@@ -1502,10 +1504,10 @@ var logic = {
                     (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
                     (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
                     0;
-                  }else if (!(front==STATE.avail) && back){
+                  }else if (!(front==STATE.avail) && back && light){
                     bc=bigKey && (hook ||  somaria);
                     cr=bc||somaria;
-                    min=5+bc;//laser+chomp + big chests
+                    min=4*safety+bc;//laser+chomp + big chests
                     keysLeft=key+1;
                     if(cr){//crystaroller can waste a key also
                       min++;
