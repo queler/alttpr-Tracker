@@ -1577,7 +1577,7 @@ var logic = {
                               : STATE.maybe
                            :STATE.unavail;
 
-                min=Math.Max(0,
+                min=Math.max(0,
                     -2 + (4 * laser) +
                     cr +
                     2 + //chomp and big key chest
