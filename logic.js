@@ -1412,7 +1412,7 @@ var logic = {
                         medallion :
                     STATE.unavail;
 //9 total items
-                min = entry && light && medallion == 1 
+                min = entry && light && medallion == 1
                     ? 2 +
                         (firerod ? 2 : 0) +
                         (firerod && safety ? 4 : 0) +
@@ -1451,7 +1451,7 @@ var logic = {
                     * medallion,
 	        hook=items.hookshot.val,
                 somaria=items.somaria.val,
-                back = logic.eastDM() && items.mirror.val,
+                back = (logic.eastDM() && items.mirror.val)?logic.DMlightAorD():STATE.unavail,
                 firerod = items.firerod.val,
                 icerod = items.icerod.val,
                 safety = items.byrna.val || items.shield.val >= 3 || items.cape.val,
@@ -1493,7 +1493,7 @@ var logic = {
               var bc;
               var cr;
               var keysLeft;
-              if (front==STATE.avail && !back){
+              if (front==STATE.avail && back!=STATE.avail){//min inv ks
                 min =  light && 1 == front ?
                     1 +                             // compass Chest
                     (firerod ? 2 : 0) +          	//Spike Roller Chests
@@ -1504,7 +1504,7 @@ var logic = {
                     (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
                     (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
                     0;
-                  }else if (back && light){
+                  }else if (back == STATE.avail){//min inv ks
                     bc=bigKey && (hook ||  somaria);
                     cr=bc||(lamp&&somaria);
                     min=4*safety+bc;//laser+chomp + big chests
@@ -1517,7 +1517,7 @@ var logic = {
                         keysLeft--;
                       if (fightTri && bigKey) {
                         min++;
-                      }  
+                      }
                     }
                     if (keysLeft>0) {
                       min++;
@@ -1530,7 +1530,7 @@ var logic = {
                   }else {
                     min=0;
                   }
-               if(front && !back){
+               if(front && !back){//max inv ks
   //inverted
                    max = front !== 0 ?
                       1 +                             // compass Chest
@@ -1541,7 +1541,7 @@ var logic = {
                       (key >= 3 && bigKey ? 1 : 0) +  // big chest
                       (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
                       0;
-               } else if (back) {
+               } else if (back) {//max inv ks
                   keysLeft=key+1;
                     bc=bigKey && (hook ||  somaria);
                     cr=bc||somaria;
@@ -1561,28 +1561,41 @@ var logic = {
                       keysLeft--; // bk
                   }
                }
-               else{
+               else{//max inv ks
                   max=0;
-               } 
+               }
             } else if (retro()) {    // RETRO LOGIC inverted
                 //must have a keyshop if accessible
-                boss = fightTri ?
-                    medallion == STATE.avail?
-                        lamp ? STATE.avail : STATE.dark :
-                        medallion :
-                    STATE.unavail;
+                var laser=safety && back==STATE.avail;
+                var cr=somaria&&lamp&&(back==STATE.avail);
+                var floor1=(front==STATE.avail)||(somaria&&(back==STATE.avail));
+                var backRoller=floor1&&firerod
+                var defBK=cr&&laser&&floor1&&backRoller;
+                    boss=fightTri && (back||front)
+                           ? defBK
+                              ? logic.DMlightAorD() //bigkey obv got in to TR
+                              : STATE.maybe
+                           :STATE.unavail;
+
+                min=Math.Max(0,
+                    -2 + (4 * laser) +
+                    cr +
+                    2 + //chomp and big key chest
+                    floor1 +
+                    (backRoller *2) +
+                    ((boss==STATE.avail)?1:0)  //don't add big chest as 1 is subtracted for big key
+                );
 //inverted
-                min = entry && light && medallion == 1 ?
-                    2 +
-                    (firerod ? 2 : 0) +
-                    (firerod && safety ? 4 : 0) +
-                    (firerod && safety && icerod ? 1 : 0) :
-                    0;
+
 //inverted
-                max = entry && medallion !== 0 ?
-                    8 +
-                    (firerod ? 1 : 0) :
-                    0;
+              if (front||back){
+                    var chestImpossible= (!firerod?0:2) //back roller
+                       + ((front||somaria)?0:1) //Compass
+                       + (boss?0:1);
+                     max=Math.min(9,12-chestImpossible);
+              }else{
+                 max=0;
+              }
 //inverted
             } else {    // REGULAR LOGIC inverted
 
