@@ -1523,7 +1523,7 @@ var logic = {
                       min++;
                       keysLeft--; //next inefficient is to use on bk
                     }
-                    if (keysLeft>0||front==STATE.avail) {
+                    if ((keysLeft>0 && somaria ) ||(front==STATE.avail)) {
                       keysLeft--;
                       min+=1+(firerod?2:0)
                     }
