@@ -79,7 +79,7 @@ var logic = {
     darkWorldEastReg: function () {
         return items.pearl.val && //need this of course
             (items.boss11.val || //agahnim gives direct access
-                items.hammer.val && items.glove.val || //portal at flute 5
+                items.hammer.val && items.glove.val>=1 || //portal at flute 5
                 items.glove.val >= 2 && items.flippers.val //kakariko portal then river crossing
             ); //
     },
@@ -551,7 +551,7 @@ var logic = {
             : 0;
         },
         50: function () { // Spike Cave
-            return (items.pearl.val || inverted()) && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val || items.bottle.val)
+            return (items.pearl.val || inverted()) && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val || items.bottle.val>0)
               ? logic.DMlightAorD()
               : 0;
         },
@@ -566,8 +566,8 @@ var logic = {
         53: function () { // Pyramid Fairy
 
             return inverted()
-               ? (items.redCrystal.val >= 2) && logic.lightWorldBunny()
-               : (items.redCrystal.val >= 2 && (items.boss11.val || logic.darkWorldEast()));
+               ? ((items.redCrystal.val >= 2) && logic.lightWorldBunny())
+               : ((items.redCrystal.val >= 2) && (items.boss11.val || logic.darkWorldEast()));
 
         },
         54: function () { // Brewery
