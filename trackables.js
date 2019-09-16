@@ -202,6 +202,14 @@ trackables= {
 			logic.apply();
 		}
 	},
+	getJSON: function(){
+		var obj={};
+		obj.items=basil.get("items")||itemsDef();
+		obj.chests=basil.get("chests")||chestsDef();
+		obj.dungeons=basil.get("dungeons")||dungeonsDef();
+		obj.keyShops=basil.get("keyShops")||keyShopsDef();
+		return JSON.stringify(obj);
+	},
 	load: function(){
 		items=basil.get("items")||itemsDef();
 		chests=basil.get("chests")||chestsDef();
