@@ -210,6 +210,12 @@ trackables= {
 		obj.keyShops=basil.get("keyShops")||keyShopsDef();
 		return JSON.stringify(obj);
 	},
+	loadJSON: function(obj){
+        basil.set("items", obj.items);
+		basil.set("chests", obj.chests);
+		basil.set("dungeons", obj.dungeons);
+		basil.set("keyShops", obj.keyShops);
+	},
 	load: function(){
 		items=basil.get("items")||itemsDef();
 		chests=basil.get("chests")||chestsDef();
