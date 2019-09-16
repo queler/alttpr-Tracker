@@ -169,11 +169,17 @@ var logic = {
     //tt
     entry6: function () { return logic.darkWorldNW(); },
     //IP
-// these haven't been updated for inverted
-   /* entry7: function () {
-            return items.pearl.val && items.glove.val >= 2 && items.flippers.val &&
-                (items.firerod.val || (items.bombos.val && logic.canUseMedallions()));
-        }, */
+    entry7: function () {
+            return  (
+               (items.pearl.val && items.glove.val >= 2)
+                  || inverted()
+               )  &&
+               (items.firerod.val || (items.bombos.val && logic.canUseMedallions()))
+                  ? items.flippers.val
+                     ? STATE.avail
+                     : STATE.dark
+                  :STATE.unavail;
+     },
         entry8: function () {//mm access no medal
             return logic.mireArea() && (items.boots.val || items.hookshot.val);
         },
@@ -183,7 +189,6 @@ var logic = {
         entry10: function () {
             return items.crystal.val >= 7 && (inverted()?logic.lightWorldLink():logic.darkEastDM()) ;
         },
-    // end
     entry11: function () { if(inverted()){
           return logic.climbDM();
        }else{
@@ -1202,15 +1207,7 @@ var logic = {
             var boss;
             var min;
             var max;
-            var entry = (
-               (items.pearl.val && items.glove.val >= 2)
-                  || inverted()
-               )  &&
-               (items.firerod.val || (items.bombos.val && logic.canUseMedallions()))
-                  ? items.flippers.val
-                     ? STATE.avail
-                     : STATE.dark
-                  :STATE.unavail;
+            var entry =logic.entry7();
 
             var hookshot = items.hookshot.val,
                 hammer = items.hammer.val,
