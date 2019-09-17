@@ -159,7 +159,7 @@ stats = {
         return list;
     },
     goList7: function () {
-        var entry = logic.entry7(),
+        var entry = logic.entry7()==STATE.avail;
             melt = items.firerod.val || (items.bombos.val && items.sword.val >= 1),
             hookshot = items.hookshot.val,
             hammer = items.hammer.val,
@@ -323,20 +323,25 @@ stats = {
         if (typeof (elem) == "string") { elem = { id: elem }; }
 
         if (settings.predictor !== "0") {
-
-            if (elem.id.indexOf("medal") >= 0 || elem.id == "bomb" || elem.id.indexOf("ey") >= 0 || items[elem.id].val == items[elem.id].max) {
+            
+            var elemId = elem.id;
+            var parsed = idParser.exec(elemId);
+            if (["bigPrize","abbr"].indexOf(parsed[1])>=0 ) {
+                elemId="boss"+parsed[2];
+            }
+            if (elemId.indexOf("medal") >= 0 || elemId == "bomb" || elemId.indexOf("ey") >= 0 || items[elemId].val == items[elemId].max) {
                 item = null;
-            } else if (elem.id.indexOf("boss") >= 0 || elem.id.indexOf("prize") >= 0) {
-                id = (elem.id.replace(/\D/g, ''));
+            } else if (elemId.indexOf("boss") >= 0 || elemId.indexOf("prize") >= 0) {
+                id = (elemId.replace(/\D/g, ''));
                 item = stats["goList" + id]();
-            } else if (elem.id == "bow") {
+            } else if (elemId == "bow") {
                 item = items.bow.val == 2 ? "silver" : "bow";
-            } else if (elem.id == "mushroompowder") {
+            } else if (elemId == "mushroompowder") {
                 item = items.mushroompowder.val == 2 ? "mushroom" : "powder";
-            } else if (elem.id == "shovelflute") {
+            } else if (elemId == "shovelflute") {
                 item = items.shovelflute.val == 2 ? "shovel" : "flute";
             } else {
-                item = elem.id;
+                item = elemId;
             }
 
             if (item !== null && item.constructor !== Array) { item = [item]; }

@@ -8,12 +8,14 @@
 	<link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="eruda.min.js"></script>
+	<script>eruda.init();</script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.4/TweenMax.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.2/utils/Draggable.min.js"></script>
 	<script src="https://code.createjs.com/soundjs-0.6.1.min.js"></script>
 	<script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
-	<script src="eruda.min.js"></script>
-	<script>eruda.init();</script>
+
+	<script src="basil.min.js"></script>
 
 
 	<script src="logic.js"></script>
@@ -265,6 +267,7 @@
 	<div id="settingsTab">
 		<div id="tabIcon" onclick="settings.toggle()">&#9776;</div>
 		<div id="tabIcon" style="left:40px" onclick="popout()"> &#8663;</div>
+		<div id="tabIcon" style="left:80px" onclick="trackables.reset()">&#8635;</div>
 		<div id="caption"></div>
 
 		<div class="selection" style="top: 40px;left:50px;">
@@ -355,6 +358,9 @@
 			<br/>
 			<input title="Open Mode" class="radio icon1" type="radio" name="openMode" value="1" onclick="settings.apply(false)">
 			<span class="radio icon1"> Open</span>
+			<br/>
+			<input title="Inverted Mode" class="radio icon2" type="radio" name="openMode" value="2" onclick="settings.apply(false)">
+			<span class="radio icon2"> Inverted</span>
 		</div>
 
 		<div class="selection" style="top:170px;left:170px">
@@ -396,6 +402,7 @@
 		<div class="selection" style="top: 130px;left:530px">
 			<b>&nbsp;LOCATION
 				<br/>&nbsp;PREDICTOR
+				<br/>&nbsp;(Non-inverted)
 				<br/>
 				<input title="No Predictions" class="radio predictOff" type="radio" name="predictor" value="0" onclick="settings.apply(false)"
 				 checked>
@@ -413,7 +420,10 @@
 	<script>
 
 		$(window).load(function () {
+			//$('#caption').on("click",trackables.reset)
+			basil=new window.Basil({namespace: 'queler/z3r_tracker'});
 			layout.sizeMap($("input[name='mapAlign']:checked").val()); //arranges the maps to best fit on screen
+			trackables.load();
 			map.populate();											//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
 			stats.fetch();
@@ -450,17 +460,26 @@
 
 			}
 		);
+		$(".icon").focus(
+			function () {
+				stats.find(this);
+			});
+		$(".icon").blur( function () {
 
-		$('.icon').mousedown(function (event) {					//adds listener for right-click on icons
-			if (event.which == 3) {
+				if (settings.predictor == 0) {
+					stats.clear();
+				} else {
+					stats.find("boss10");
+				}
+
+			}
+		);
+		$('.icon').contextmenu(function (event) {					//adds listener for right-click on icons
 				toggle.icon(this, true);
-			};
 		});
 
-		$('#timer').mousedown(function (event) {					//adds listener for right-click on icons
-			if (event.which == 3) {
+		$('#timer').contextmenu(function (event) {					//adds listener for right-click on icons
 				resetTimer();
-			};
 		});
 
 

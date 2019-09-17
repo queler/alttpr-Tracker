@@ -1,5 +1,5 @@
-
-items = {				//a list of everything we're tracking-- includes all inventory items and also some other variables
+idParser=/(\D+)(\d*)/;
+function itemsDef(){return {				//a list of everything we're tracking-- includes all inventory items and also some other variables
 	bow: { val: 0, max: 3 },
 	boomerang: { val: 0, max: 3 },
 	hookshot: { val: 0, max: 1 },
@@ -84,10 +84,10 @@ items = {				//a list of everything we're tracking-- includes all inventory item
 	pendant: { val: 0, max: 3 },
 	greenPendant: { val: 0, max: 1 },
 	crystal: { val: 0, max: 7 },
-	redCrystal: { val: 0, max: 2 },
-}
+	redCrystal: { val: 0, max: 2 }
+};}
 
-chests = {
+function chestsDef(){return {
 	0: { world: "LW", amount: 3, xPos: 82.5, yPos: 42.5, opened: false, status: null, name: "Sahasrahla's Hut" },
 	1: { world: "LW", amount: 1, xPos: 81.0, yPos: 46.0, opened: false, status: null, name: "Sahasrahla" },
 	2: { world: "LW", amount: 1, xPos: 97.0, yPos: 12.0, opened: false, status: null, name: "King Zora" },
@@ -109,6 +109,7 @@ chests = {
 	18: { world: "LW", amount: 1, xPos: 56.5, yPos: 27.0, opened: false, status: null, name: "Graveyard Ledge" },
 	19: { world: "LW", amount: 1, xPos: 12.3, yPos: 8.60, opened: false, status: null, name: "Mushroom" },
 	20: { world: "LW", amount: 2, xPos: 46.9, yPos: 93.5, opened: false, status: null, name: "Dam" },
+       //TODO: FLIP WORLDS
 	21: { world: "LW", amount: 1, xPos: 54.6, yPos: 68.0, opened: false, status: null, name: "Link's House" },
 	22: { world: "LW", amount: 1, xPos: 20.0, yPos: 82.5, opened: false, status: null, name: "Aginah's Cave" },
 	23: { world: "LW", amount: 5, xPos: 65.3, yPos: 93.8, opened: false, status: null, name: "Mini Moldorm Cave" },
@@ -127,6 +128,7 @@ chests = {
 	36: { world: "LW", amount: 1, xPos: 51.0, yPos: 36.5, opened: false, status: null, name: "Sewers - Dark Cross" },
 	37: { world: "LW", amount: 3, xPos: 50.0, yPos: 43.6, opened: false, status: null, name: "Hyrule Castle" },
 	38: { world: "LW", amount: 2, xPos: 57.3, yPos: 42.3, opened: false, status: null, name: "Link's Uncle" },
+        //TODO:maybe switch
 	39: { world: "LW", amount: 1, xPos: 40.7, yPos: 18.6, opened: false, status: null, name: "Old Man" },
 	40: { world: "LW", amount: 1, xPos: 48.9, yPos: 14.5, opened: false, status: null, name: "Spectacle Rock Cave" },
 	41: { world: "LW", amount: 1, xPos: 42.1, yPos: 2.60, opened: false, status: null, name: "Ether Tablet" },
@@ -153,9 +155,9 @@ chests = {
 	62: { world: "DW", amount: 1, xPos: 30.9, yPos: 68.5, opened: false, status: null, name: "Stumpy" },
 	63: { world: "DW", amount: 1, xPos: 5.00, yPos: 69.9, opened: false, status: null, name: "Digging Game" },
 	64: { world: "DW", amount: 2, xPos: 4.00, yPos: 79.5, opened: false, status: null, name: "Mire Shed" },
-};
+};}
 
-dungeons = {
+function dungeonsDef(){return {
 	0: { world: "LW", xPos: 92.9, yPos: 40.0, chests0: 3, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Eastern Palace" },
 	1: { world: "LW", xPos: 7.00, yPos: 78.5, chests0: 2, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Desert Palace" },
 	2: { world: "LW", xPos: 56.0, yPos: 4.00, chests0: 2, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Tower of Hera" },
@@ -168,9 +170,9 @@ dungeons = {
 	9: { world: "DW", xPos: 92.9, yPos: 5.00, chests0: 5, chests1: 12, chests2: 9, openChests: 0, completed: false, status: null, prize: 0, name: "Turtle Rock" },
 	10: { world: "DW", xPos: 56.0, yPos: 4.00, chests0: 20, chests1: 27, chests2: 24, openChests: 0, completed: false, status: null, prize: 0, name: "Ganon's Tower" },
 	11: { world: "LW", xPos: 50.0, yPos: 51.0, chests0: 0, chests1: 2, chests2: 2, openChests: 0, completed: false, status: null, prize: "AGA", name: "Agahnim's Tower" },
-};
+};}
 
-keyShops = {
+function keyShopsDef(){return {
 	0: { world: "LW", xPos: 71.1, yPos: 75.0, active: false, name: "Lake Hylia Shop" },
 	1: { world: "LW", xPos: 9.40, yPos: 56.3, active: false, name: "Kakariko Shop" },
 	2: { world: "LW", xPos: 84.0, yPos: 11.9, active: false, name: "Death Mountain Shop" },
@@ -180,10 +182,76 @@ keyShops = {
 	6: { world: "DW", xPos: 31.7, yPos: 43.4, active: false, name: "Dark World Forest Shop" },
 	7: { world: "DW", xPos: 32.1, yPos: 3.40, active: false, name: "Dark World Lumberjack Shop" },
 	8: { world: "DW", xPos: 78.9, yPos: 31.3, active: false, name: "Dark World Potion Shop" },
+};}
+var items, chests, dungeons,keyShops;
+trackables= {
+//	objs:{items, chests, dungeons,keyShops},
+	save: function(){
+		basil.set("items", items);
+		basil.set("chests", chests);
+		basil.set("dungeons", dungeons);
+		basil.set("keyShops", keyShops);
+	},
+	reset: function(){
+		if (window.confirm("Are you sure you want to reset?")){
+			basil.remove("items");
+			basil.remove("chests");
+			basil.remove("dungeons");
+			basil.remove("keyShops");
+			this.load();
+			logic.apply();
+		}
+	},
+	getJSON: function(){
+		var obj={};
+		obj.items=basil.get("items")||itemsDef();
+		obj.chests=basil.get("chests")||chestsDef();
+		obj.dungeons=basil.get("dungeons")||dungeonsDef();
+		obj.keyShops=basil.get("keyShops")||keyShopsDef();
+		return JSON.stringify(obj);
+	},
+	loadJSON: function(obj){
+        basil.set("items", obj.items);
+		basil.set("chests", obj.chests);
+		basil.set("dungeons", obj.dungeons);
+		basil.set("keyShops", obj.keyShops);
+	},
+	load: function(){
+		items=basil.get("items")||itemsDef();
+		chests=basil.get("chests")||chestsDef();
+		dungeons=basil.get("dungeons")||dungeonsDef();
+		keyShops=basil.get("keyShops")||keyShopsDef();
+		$('.icon,.dungeon').each(function() {
+			rID=(/(\D+)(\d*)/.exec(this.id));
+			if(rID[1]!=='abbr'){
+				switch (rID[1]){
+					case 'bigPrize':
+						this.classList.toggle("complete",items['boss'+rID[2]].val);
+						/* falls through */
+					case "dungeon":
+					itemId='prize' +rID[2];
+					break;
+					default:
+						itemId=this.id;
+					break;
+				}
+				if (items[itemId]) {
+					setState(this,items[itemId].val);
+				}
+			}
+		});
+	}
+};
+function setState(el, stateVal){
+
+					var newCN=el.className.replace(/state(\d*)/,"state"+stateVal);
+					if (newCN===el.className){
+						el.classList.add("state"+stateVal);
+					}
+					else{
+						el.className=newCN;
+					}
 }
-
-
-
 map = {
 	populate: function () {
 		$.each(chests, function (id, chest) {	//places all the chest icons onto the map
@@ -195,10 +263,8 @@ map = {
 			$("#map" + dungeon.world).append("<div class='chest dungeonChest' onclick=toggle.dungeonChest(" + id + ") id=dungeonChest" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1200 - id) + ">" + dungeon["chests" + settings.keyMode] + "</div>");
 		});
 
-		$('.dungeonChest').mousedown(function (event) {	//adds right-click functionality to dungeon chest counters
-			if (event.which == 3) {
+		$('.dungeonChest').contextmenu(function (event) {	//adds right-click functionality to dungeon chest counters
 				toggle.dungeonChest((this.id.replace(/\D/g, '')), true);
-			};
 		});
 
 		$("#dungeon10").css({ 'background-image': 'none' }).html("GT");	//replaces prize icons with text for these dungeons
@@ -219,16 +285,16 @@ map = {
 
 
 		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering
-
+			var state ;
 			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
 			id = (this.id.replace(/\D/g, ''));
 			if (this.id.indexOf("dungeonChest") >= 0) {
 				$("#caption").html(dungeons[id].name + " Chests");
 			} else if (this.id.indexOf("keyShop") >= 0) {
-				var state = logic.keyShops[id]();
+				state = logic.keyShops[id]();
 				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			} else {
-				var state = logic.chests[id]();
+				state = logic.chests[id]();
 				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			}
 
@@ -302,7 +368,8 @@ toggle = {
 		$("#bigPrize" + id).toggleClass("complete", dungeons[id].completed);
 		logic.apply();
 	},
-	dungeonChest: function (id, reverse = false) {			//increments or decrements a dungeon's open chest count
+	dungeonChest: function (id, reverse ) {			//increments or decrements a dungeon's open chest count
+		reverse=(typeof reverse !== 'undefined') ?  reverse : false;
 		dungeons[id].openChests += reverse ? -1 : 1;
 		if (dungeons[id].openChests > dungeons[id]["chests" + settings.keyMode]) { dungeons[id].openChests = 0; }
 		if (dungeons[id].openChests < 0) { dungeons[id].openChests = dungeons[id]["chests" + settings.keyMode]; }
@@ -313,8 +380,8 @@ toggle = {
 		$("#keyShop" + id).toggleClass("active", keyShops[id].active);
 		logic.apply();
 	},
-	icon: function (icon, reverse = false) {			//toggles icons on the tracker
-
+	icon: function (icon, reverse ) {			//toggles icons on the tracker
+		reverse=(typeof reverse !== 'undefined') ?  reverse : false;
 		if (icon.id.indexOf("bigPrize") >= 0) {			//if icon is a Bigprize, changes the target
 			num = icon.id.replace(/\D/g, '');
 			icon = $("#prize" + num)[0];
@@ -327,10 +394,10 @@ toggle = {
 
 		//increments or decrements the icon state
 		curVal = items[icon.id].val;
-		if (reverse == false) {
+		if (reverse === false) {
 			items[icon.id].val = (curVal == items[icon.id].max) ? 0 : (curVal + 1);
 		} else {
-			items[icon.id].val = (curVal == 0) ? items[icon.id].max : (curVal - 1);
+			items[icon.id].val = (curVal === 0) ? items[icon.id].max : (curVal - 1);
 		}
 
 		if (icon.id.indexOf("boss") >= 0) {								//if it's a boss, do the boss toggle stuff
@@ -345,7 +412,6 @@ toggle = {
 			$("#dungeon" + num + ",#bigPrize" + num)
 				.attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); })
 				.addClass("state" + dungeons[num].prize);
-			;
 		}
 
 		if (icon.id == "mushroompowder" || icon.id == "shovelflute") {		//this ensures that the separated mushroom/powder and shovel/flute icons always match the combined versions of those icons
@@ -368,8 +434,7 @@ toggle = {
 
 		$("#" + icon.id)																	//removes the previous class from the icon and adds the proper new class
 			.attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); })
-			.addClass("state" + items[icon.id].val)
-			;
+			.addClass("state" + items[icon.id].val);
 
 		logic.apply();
 	},

@@ -1,70 +1,228 @@
+"use strict";
+function swordless() {
+    return false;
+    //todo: replace sword with net
+    // change toggle logic for it.
 
-logic = {
+}
+function keysanity() {
+	return (settings.keyMode ==1);
+}
+function retro() {
+	return (settings.keyMode == 2);
+}
+function inverted() {
+    return settings.openMode==2;
+}
+function std() {
+    return settings.openMode==0;
+}
+var STATE={
+      unavail:0,
+      avail:1,
+      dark:2,
+      maybe:3,
+      visible:4
+};
+//0 = unknown, 1 = bombos, 2 = ether, 3 = quake
+var MEDAL={
+    unknown:0,
+    bombos:1,
+    ether:2,
+    quake:3
+};
+var logic = {
     //these functions return true or false
-    darkWorldNW: function () { //check for access to this whole region
+    canActivatabteTablets: function(){
+        if( swordless()){
+            return items.hammer.val;
+        }else{
+            return items.sword.val>=2;
+        }
+    },
+
+    canUseMedallions: function(){
+        if( swordless()){
+            return 1
+        }else{
+            return items.sword.val>0;
+        }
+    },
+
+    canRemoveCurtains: function(){
+        if( swordless()){
+            return 1
+        }else{
+            return items.sword.val>0;
+        }
+    },
+    darkWorldNWReg: function (){
         return items.pearl.val && //need this of course
             (items.glove.val >= 2 || //kakariko portal
                 (items.glove.val >= 1 && items.hammer.val) || //kakariko portal
                 (items.boss11.val && items.hookshot.val && (items.hammer.val || items.glove.val || items.flippers.val)) //agahnim then river crossing
             );
     },
-    darkWorldEast: function () { //check for access to this whole region
+    darkWorldNW: function () { //check for access to this whole region
+        return inverted()?true: this.darkWorldNWReg();
+    },
+
+    darkWorldEastInv: function(){
+    //emu: [ "hammer", "flippers", "lift2,pearl,mirror", "aga1,mirror" ], => pyr, catfish, pod
+    //hyph: DW*N*E flippers || hammer || (canEnterLightWorld && trackerData.items.mirror) => [yr catfish pod,
+            //LW=aga1(boss11) || ((canLiftDarkRocks() || (trackerData.items.hammer && canLiftRocks())) && trackerData.items.moonpearl)
+        return items.hammer.val || items.flippers.val ||
+            (items.mirror.val &&
+                (items.boss11.val || (items.glove.val>=2 && items.pearl.val)) );
+    },
+
+    darkWorldEastReg: function () {
         return items.pearl.val && //need this of course
             (items.boss11.val || //agahnim gives direct access
-                items.hammer.val && items.glove.val || //portal at flute 5
+                items.hammer.val && items.glove.val>=1 || //portal at flute 5
                 items.glove.val >= 2 && items.flippers.val //kakariko portal then river crossing
             ); //
     },
-    darkWorldSouth: function () { //check for access to this whole region
-        return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
-            (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
+    darkWorldEast: function () { //check for access to this whole region
+            return inverted() ? this.darkWorldEastInv() : this.darkWorldEastReg();
+        },
+        darkWorldSouth: function () {
+            return inverted() ? true : logic.darkWorldSouthReg();
+        },
+        darkWorldSouthReg: function () { //check for access to this whole region
+            return logic.darkWorldNW() || //can drop down from village -- includes hammer + glove option
+                (items.boss11.val && items.pearl.val && items.hammer.val); //agahnim + hammer also works
+        },
+        lightWorldBunny: function () {
+            return !inverted() || (
+                items.boss11.val || //aga1
+                (
+                    (
+                        items.glove.val >= 2 ||
+                        (items.hammer.val && items.glove.val)
+                    ) && items.pearl.val
+                )
+            );
+        },
+        lightWorldLink: function () {
+            return !inverted() || (logic.lightWorldBunny() && items.pearl.val);
+        },
+        canFly: function () {
+            return items.flute.val &&
+                (
+                    !inverted() ||
+                    (this.lightWorldLink())
+                );
+        },
+    DMlight: function () { return (items.lamp.val || logic.canFly() || chests[39].opened); }, //used to determine if DM chests require dark
+    DMlightAorD: function () { return logic.DMlight() ? 1 : 2; }, //used to determine val if DM chests require dark
+    climbDM: function () { return (items.glove.val || logic.canFly()); }, //can get up Death Mountain, all below spec rock
+    eastDMReg: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
+	eastDMInv: function () {return logic.climbDM() && ((items.hookshot.val && items.pearl.val) || (items.glove.val>=2));},
+	eastDM: function () {return !inverted() ? logic.eastDMReg() : logic.eastDMInv();},
+    darkEastDM: function () { return inverted()
+      ? logic.climbDM()
+      :logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
+    heraArea: function () {
+        if (inverted()) {
+            return logic.eastDM() && items.pearl.val && items.hammer.val;
+        }
+        else {
+            return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val);
+        }
     },
-    DMlight: function () { return (items.lamp.val || items.flute.val); }, //used to determine if DM chests require dark
-    climbDM: function () { return (items.glove.val || items.flute.val); }, //can get up Death Mountain
-    eastDM: function () { return logic.climbDM() && (items.hookshot.val || items.mirror.val && items.hammer.val); }, //can get to EDM
-    darkEastDM: function () { return logic.eastDM() && items.pearl.val && items.glove.val >= 2; },  //can get to dark EDM
     cane: function () { return items.somaria.val || items.byrna.val; }, //the canes work against certain bosses
     rod: function () { return items.firerod.val || items.icerod.val; }, //the rods work against certain bosses
     fire: function () { return items.lamp.val || items.firerod.val; }, //can light torches
+    bunnyMaybe: function() {
+      return logic.lightWorldLink()
+         ? STATE.avail
+         : logic.lightWorldBunny()
+            ? STATE.maybe
+            : STATE.unavail;
+    },
+    mireArea: function() {
+       return inverted()
+               ? logic.canFly() ||
+               (logic.lightWorldBunny() && items.mirror.val)
+               :items.pearl.val && items.flute.val && items.glove.val >= 2;
+    },
     //Dungeon entry
-    entry0: function () { return true; },
-    entry1: function () { return items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val },
-    entry2: function () { return logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) },
-    entry3: function () { return logic.darkWorldEast() },
-    entry4: function () { return logic.darkWorldSouth() && items.mirror.val && items.flippers.val },
-    entry5: function () { return logic.darkWorldNW() },
-    entry6: function () { return logic.darkWorldNW() },
-    entry7: function () { return items.pearl.val && items.glove.val >= 2 && items.flippers.val && (items.firerod.val || (items.bombos.val && items.sword.val >= 1)) },
-    entry8: function () { return items.pearl.val && items.glove.val >= 2 && items.flute.val && (items.boots.val || items.hookshot.val) },
-    entry9: function () { return logic.darkEastDM() && items.hammer.val && items.somaria.val },
-    entry10: function () { return items.crystal.val >= 7 && logic.darkEastDM() },
-    entry11: function () { return items.sword.val >= 2 || items.cape.val },
+    entry0: function () {return !inverted() || (logic.lightWorldLink()); },
+    entry1: function () {
+       return inverted()
+       ? logic.lightWorldLink() && items.book.val
+       : items.book.val || items.glove.val >= 2 && items.flute.val && items.mirror.val; },
+    entry2: function () { return logic.heraArea(); },
+    //POD
+    entry3: function () { return logic.darkWorldEast(); },
+    //SP
+    entry4: function () {
+        if (inverted()) {
+            return this.lightWorldLink() && items.mirror.val && items.flippers.val;
+        } else {
+            return this.darkWorldSouth() && items.mirror.val && items.flippers.val;
+        }
+    },
+    //sw
+    entry5: function () { return logic.darkWorldNW(); },
+    //tt
+    entry6: function () { return logic.darkWorldNW(); },
+    //IP
+    entry7: function () {
+            return  (
+               (items.pearl.val && items.glove.val >= 2)
+                  || inverted()
+               )  &&
+               (items.firerod.val || (items.bombos.val && logic.canUseMedallions()))
+                  ? items.flippers.val
+                     ? STATE.avail
+                     : STATE.dark
+                  :STATE.unavail;
+     },
+        entry8: function () {//mm access no medal
+            return logic.mireArea() && (items.boots.val || items.hookshot.val);
+        },
+        entry9: function () {//tr no medal light only
+            return logic.darkEastDM() && items.hammer.val && items.somaria.val;
+        },
+        entry10: function () {
+            return items.crystal.val >= 7 && (inverted()?logic.lightWorldLink():logic.darkEastDM()) ;
+        },
+    entry11: function () { if(inverted()){
+          return logic.climbDM();
+       }else{
+          return (swordless()?items.hammer.val:(items.sword.val >= 2)) || items.cape.val;
+       }
+    },
+
     //this function returns 0, 1, or 3
     // 0 = unavailable
     // 1 = available
     // 3 = possibly available
     medallion: function (id) { //check for the correct MM/TR medallions; id is the dungeon id (8 = MM, 9 = TR)
 
-        medal = items["medal" + id].val; //identifies what medallion we want; 0 = unknown, 1 = bombos, 2 = ether, 3 = quake
+        var medal = items["medal" + id].val; //identifies what medallion we want; 0 = unknown, 1 = bombos, 2 = ether, 3 = quake
 
-        return items.sword.val >= 1 ? //need a sword
+        return logic.canUseMedallions() ? //need a sword
             medal == 0 ?
                 items.bombos.val && items.ether.val && items.quake.val ?                 //medallion is unknown
-                    1 :                                                                  //has all medallions so check is automatically passed
-                    items.bombos.val || items.ether.val || items.quake.val ? 3 : 0 :     //if at least one medallion, maybe ok; otherwise nope
-                medal == 1 && items.bombos.val || medal == 2 && items.ether.val || medal == 3 && items.quake.val ? //medallion is known and we need a specific one
-                    1 : //has the specific matching medallion
-                    0 : //does not have the matching medallion
-            0; //no sword, cannot use any medallions
+                    STATE.avail :                                                                  //has all medallions so check is automatically passed
+                    items.bombos.val || items.ether.val || items.quake.val ? STATE.maybe : STATE.unavail:     //if at least one medallion, maybe ok; otherwise nope
+                medal == MEDAL.bombos && items.bombos.val || medal == MEDAL.ether &&
+                            items.ether.val || medal == MEDAL.quake && items.quake.val ? //medallion is known and we need a specific one
+                    STATE.avail : //has the specific matching medallion
+                    STATE.unavail: //does not have the matching medallion
+            STATE.unavail; //no sword, cannot use any medallions
 
     },
     //this sets the prizes in the item tracker based on completed dungeons
     setPrizes: function () {
 
-        counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }; //tally of each type of prize; 
+        var counts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }; //tally of each type of prize;
         // 0 = unknown, 1 = red/blue pend, 2 = green pend, 3 = blue crystal, 4 = red crystal
 
-        for (i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
+        for (var i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
             if (dungeons[i].completed) {
                 counts[dungeons[i].prize]++;
                 counts.total++;
@@ -102,75 +260,159 @@ logic = {
     // 3 = possibly available
     // 4 = visible/checkable but unattainable
     chests: {
-        0: function () { return 1; },                        // Sahasrahla's Hut
+        0: function () { return  (logic.lightWorldLink()); },                        // Sahasrahla's Hut
         1: function () { return items.greenPendant.val; }, // Sahasrahla
         2: function () {                                     // King Zora
-            return items.flippers.val || items.glove.val ? 1 : 0;
+            if(logic.lightWorldLink() && (items.flippers.val || items.glove.val)) {
+                return STATE.avail;
+            }
+            else if(logic.lightWorldLink()) {
+               return STATE.dark;
+            }else{
+               return STATE.unavail;
+            }
         },
-        3: function () { return items.mushroom.val; }, // Potion Shop
-        4: function () { return items.flippers.val; }, // Zora's Ledge
-        5: function () { return items.flippers.val; }, // Waterfall Fairy
+        3: function () { return logic.lightWorldLink() && items.mushroom.val; }, // Potion Shop
+        4: function () {                             // Zora's Ledge
+            if (logic.lightWorldLink() && items.flippers.val) {
+                return STATE.avail;
+            }else if (logic.lightWorldLink()) {
+                return STATE.visible;
+            }else{
+                return STATE.unavail;
+            }
+        },
+        5: function () {                            // Waterfall Fairy
+            if (logic.lightWorldLink() && items.flippers.val) {
+                return STATE.avail;
+            } else if (logic.lightWorldLink() && (items.boots.val || items.pearl.val)){
+                return STATE.dark;
+            }else{
+                return STATE.unavail;
+            }
+         },
         6: function () {                            // Master Sword Pedestal
-            return (items.pendant.val == 3) ?
+            return (items.pendant.val == 3) && logic.lightWorldBunny() ?
                 1 :
-                items.book.val ? 4 : 0;
+                items.book.val && logic.lightWorldBunny() ? STATE.visible
+                : STATE.unavail;
         },
         7: function () {                                                // King's Tomb
             return items.boots.val &&
-                (items.glove.val >= 2 ||
-                    (logic.darkWorldNW() && items.mirror.val))
-                ? 1 : 0;
+                (items.glove.val >= 2 && logic.lightWorldLink() ||
+                    (logic.darkWorldNW() && items.mirror.val && !inverted()))?
+						1 : 0;
         },
-        8: function () { return 1; }, // Kakariko Tavern
-        9: function () { return 1; }, // Chicken House
-        10: function () { return 1; }, // Kakariko Well
-        11: function () { return 1; }, // Blind's Hideout
-        12: function () { return items.boots.val; }, // Pegasus Rocks
-        13: function () { return 1; }, // Bottle Merchant
+        8: function () { return logic.lightWorldLink(); }, // Kakariko Tavern
+        9: function () { return logic.lightWorldLink(); }, // Chicken House
+        10: function () { return logic.bunnyMaybe(); }, // Kakariko Well
+        11: function () { return logic.lightWorldLink(); }, // Blind's Hideout
+        12: function () { return items.boots.val && logic.lightWorldLink(); }, // Pegasus Rocks
+        13: function () { return logic.lightWorldBunny(); }, // Bottle Merchant
         14: function () {           // Magic Bat
-            return items.powder.val &&
-                (items.hammer.val || logic.darkWorldNW() &&
-                    items.mirror.val);
+            var batCave=inverted()
+              ?logic.lightWorldLink() && items.hammer.val
+              : items.hammer.val  ||
+                 (items.glove.val>=2 && items.pearl.val && items.mirror.val) ;
+            if(items.powder.val && batCave){
+               return STATE.avail;
+            }else if(batCave && items.somaria.val && items.mushroom.val && !chests[3].opened){
+               return STATE.dark;
+            }else{
+               return STATE.unavail;
+            }
         },
-        15: function () { return items.bottle.val >= 1 ? 1 : 0; }, // Sick Kid
-        16: function () { return 1; }, // Lost Woods Hideout
-        17: function () { return items.boss11.val && items.boots.val ? 1 : 4; }, // Lumberjack Tree
-        18: function () { return logic.darkWorldNW() && items.mirror.val ? 1 : 0; }, // Graveyard Ledge
-        19: function () { return 1; }, // Mushroom
-        20: function () { return 1; }, // Dam
-        21: function () { return 1; }, // Link's House
-        22: function () { return 1; }, // Aginah's Cave
-        23: function () { return 1; }, // Mini Moldorm Cave
-        24: function () { return 1; }, // Ice Rod Cave
-        25: function () { return items.flippers.val; }, // Hobo
+        15: function () { return items.bottle.val >= 1 && logic.lightWorldBunny() }, // Sick Kid
+        16: function () { return logic.lightWorldLink(); }, // Lost Woods Hideout
+        17: function () { return logic.lightWorldLink()
+             ? items.boss11.val && items.boots.val
+                ? STATE.avail
+                : STATE.visible
+             : STATE.unavail; }, // Lumberjack Tree
+        18: function () { return !inverted()
+              ? logic.darkWorldNW() && items.mirror.val
+                 ? 1
+                 : 0
+              : logic.lightWorldLink(); }, // Graveyard Ledge
+        19: function () { return logic.lightWorldLink(); }, // Mushroom
+        20: function () { return logic.lightWorldLink(); }, // Dam
+        21: function () { return STATE.avail; }, // Link's House
+        22: function () { return logic.lightWorldLink();}, // Aginah's Cave
+        23: function () { return logic.lightWorldLink(); }, // Mini Moldorm Cave
+        24: function () { return logic.lightWorldLink(); }, // Ice Rod Cave
+        25: function () {
+           return logic.lightWorldLink()
+              ? items.flippers.val
+                 ? STATE.avail
+                 : STATE.dark
+              : STATE.unavail;
+           }, // Hobo
         26: function () { // Bombos Tablet
-            return items.book.val && items.mirror.val && logic.darkWorldSouth() ?
-                items.sword.val >= 2 ? 1 : 4 :
-                0;
+            return items.book.val && (
+                  inverted()
+                     ? logic.lightWorldBunny()
+                     : items.mirror.val && logic.darkWorldSouth()
+                  )
+               ? logic.canActivatabteTablets()
+                  ? STATE.avail
+                  : STATE.visible
+               : STATE.unavail;
         },
         27: function () { // Cave 45
-            return items.mirror.val &&
-                (logic.darkWorldNW() || items.boss11.val && items.pearl.val && items.hammer.val) ? 1 : 0;
+            return inverted()
+               ? logic.lightWorldLink()
+               : items.mirror.val &&
+                   (logic.darkWorldNW()
+                      || items.boss11.val
+                      && items.pearl.val
+                      && items.hammer.val)
+                      ;
         },
         28: function () { // Checkerboard Cave
-            return items.flute.val && items.glove.val >= 2 && items.mirror.val ? 1 : 0;
+            return inverted()
+               ? logic.lightWorldLink() && items.glove.val>=1
+               : items.flute.val && items.glove.val >= 2 && items.mirror.val;
         },
-        29: function () { return items.boots.val ? 1 : 4; }, // Library
-        30: function () { return 1; }, // Maze Race
+        29: function () {
+               return inverted()
+                  ? logic.lightWorldBunny()
+                     ? items.boots.val && items.pearl.val
+                        ? STATE.avail
+                        : STATE.visible
+                     : STATE.unavail
+                  : items.boots.val
+                     ? STATE.avail
+                     : STATE.visible
+             ;}, // Library
+        30: function () { return logic.lightWorldLink(); }, // Maze Race
         31: function () { // Desert Ledge
-            return logic.entry1() ? 1 : 4;
+            return logic.entry1()
+               ? STATE.avail
+               : logic.lightWorldBunny()
+                  ? STATE.visible
+                  : 0;
         },
         32: function () { // Lake Hylia Island
-            return items.flippers.val ?
-                items.pearl.val && items.mirror.val && (items.boss11.val || items.glove.val >= 2 || items.glove.val && items.hammer.val) ?
-                    1 : 4 :
-                4;
+            return (
+               inverted()
+                  ? logic.lightWorldLink()
+                  : items.pearl.val && items.mirror.val
+                     && (items.boss11.val || items.glove.val >= 2
+                        || items.glove.val && items.hammer.val)
+                )
+                   ? items.flippers.val
+                      ? STATE.avail
+                      : STATE.dark
+                   : logic.lightWorldBunny()
+                      ? STATE.visible
+                      : STATE.unavail;
         },
-        33: function () { return items.shovel.val; }, // Flute Spot
-        34: function () { return 1; }, // Sanctuary
+        33: function () { return logic.lightWorldLink() && items.shovel.val; }, // Flute Spot
+        34: function () { return logic.lightWorldLink(); }, // Sanctuary
         35: function () { // Sewers - Secret Room
-
-            if (settings.keyMode == 2) {
+			var maxKey;
+			var minKey;
+            if (retro()) {
                 maxKey = items.keyAny.val;
                 minKey = Math.max(0,
                     maxKey -
@@ -182,116 +424,155 @@ logic = {
                 );
             }
 
-            lampTest = items.lamp.val ? 1 : 2;
+            var lampTest = items.lamp.val ? 1 : 2;
 
-            return settings.openMode == 0 || items.glove.val ?
-                1 :
-                settings.keyMode == 1 ?
-                    items.key12.val ? lampTest : 0 :
-                    settings.keyMode == 2 && items.keyShopFound.val == 0 ?
-                        maxKey >= 1 ?
-                            minKey >= 1 ? lampTest : 3 :
-                            0 :
-                        lampTest
-                ;
+            return ( std() || items.glove.val
+               ? 1
+               : keysanity()
+                  ? items.key12.val
+                     ? lampTest
+                     : 0
+                  : retro() && items.keyShopFound.val == 0
+                     ? maxKey >= 1
+                        ? minKey >= 1
+                           ? lampTest
+                           : STATE.maybe
+                        : 0
+                     : items.glove.val
+                        ? lampTest
+                        : items.lamp.val
+                           ? STATE.maybe
+                           : STATE.dark
+             ) * logic.lightWorldLink();
 
 
         },
         36: function () { // Sewers - Dark Cross
-            return settings.openMode == 0 || items.lamp.val ? 1 : 2;
+            return (std() || items.lamp.val ? 1 : 2)
+               * logic.lightWorldLink();
         },
-        37: function () { return 1; }, // Hyrule Castle
-        38: function () { return 1; }, // Link's Uncle
+        37: function () { return logic.lightWorldLink(); }, // Hyrule Castle
+        38: function () { return logic.lightWorldLink(); }, // Link's Uncle
         39: function () { // Old Man
             return logic.climbDM() ?
-                items.lamp.val ? 1 : 2 :
+                items.lamp.val ? 1 : STATE.dark:
                 0;
         },
         40: function () { // Spectacle Rock Cave
             return logic.climbDM() ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         41: function () { // Ether Tablet
-            return items.book.val && logic.climbDM() && (items.mirror.val || items.hookshot.val && items.hammer.val) ?
-                items.sword.val >= 2 ?
-                    logic.DMlight() ? 1 : 2 :
-                    4 :
-                0;
+            return items.book.val && logic.heraArea()
+               ? logic.canActivatabteTablets()
+                  ? logic.DMlightAorD()
+                  : STATE.visible
+               : 0;
         },
         42: function () { // Spectacle Rock
-            return logic.climbDM() ?
-                items.mirror.val ?
-                    logic.DMlight() ? 1 : 2 :
-                    4 :
-                0;
+            var av=null;
+            if (inverted()){
+               av=logic.heraArea();
+            } else{
+               av=logic.climbDM() && items.mirror.val;
+            }
+            return av
+               ? logic.DMlightAorD()
+               : logic.climbDM()
+                 ? STATE.visible
+                 : STATE.unavail;
         },
         43: function () { // Spiral Cave
             return logic.eastDM() ?
-                logic.DMlight() ? 1 : 2 :
+                logic.DMlightAorD() :
                 0;
         },
         44: function () { // Mimic Cave
-
-            return !(settings.keyMode == 1 && items.key9.val < 2) &&
-                items.pearl.val &&
-                items.hammer.val &&
-                items.glove.val >= 2 &&
-                items.somaria.val &&
-                items.mirror.val ?
-                logic.medallion(9) !== 1 ?
-                    logic.medallion(9) :
-                    items.firerod.val ?
-                        logic.DMlight() ? 1 : 2 :
-                        3 :
-                0;
-
+           if(inverted()){
+              return logic.eastDM()
+                 && items.hammer.val
+                 && items.pearl.val;
+           }else{
+              return !(keysanity() && items.key9.val < 2) &&
+                  items.pearl.val &&
+                  items.hammer.val &&
+                  items.glove.val >= 2 &&
+                  items.somaria.val &&
+                  items.mirror.val ?
+                  logic.medallion(9) !== 1 ?
+                      logic.medallion(9) :
+                      items.firerod.val ?
+                          logic.DMlightAorD() :
+                          STATE.maybe :
+                  0;
+            }
         },
         45: function () { // Paradox Cave
-            return logic.eastDM() ?
-                logic.DMlight() ? 1 : 2 :
-                0;
+            return logic.eastDM()
+              ? (!inverted() || items.pearl.val)
+                  ? logic.DMlightAorD()
+                  : items.sword.val>=2
+                     ? STATE.maybe
+                     : STATE.unavail
+               : STATE.unavail;
         },
         46: function () { // Floating Island
-            return logic.eastDM() ?
-                items.mirror.val && items.pearl.val && items.glove.val >= 2 ?
-                    logic.DMlight() ? 1 : 2 :
-                    4 :
-                0;
+            return logic.eastDM()
+               ? (!inverted() && items.mirror.val && items.pearl.val && items.glove.val >= 2)
+                  || (inverted())
+                  ?  logic.DMlightAorD()
+                  :  STATE.visible
+               : 0;
         },
         47: function () { // Superbunny Cave
-
-            return items.pearl.val && items.glove.val >= 2 && logic.eastDM() ?
-                logic.DMlight() ? 1 : 2 :
-                0;
-
+//update for tr portal w/o pearl
+           if(inverted()){
+              return logic.climbDM()
+                 ? logic.DMlightAorD()
+                 : STATE.unavail;
+           } else{
+              return  items.glove.val >= 2 && logic.eastDM()
+              ? items.pearl.val
+                 ? logic.DMlightAorD()
+                 : STATE.dark
+              : 0;
+           }
         },
         48: function () { // Hookshot Cave
-            return items.pearl.val && items.glove.val >= 2 && items.hookshot.val ?
-                logic.DMlight() ? 1 : 2 :
-                0;
+            return (inverted()
+               ? logic.climbDM() && items.hookshot.val
+               : items.pearl.val && items.glove.val >= 2 && items.hookshot.val
+            )
+            ? logic.DMlightAorD()
+            : 0;
         },
         49: function () { // Hookshot Cave - Bottom Chest
-            return items.pearl.val && items.glove.val >= 2 && (items.hookshot.val || (items.mirror.val && items.hammer.val && items.boots.val)) ?
-                logic.DMlight() ? 1 : 2 :
-                0;
+            return (inverted()
+               ? logic.climbDM() && (items.hookshot.val || items.boots.val)
+               : items.pearl.val && items.glove.val >= 2 && (items.hookshot.val || (items.mirror.val && items.hammer.val && items.boots.val))
+              )
+            ? logic.DMlightAorD()
+            : 0;
         },
         50: function () { // Spike Cave
-            return items.pearl.val && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val) ?
-                logic.DMlight() ? 1 : 2 :
-                0;
+            return (items.pearl.val || inverted()) && items.glove.val && items.hammer.val && (items.byrna.val || items.cape.val || items.bottle.val>0)
+              ? logic.DMlightAorD()
+              : 0;
         },
         51: function () { // Catfish"
             return logic.darkWorldEast() && items.glove.val ? 1 : 0;
         },
         52: function () { // Pyramid
 
-            return items.boss11.val || logic.darkWorldEast() ? 1 : 0;
+            return (!inverted() && items.boss11.val) || logic.darkWorldEast() ? 1 : 0;
 
         },
         53: function () { // Pyramid Fairy
 
-            return items.redCrystal.val >= 2 && (items.boss11.val || logic.darkWorldEast()) ? 1 : 0;
+            return inverted()
+               ? ((items.redCrystal.val >= 2) && logic.lightWorldBunny())
+               : ((items.redCrystal.val >= 2) && (items.boss11.val || logic.darkWorldEast()));
 
         },
         54: function () { // Brewery
@@ -304,21 +585,35 @@ logic = {
             return logic.darkWorldNW() ? 1 : 0;
         },
         57: function () { // Hammer Pegs
-            return items.pearl.val && items.glove.val >= 2 && items.hammer.val ? 1 : 0;
+            return inverted()
+               ? items.hammer.val &&
+                  ( items.glove.val>=2
+                     || (logic.lightWorldBunny()
+                        && items.mirror.val)
+                  )
+               : items.pearl.val && items.glove.val >= 2 && items.hammer.val;
         },
         58: function () { // Bumper Cave
-            return logic.darkWorldNW() ?
-                items.glove.val && items.cape.val ? 1 : 4 :
-                0;
+              return logic.darkWorldNW() ?
+                  items.glove.val && items.cape.val &&
+                  (!inverted || (logic.lightWorldLink()
+                        && items.mirror.val)
+                  )
+                     ? STATE.avail
+                     : STATE.visible
+                  :0;
         },
         59: function () { // BlackSmith
-            return items.pearl.val && items.glove.val >= 2 ? 1 : 0;
+            return inverted()
+               ? logic.lightWorldBunny() &&
+                  (items.glove.val>=2 || items.mirror.val)
+               :items.pearl.val && items.glove.val >= 2;
         },
         60: function () { // Purple Chest
-            return items.pearl.val && items.glove.val >= 2 ? 1 : 0;
+            return logic.chests[59]();
         },
         61: function () { // Hype Cave
-            return logic.darkWorldSouth() ? 1 : 0;
+            return logic.darkWorldSouth();
         },
         62: function () { // Stumpy
             return logic.darkWorldSouth() ? 1 : 0;
@@ -327,7 +622,7 @@ logic = {
             return logic.darkWorldSouth() ? 1 : 0;
         },
         64: function () { // Mire Shed
-            return items.pearl.val && items.flute.val && items.glove.val >= 2 ? 1 : 0;
+            return logic.mireArea();
         }
     },
 
@@ -343,15 +638,18 @@ logic = {
 
 
         0: function () { // Eastern Palace
-            var bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+            var boss;
+			var min;
+			var max;
+			var bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 lamp = items.lamp.val,
                 bigKey = items.bigKey0.val;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = bow && bigKey ?          // need these to reach
-                    lamp ? 1 : 2 :              // boss accessible; light determines status
-                    0;
+                    lamp ? STATE.avail : STATE.dark :              // boss accessible; light determines status
+                    STATE.unavail;
 
                 min = 3 +                             // base access
                     (lamp ? 1 : 0) +                  // BK chest
@@ -367,7 +665,7 @@ logic = {
             } else {             // REGULAR AND RETRO LOGIC
 
                 boss = bow ?             // need this to reach
-                    lamp ? 1 : 2 :       // boss accessible; light determines status
+                    lamp ? STATE.avail : STATE.dark :       // boss accessible; light determines status
                     0;
 
                 min = lamp ?
@@ -378,23 +676,25 @@ logic = {
                 max = 3;      // always possible for the first three chests to have items
             }
 
-            return { boss: boss, max: max, min: min }
+            return { boss: boss*logic.entry0(), max: max*logic.entry0(), min: min*logic.entry0() };
         },
         1: function () { //Desert Palace
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry1(),
                 glove = items.glove.val,
                 reachLanmo = entry && logic.fire() && glove,
-                bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+                bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 fightLanmo = reachLanmo && (items.hammer.val || items.sword.val >= 1 || bow || logic.cane() || logic.rod()),
                 boots = items.boots.val,
                 key = items.key1.val,
                 bigKey = items.bigKey1.val;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightLanmo && bigKey ?
-                    key ? 1 : 3 :   // if no key, player might steal pot key for chests and lock themselves out of boss
+                    key ? STATE.avail : STATE.maybe :   // if no key, player might steal pot key for chests and lock themselves out of boss
                     0;
 
                 min = entry ?
@@ -414,12 +714,12 @@ logic = {
                         key ? 2 : 0) :              // if no glove, need key to get 2 chests (no boss)
                     0;
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {     // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightLanmo ?     // have inventory to fight the boss
-                        boots ? 1 : 3 :     // big key might be on torch, so if missing boots, boss access unknown
-                        0;
+                        boots ? STATE.avail : STATE.maybe :     // big key might be on torch, so if missing boots, boss access unknown
+                        STATE.unavail;
 
                     min = entry ?
                         boots ?
@@ -432,8 +732,8 @@ logic = {
 
                 } else {     // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val - (settings.openMode == 0 ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var maxKey = items.keyAny.val - (std() ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val -
                         1 -                        //Hyrule Castle
                         (logic.entry2() ? 1 : 0) - //Tower of Hera
@@ -443,8 +743,8 @@ logic = {
                     );
 
                     boss = fightLanmo ?
-                        minKey >= 1 && boots ? 1 : 3 : // if missing boots or if key uncertain, boss state unknown
-                        0;
+                        minKey >= 1 && boots ? STATE.avail : STATE.maybe : // if missing boots or if key uncertain, boss state unknown
+                        STATE.unavail;
 
                     min = entry && minKey >= 1 ?
                         boots ?
@@ -457,14 +757,14 @@ logic = {
                         1 + //map chest
                         (maxKey >= 1 || glove ?
                             2 :       // compass chest and BK chest accessible
-                            boots ? 1 : 0) :  // with no glove, best case is that torch has item 
+                            boots ? 1 : 0) :  // with no glove, best case is that torch has item
                         0;
 
                 }
             } else {     // REGULAR LOGIC
 
                 boss = fightLanmo ?
-                    boots ? 1 : 3 : // if no boots, boss state unknown
+                    boots ? STATE.avail : STATE.maybe : // if no boots, boss state unknown
                     0;
 
                 min = entry ?
@@ -476,10 +776,12 @@ logic = {
                 max = entry ? 2 : 0;  //2 of first three chests might have items
             }
 
-            return { boss: boss, max: max, min: min }
+            return { boss: boss, max: max, min: min };
         },
         2: function () { //Tower of Hera
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry2(),
                 fightMold = entry && (items.sword.val >= 1 || items.hammer.val),
                 fire = logic.fire(),
@@ -488,10 +790,10 @@ logic = {
                 bigKey = items.bigKey2.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
                 boss = fightMold && bigKey ?    // requirements for boss
-                    light ? 1 : 2 :             // checks if player had to use dark room to climb Death Mountain
-                    0;
+                    light ? STATE.avail: STATE.dark:             // checks if player had to use dark room to climb Death Mountain
+                    STATE.unavail;
 
                 max = entry ?
                     2 +                                    //base access
@@ -502,14 +804,14 @@ logic = {
 
                 min = light ? max : 0;      //sets min to 0 if had to go through dark
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightMold ?
                         fire ?
-                            light ? 1 : 2 :     // checks if player had to use dark room to climb Death Mountain
-                            3 :                 // big key might be in basement, locking out boss
-                        0;
+                            light ? STATE.avail: STATE.dark:     // checks if player had to use dark room to climb Death Mountain
+                            STATE.maybe :                 // big key might be in basement, locking out boss
+                        STATE.unavail;
 
                     min = entry && light && fire ?
                         2 +                     // can open every chest and get at least 2 items
@@ -520,8 +822,8 @@ logic = {
 
                 } else {    // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val - (settings.openMode == 0 ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var maxKey = items.keyAny.val - (std() ? 1 : 0); // if standard, you must have used a key at Hyrule Castle
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val -
                         1 -                        // Hyrule Castle
                         (logic.entry1() ? 1 : 0) - // Desert Palace
@@ -532,9 +834,9 @@ logic = {
 
                     boss = fightMold && maxKey >= 1 ?
                         fire && minKey >= 1 ?
-                            light ? 1 : 2 :     // checks if player had to use dark room to climb Death Mountain
-                            3 :                 // big key might be in basement, locking out boss
-                        0;
+                            light ? STATE.avail: STATE.dark:     // checks if player had to use dark room to climb Death Mountain
+                            STATE.maybe :                 // big key might be in basement, locking out boss
+                        STATE.unavail;
 
                     min = entry && light && fire && minKey >= 1 ?
                         2 +                    // can open every chest and get at least 2 items
@@ -548,9 +850,9 @@ logic = {
 
                 boss = fightMold ?
                     fire ?
-                        light ? 1 : 2 :     // checks if player had to use dark room to climb Death Mountain
-                        3 :                 // big key might be in basement, locking out boss
-                    0;
+                        light ? STATE.avail: STATE.dark:     // checks if player had to use dark room to climb Death Mountain
+                        STATE.maybe :                 // big key might be in basement, locking out boss
+                    STATE.unavail;
 
                 min = entry && light && fire ?
                     1 +                    // can open every chest and get at least 1 item
@@ -561,27 +863,29 @@ logic = {
 
             }
 
-            return { boss: boss, max: max, min: min }
+            return { boss: boss, max: max, min: min };
         },
         3: function () { //Palace of Darkness
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry3(),
                 lamp = items.lamp.val,
                 hammer = items.hammer.val,
-                bow = settings.keyMode == 2 ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+                bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
                 hamBow = hammer && bow,
                 key = items.key3.val,
                 bigKey = items.bigKey3.val,
                 fightHelm = entry && hamBow
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = entry && hamBow && bigKey && key >= 1 ? // need all this for boss
                     key == 6 ?
-                        lamp ? 1 : 2 :   // checks if player has to go through dark
-                        3 :              // if less than 6 keys, might spend them all elsewhere
-                    0;
+                        lamp ? STATE.avail : STATE.dark :   // checks if player has to go through dark
+                        STATE.maybe :              // if less than 6 keys, might spend them all elsewhere
+                    STATE.unavail;
 
                 min = entry ?
                     1 +                                                                       // first chest
@@ -592,7 +896,7 @@ logic = {
                     (bow ? 2 : 0) +                                                           // mimic chests
                     ((key == 2 || key == 4 || key == 5) && bow && hammer ? -1 : 0) +          // if have hammer, might waste key going toward boss at these key counts. don't ask why 3 is left out, it just is
                     (key >= 3 && lamp && !hamBow ? 3 : 0) +                 // if you have light and no hammer+bow, you're forced to go toward the dark rooms, which have the most chests
-                    (key >= 4 && hamBow && lamp ? 2 : 0) +              // I dont know what these two mean 
+                    (key >= 4 && hamBow && lamp ? 2 : 0) +              // I dont know what these two mean
                     (key == 4 || key == 6 && hamBow && lamp ? 1 : 0) +  // but they make the numbers right
                     (key >= 5 && lamp ? 1 : 0) +                                              // now you can get 2 from the dark maze instead of 1 from somewhere else, I think is what this means
                     (key >= 5 && lamp && bigKey ? 1 : 0) +                                    // big chest
@@ -611,12 +915,12 @@ logic = {
                     (key >= 5 && bigKey && hamBow ? 1 : 0) :    // boss
                     0;
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
                     boss = fightHelm ?  // need for boss
-                        lamp ? 1 : 2 : // checks if player has to go through dark
-                        0;
+                        lamp ? STATE.avail : STATE.dark : // checks if player has to go through dark
+                        STATE.unavail;
 
                     min = entry ?
                         3 +                         // first 3 chests
@@ -632,11 +936,11 @@ logic = {
 
                 } else {    // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val
-                        - (settings.openMode == 0 ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
+                    var maxKey = items.keyAny.val
+                        - (std() ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
                         - 2; // if less than 5 shops accessible, must have come via Agahnim
 
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val
                         - 1                         // Hyrule Castle
                         - (logic.entry1() ? 1 : 0)  // Desert Palace
@@ -647,9 +951,9 @@ logic = {
 
                     boss = entry && hamBow && maxKey >= 1 ? // need to have at least 1 key
                         minKey >= 6 ?
-                            lamp ? 1 : 2 : // checks if player has to go through dark
-                            3 :            // if less than 6 guaranteed keys, boss status unknown
-                        0;
+                            lamp ? STATE.avail : STATE.dark : // checks if player has to go through dark
+                            STATE.maybe :            // if less than 6 guaranteed keys, boss status unknown
+                        STATE.unavail;
 
                     min = entry ?
                         (minKey >= 2 ? 1 : 0) +
@@ -686,8 +990,8 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightHelm ?  // need for boss
-                    lamp ? 1 : 2 : // checks if player has to go through dark
-                    0;
+                    lamp ? STATE.avail : STATE.dark : // checks if player has to go through dark
+                    STATE.unavail;
 
                 min = entry && bow && lamp ?   // if fully equipped, can do whole dungeon except boss
                     hammer ? 5 : 4 :           // if hammer, can do boss too
@@ -700,7 +1004,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         4: function () { //Swamp Palace
-
+           var boss;
+		         	var min;
+         			var max;
             var entry = logic.entry4(),
                 hammer = items.hammer.val,
                 hookshot = items.hookshot.val,
@@ -709,24 +1015,24 @@ logic = {
                 bigKey = items.bigKey4.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = fightArrg && key ? 1 : 0;              // all you need
+                boss = fightArrg && key ? STATE.avail: STATE.unavail;              // all you need
 
                 min = entry ?
                     1 +                                       // entrance
                     (key ? 1 : 0) +                           // ledge Chest
                     (key && hammer ? 3 : 0) +                 // main Dungeon
-                    (key && hammer && bigKey ? 1 : 0) +       // big Chest 
+                    (key && hammer && bigKey ? 1 : 0) +       // big Chest
                     (key && hammer && hookshot ? 4 : 0) :     // back of dungeon
                     0;
 
                 max = min;                                    // accessible items are the same no matter what
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
                 if (items.keyShopFound.val) {    // RETRO LOGIC - INFINITE KEYS
 
-                    boss = fightArrg ? 1 : 0;
+                    boss = fightArrg ? STATE.avail: STATE.unavail;
 
                     min = entry && hammer ?
                         3 +                     // main dungeon access guarantees 3
@@ -741,11 +1047,11 @@ logic = {
 
                 } else {    // RETRO LOGIC - LIMITED KEYS
 
-                    maxKey = items.keyAny.val
-                        - (settings.openMode == 0 ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
+                    var maxKey = items.keyAny.val
+                        - (std() ? 1 : 0) // if standard, you must have used a key at Hyrule Castle
                         - 2; // if less than 5 shops accessible, must have come via Agahnim
 
-                    minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
+                    var minKey = Math.max(0,    // subtracts the other places you might have spent your keys, if they are accessible
                         items.keyAny.val
                         - 1                         // Hyrule Castle
                         - (logic.entry1() ? 1 : 0)  // Desert Palace
@@ -754,9 +1060,9 @@ logic = {
                         - 2                         // Agahnim
                     );
 
-                    boss = fightArrg && maxKey >= 1 ?
-                        minKey >= 1 ? 1 : 3 :     // if 1 key not guaranteed, boss state unknown
-                        0;
+                    boss = fightArrg && maxKey >= STATE.avail?
+                        minKey >= 1 ? STATE.avail: STATE.maybe :     // if 1 key not guaranteed, boss state unknown
+                        STATE.unavail;
 
                     min = entry && minKey >= 1 ?
                         (hammer ? 3 : 0) +               // main dungeon access guarantees 3
@@ -773,7 +1079,7 @@ logic = {
                 }
             } else {    // REGULAR LOGIC
 
-                boss = fightArrg ? 1 : 0;
+                boss = fightArrg ? STATE.avail: STATE.unavail;
 
                 min = entry ?
                     (hammer ? 2 : 0) +              // main dungeon access guarantees 2
@@ -791,18 +1097,20 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         5: function () { // Skull Woods
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry5(),
                 firerod = items.firerod.val,
-                sword = items.sword.val >= 1,
+                sword = logic.canRemoveCurtains(),
                 fightMoth = entry && firerod && sword,
                 key = items.key5.val,
                 bigKey = items.bigKey5.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = fightMoth ? 1 : 0;      //boss reqs
+                boss = fightMoth ? STATE.avail: STATE.unavail;      //boss reqs
 
                 min = entry ?
                     5 +                         // base access
@@ -813,9 +1121,9 @@ logic = {
 
                 max = min;                  //no variation in availability
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
-                boss = fightMoth ? 1 : 0;      //boss reqs
+                boss = fightMoth ? STATE.avail: STATE.unavail;      //boss reqs
 
                 min = entry ?
                     3 +                             // guaranteed 3 in 1st/2nd phase
@@ -830,7 +1138,7 @@ logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = fightMoth ? 1 : 0;       //boss reqs
+                boss = fightMoth ? STATE.avail: STATE.unavail;       //boss reqs
 
                 min = entry && firerod ?
                     1 +                         // both might be in phase 3
@@ -844,7 +1152,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         6: function () { // Thieves Town
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry6(),
                 hammer = items.hammer.val,
                 fightBlind = entry && (items.sword.val >= 1 || hammer || logic.cane()),
@@ -852,9 +1162,9 @@ logic = {
                 bigKey = items.bigKey6.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = fightBlind && bigKey ? 1 : 0;
+                boss = fightBlind && bigKey ? STATE.avail: STATE.unavail;
 
                 min = entry ?
                     4 +                                     // base access
@@ -865,7 +1175,7 @@ logic = {
 
                 max = min;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightBlind ? 1 : 0;      //boss reqs
 
@@ -879,7 +1189,7 @@ logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = fightBlind ? 1 : 0;      //boss reqs
+                boss = fightBlind ? STATE.avail: STATE.unavail;      //boss reqs
 
                 min = entry ?
                     2 +                         // guaranteed 2 from access
@@ -894,26 +1204,33 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         7: function () { //Ice Palace
+            var boss;
+            var min;
+            var max;
+            var entry =logic.entry7();
 
-            var entry = logic.entry7(),
-                hookshot = items.hookshot.val,
+            var hookshot = items.hookshot.val,
                 hammer = items.hammer.val,
                 somaria = items.somaria.val,
                 spikeWalk = items.byrna.val || items.cape.val || hookshot,
-                fightKhold = entry && hammer,
+                fightKhold = entry && hammer && items.glove.val,
                 key = items.key7.val,
                 bigKey = items.bigKey7.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = fightKhold ?
-                    bigKey && key >= 1 && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? 1 : 3 : //boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
-                    0;
+                boss = fightKhold
+                   ? bigKey && key >= 1
+                         && ((spikeWalk && somaria)
+                         || (spikeWalk && key ==2) || (somaria && key == 2))
+                      ? entry
+                      : STATE.maybe
+                   : 0;//boss reqs; need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
 
-                min = entry ?
-                    3 +                                                                               // compass chest, freezor chest, ice T chest
-                    (bigKey ? 1 : 0) +                                                                   // big chest    
+                min = entry===STATE.avail
+                   ? 3 +                                                                               // compass chest, freezor chest, ice T chest
+                    (bigKey ? 1 : 0) +                                                                   // big chest
                     ((key == 0 && hookshot) || (key >= 1 && spikeWalk) ? 1 : 0) +                     // spike chest -- specifically need hookshot if 0 keys, otherwise any spike safety will do
                     (hammer && ((key == 0 && hookshot) || (key >= 1 && spikeWalk)) ? 2 : 0) +       // map chest, BK chest -- specifically need hookshot if 0 keys, otherwise any spike safety will do
                     (key >= 1 && hammer && ((spikeWalk && somaria) || (spikeWalk && key == 2) || (somaria && key == 2)) ? 1 : 0) : //boss: need 2 out of 3-- 2nd key, somaria, and/or spikeWalk to get a free key with
@@ -925,10 +1242,10 @@ logic = {
                     (hammer ? 3 : 0) :              // map chest, BK chest, boss
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightKhold ?                   //boss reqs
-                    spikeWalk ? 1 : 3 :             //big key might be past spikes
+                    spikeWalk ? STATE.avail: STATE.maybe:             //big key might be past spikes
                     0;
 
                 min = entry ?
@@ -945,7 +1262,7 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightKhold ?
-                    hookshot ? 1 : 3 :            // big key might be past spikes
+                    hookshot ? STATE.avail: STATE.maybe:            // big key might be past spikes
                     0;
 
                 min = entry ?
@@ -960,7 +1277,9 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         8: function () { //Misery Mire
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry8(),
                 lamp = items.lamp.val,
                 somaria = items.somaria.val,
@@ -973,22 +1292,22 @@ logic = {
                 medallion = logic.medallion(8)
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = fightVit && bigKey ?
                     medallion == 1 ?
-                        lamp ? 1 : 2 :
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
-                max = entry ?
+                max = entry && medallion !== 0 ?
                     4 +			                    //Bridge Chest, Spike Chest, Map Chest, Main Room
                     (fire ? 2 : 0) +               //Compass Chest, Big Key Chest
                     (bigKey ? 1 : 0) +	            //Big Chest
                     (fightVit && bigKey ? 1 : 0) :     //Boss
                     0;
 
-                min = entry ?
+                min = entry && medallion ==1 ?
                     3 +			                            //Bridge Chest, Map Chest, Main Room
                     (spikeWalk ? 1 : 0) +                   //Spike Chest
                     (fire ? 2 : 0) +                        //Compass Chest, Big Key Chest
@@ -996,13 +1315,12 @@ logic = {
                     (fightVit && bigKey && lamp ? 1 : 0) :    //Boss
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
-
-                boss = fightVit ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+            } else if (retro()) {    // RETRO LOGIC
+                 boss = fightVit ?
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && medallion == 1 ?
                     1 +
@@ -1018,10 +1336,10 @@ logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightVit ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && medallion == 1 ?
                     fightVit && lamp ?
@@ -1035,7 +1353,11 @@ logic = {
 
             return { boss: boss, max: max, min: min }
         },
-        9: function () { //Turtle Rock
+        9: function () { //Turtle Rock reg
+        if (!inverted()){
+            var boss;
+            var min;
+            var max;
             var entry = logic.entry9(),
                 medallion = logic.medallion(9),
                 firerod = items.firerod.val,
@@ -1048,15 +1370,15 @@ logic = {
                 bigKey = items.bigKey9.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC reg
 
                 boss = fightTri && bigKey && key >= 3 ?
-                    medallion == 1 ?
+                    medallion == STATE.avail ?
                         key == 4 ?
-                            light ? 1 : 2 :
-                            3 :
+                            lamp ? STATE.avail : STATE.dark:
+                            STATE.maybe:
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 min = entry && light && 1 == medallion ?
                     1 +                             // compass Chest
@@ -1079,33 +1401,33 @@ logic = {
                     (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
-
+            } else if (retro()) {    // RETRO LOGIC reg
+                //must have a keyshop if accessible
                 boss = fightTri ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
-
-                min = entry && light && medallion == 1 ?
-                    2 +
-                    (firerod ? 2 : 0) +
-                    (firerod && safety ? 4 : 0) +
-                    (firerod && safety && icerod ? 1 : 0) :
-                    0;
+                    STATE.unavail;
+//9 total items
+                min = entry && light && medallion == 1
+                    ? 2 +
+                        (firerod ? 2 : 0) +
+                        (firerod && safety ? 4 : 0) +
+                        (firerod && safety && icerod ? 1 : 0)
+                    : 0;
 
                 max = entry && medallion !== 0 ?
                     8 +
                     (firerod ? 1 : 0) :
                     0;
 
-            } else {    // REGULAR LOGIC
+            } else {    // REGULAR LOGIC reg
 
                 boss = fightTri ?
-                    medallion == 1 ?
-                        lamp ? 1 : 2 :
+                    medallion == STATE.avail ?
+                        lamp ? STATE.avail : STATE.dark :
                         medallion :
-                    0;
+                    STATE.unavail;
 
                 max = entry && medallion !== 0 ? 5 : 0;
 
@@ -1117,9 +1439,193 @@ logic = {
             }
 
             return { boss: boss, max: max, min: min }
+        }else{//inverted
+            var boss;
+            var min;
+            var max;
+            var medallion = logic.medallion(9),
+                front=(logic.darkEastDM()  && items.somaria.val)
+                    * medallion,
+	        hook=items.hookshot.val,
+                somaria=items.somaria.val,
+                back = (logic.eastDM() && items.mirror.val)?logic.DMlightAorD():STATE.unavail,
+                firerod = items.firerod.val,
+                icerod = items.icerod.val,
+                safety = items.byrna.val || items.shield.val >= 3 || items.cape.val,
+                light = logic.DMlight(),
+                lamp = items.lamp.val,
+                fightTri = firerod && items.icerod.val && somaria,
+                key = items.key9.val,
+                bigKey = items.bigKey9.val
+                ;
+
+            if (keysanity()) {    // KEY-SANITY LOGIC inverted
+                if (fightTri && bigKey) {//otherwise no chance
+                    if (back) {//front doesn't change back logic, 0 keys could do, and can't mess up with 4
+                        if (key>=4) {
+                            boss=logic.DMlightAorD();
+                        } else {//0-3 keys and back
+                            boss=STATE.maybe;
+                        }
+                    } else {//front only
+                        if (front && key>=3){
+                            if (front==STATE.avail) {
+                                if (key==4) {
+                                    boss=lamp?STATE.avail:STATE.dark;
+                                } else {
+                                    boss=STATE.maybe;
+                                }
+                            }else{//front is true but not avail
+                                boss=front;
+                            }
+                        }else{
+                            boss=STATE.unavail;
+                        }
+
+                    }
+                }else{
+                    boss=STATE.unavail;
+                }
+//inverted ks
+              var bc;
+              var cr;
+              var keysLeft;
+              if (front==STATE.avail && back!=STATE.avail){//min inv ks
+                min =  light && 1 == front ?
+                    1 +                             // compass Chest
+                    (firerod ? 2 : 0) +          	//Spike Roller Chests
+                    (key >= 1 ? 1 : 0) +          // chomp room
+                    (key >= 2 ? 1 : 0) +         // BK chest
+                    (key >= 2 && bigKey ? 2 : 0) +  //big chest and crystaroller chest
+                    (key == 3 && bigKey ? -1 : 0) +  // must leave 1 behind-- either BK chest or boss
+                    (key >= 3 && bigKey && lamp && safety ? 4 : 0) + // laser bridge
+                    (key >= 3 && firerod && bigKey && lamp && icerod ? 1 : 0) : // boss
+                    0;
+                  }else if (back == STATE.avail){//min inv ks
+                    bc=bigKey && (hook ||  somaria);
+                    cr=bc||(lamp&&somaria);
+                    min=4*safety+bc;//laser+chomp + big chests
+                    keysLeft=key+1;
+                    if(cr){//crystaroller can waste a key also
+                      min++;
+                      keysLeft--;
+                    }
+                    if (keysLeft>0) {//boss
+                        keysLeft--;
+                      if (fightTri && bigKey) {
+                        min++;
+                      }
+                    }
+                    if (keysLeft>0) {
+                      min++;
+                      keysLeft--; //next inefficient is to use on bk
+                    }
+                    if ((keysLeft>0 && somaria ) ||(front==STATE.avail)) {
+                      keysLeft--;
+                      min+=1+(firerod?2:0)
+                    }
+                  }else {
+                    min=0;
+                  }
+               if(front && !back){//max inv ks
+  //inverted
+                   max = front !== 0 ?
+                      1 +                             // compass Chest
+                      (firerod ? 2 : 0) +                               // compass Chest
+                      (key >= 1 ? 1 : 0) +            // chomp room
+                      (key >= 2 ? 1 : 0) +            // BK chest
+                      (key >= 2 && bigKey ? 5 : 0) +  // crystaroller chest and laser bridge
+                      (key >= 3 && bigKey ? 1 : 0) +  // big chest
+                      (key == 4 && firerod && bigKey && icerod ? 1 : 0) : //boss
+                      0;
+               } else if (back) {//max inv ks
+                  keysLeft=key+1;
+                    bc=bigKey && (hook ||  somaria);
+                    cr=bc||somaria;
+                  max=5 + bc + cr; //laser + cr bc chomp=7
+                  if(front||key>0){
+                     max+=1+(firerod?2:0);//compass roller=10
+                     if (!front){
+                        keysLeft--;
+                     }
+                     if (keysLeft>0 && boss) {
+                      min++;
+                      keysLeft--; //next inefficient is to use on bk
+                    }
+                  }
+                  if (keysLeft>0) {
+                      max++;
+                      keysLeft--; // bk
+                  }
+               }
+               else{//max inv ks
+                  max=0;
+               }
+            } else if (retro()) {    // RETRO LOGIC inverted
+                //must have a keyshop if accessible
+                var laser=safety && back==STATE.avail;
+                var cr=somaria&&lamp&&(back==STATE.avail);
+                var floor1=(front==STATE.avail)||(somaria&&(back==STATE.avail));
+                var backRoller=floor1&&firerod
+                var defBK=cr&&laser&&floor1&&backRoller;
+                    boss=fightTri && (back||front)
+                           ? defBK
+                              ? logic.DMlightAorD() //bigkey obv got in to TR
+                              : STATE.maybe
+                           :STATE.unavail;
+
+                min=Math.max(0,
+                    -2 + (4 * laser) +
+                    cr +
+                    2 + //chomp and big key chest
+                    floor1 +
+                    (backRoller *2) +
+                    ((boss==STATE.avail)?1:0)  //don't add big chest as 1 is subtracted for big key
+                );
+//inverted
+
+//inverted
+              if (front||back){
+                    var chestImpossible= (!firerod?0:2) //back roller
+                       + ((front||somaria)?0:1) //Compass
+                       + (boss?0:1);
+                     max=Math.min(9,12-chestImpossible);
+              }else{
+                 max=0;
+              }
+//inverted
+            } else {    // REGULAR LOGIC inverted
+
+                boss = fightTri
+                    ? front==STATE.avail && back
+                        ? STATE.avail
+                        :  back
+                            ? STATE.maybe
+                            : front
+                               ? STATE.maybe
+                               : STATE.unavail
+                    : STATE.unavail;
+                if (boss==STATE.avail && !lamp){
+                    boss=STATE.dark;
+                }
+//inverted
+//12 chests 5 items
+                max = entry && medallion !== 0 ? 5 : 0;
+
+                min = entry && light && firerod && medallion == 1 ?
+                    1 +
+                    (safety ? 3 : 0) +
+                    (safety && icerod ? 1 : 0) :
+                    0;
+            }
+//inverted
+            return { boss: boss, max: max, min: min }
+          }
         },
         10: function () { //Ganon's Tower
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry10(),
                 bigKey = items.bigKey10.val,
                 canClimb = items.bow.val >= 2 && logic.fire() && (bigKey || settings.keyMode !== 1),
@@ -1135,13 +1641,13 @@ logic = {
                 key = items.key10.val
                 ;
 
-            if (settings.keyMode == 1) {    // KEY-SANITY LOGIC
+            if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = entry && canClimb && hookshot && bigKey && key >= 1 ?
                     key == 4 ?
-                        logic.DMlight() ? 1 : 2 :
-                        3 :
-                    0;
+                        logic.DMlight() ? STATE.avail : STATE.dark:
+                        STATE.maybe :
+                    STATE.unavail;
 
                 max = entry ?
                     2 +                     //hope room
@@ -1153,7 +1659,7 @@ logic = {
                     (bigKey && (fireCane || hamHook) ? 1 : 0) + //big chest
                     (hamHook || hamBoots ? 1 : 0) + //map chest
                     (key >= 1 && hamHook ? 1 : 0) + //firesnake room
-                    //chests from either compass or rando room  
+                    //chests from either compass or rando room
                     (key == 0 && canClimb && fireCane && hamHook ? 3 : 0) +
                     (key >= 1 && fireCane && hamHook ? 3 : 0) +
                     (key >= 2 && fireCane && hamHook ? 1 : 0) +
@@ -1199,11 +1705,11 @@ logic = {
                     (key == 0 && fireCane && !hamHook ? 1 : 0) : //I DON'T KNOW
                     0;
 
-            } else if (settings.keyMode == 2) {    // RETRO LOGIC
+            } else if (retro()) {    // RETRO LOGIC
 
                 boss = entry && canClimb && hookshot ?
                     hamHook && fireCane && boots ?
-                        logic.DMlight() ? 1 : 2 :
+                        logic.DMlight() ? STATE.avail : STATE.dark :
                         3 :
                     0;
 
@@ -1246,9 +1752,9 @@ logic = {
 
                 boss = entry && canClimb && hookshot ?
                     hamHook && fireCane && boots ?
-                        logic.DMlight() ? 1 : 2 :
-                        3 :
-                    0;
+                        logic.DMlight() ? STATE.avail : STATE.dark:
+                        STATE.maybe :
+                    STATE.unavail;
 
                 min = entry ?
                     (somaria && firerod && hammer && hookshot ? 3 : 0) +
@@ -1281,19 +1787,21 @@ logic = {
             return { boss: boss, max: max, min: min }
         },
         11: function () { //Agahnim's Tower
-
+            var boss;
+			var min;
+			var max;
             var entry = logic.entry11(),
-                sword = items.sword.val >= 1,
+                curtainAndFight = logic.canRemoveCurtains() && (items.sword.val>=1 || items.hammer.val ),//will need to use sword for net
                 light = items.lamp.val,
                 key = items.key11.val
                 ;
 
-            if (settings.keyMode == 1) {
+            if (keysanity()) {
 
 
-                boss = entry && sword && key == 2 ?
-                    light ? 1 : 2 :
-                    0;
+                boss = entry && curtainAndFight && key == 2 ?
+                    light ? STATE.avail : STATE.dark:
+                    STATE.unavail;
 
                 max = entry ?
                     1 +             //first chest
@@ -1305,14 +1813,14 @@ logic = {
                     (key && light ? 1 : 0) :    //second chest
                     0;
 
-            } else if (settings.keyMode == 2) {
+            } else if (retro()) {
 
 
                 if (items.keyShopFound.val) { //infinite key logic
 
-                    boss = entry && sword ?
-                        light ? 1 : 2 :
-                        0;
+                    boss = entry && curtainAndFight ?
+                        light ? STATE.avail : STATE.dark:
+                        STATE.unavail;
 
                     min = entry ?
                         light ? 2 : 1 :
@@ -1322,8 +1830,8 @@ logic = {
 
                 } else {    //limited key logic
 
-                    maxKey = items.keyAny.val;
-                    minKey = Math.max(0,
+                    var maxKey = items.keyAny.val;
+                    var minKey = Math.max(0,
                         maxKey -
                         1 -
                         (logic.entry1() ? 1 : 0) -
@@ -1331,13 +1839,13 @@ logic = {
                         (logic.entry3() ? 6 : 0) -
                         (logic.entry4() ? 1 : 0)
                     );
-                    maxKey -= (settings.openMode == 0 ? 1 : 0);
+                    maxKey -= (std() ? 1 : 0);
 
-                    boss = entry && maxKey >= 2 && sword ?
+                    boss = entry && maxKey >= 2 && curtainAndFight ?
                         minKey >= 2 ?
-                            light ? 1 : 2 :
-                            3 :
-                        0;
+                            light ? STATE.avail : STATE.dark:
+                            STATE.maybe:
+                        STATE.unavail;
 
                     max = entry ?
                         maxKey >= 1 ? 2 : 1 :
@@ -1351,9 +1859,9 @@ logic = {
                 }
 
             } else {
-                boss = entry && sword ?
-                    light ? 1 : 2 :
-                    0;
+                boss = entry && curtainAndFight ?
+                    light ? STATE.avail : STATE.dark:
+                    STATE.unavail;
 
                 max = 0;
                 min = 0;
@@ -1363,11 +1871,11 @@ logic = {
         },
     },
     keyShops: {
-        0: function () { return 1 },  //LW Lake Hylia
-        1: function () { return 1 },  //Kakariko
-        2: function () { return logic.eastDM() ? logic.DMlight() ? 1 : 2 : 0; },  //Death Mountain
+        0: function () { return logic.lightWorldBunny() },  //LW Lake Hylia
+        1: function () { return logic.lightWorldBunny() },  //Kakariko
+        2: function () { return (logic.eastDM()&&(!inverted() || items.pearl.val)) ? logic.DMlightAorD() : 0; },  //Death Mountain
         3: function () { return logic.darkWorldSouth() ? 1 : 0; },  //DW Lake Hylia
-        4: function () { return logic.darkEastDM() ? logic.DMlight() ? 1 : 2 : 0; },  //Dark EDM
+        4: function () { return logic.darkEastDM() ? logic.DMlightAorD() : 0; },  //Dark EDM
         5: function () { return logic.darkWorldNW() && items.hammer.val ? 1 : 0; },  //Outcasts
         6: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Forest
         7: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Lumberjack
@@ -1415,25 +1923,25 @@ logic = {
 
         stats.clear();
         logic.setPrizes();
-        if (settings.keyMode == 2) { logic.keyShopCheck(); }
+        if (retro()) { logic.keyShopCheck(); }
 
         $.each(logic.chests, function (id, test) {
 
-            status = chests[id].opened ? null : test(); //if the chest's not open, it is tested
+            var status = chests[id].opened ? null : test(); //if the chest's not open, it is tested
             chests[id].status = status;                 //sets chest's status according to what the test found
 
             logic.colour("#chest" + id, status);         //colours the chest on the map
         });
 
         $.each(logic.dungeons, function (id, test) {
-            dStatus = test();
+            var dStatus = test();
 
             dStatus.boss = dungeons[id].completed ? null : dStatus.boss;
             dungeons[id].status = dStatus.boss;              //applies the test result to the dungeons object
             logic.colour("#dungeon" + id, dStatus.boss);    //colours the boss by its status
-
-            total = dungeons[id]["chests" + settings.keyMode];
-            opened = dungeons[id].openChests;
+            setState($("#dungeon"+id)[0],dungeons[id].prize);
+            var total = dungeons[id]["chests" + settings.keyMode];
+            var opened = dungeons[id].openChests;
 
             dStatus.chest =             //figures out status of next chest based on how many opened so far & max/min available
                 opened == total ? "null"
@@ -1445,8 +1953,8 @@ logic = {
             $("#dungeonChest" + id).html(total - opened);
 
             logic.colour("#dungeonChest" + id, dStatus.chest);
-
-            for (chest = 1; chest <= total; chest++) {  //colours each chest pip based on amount opened and max/min
+			var pipStatus;
+            for (var chest = 1; chest <= total; chest++) {  //colours each chest pip based on amount opened and max/min
                 pipStatus =
                     chest > (total - opened) ? "null"
                         : chest > (total - dStatus.min) ? 1
@@ -1463,12 +1971,6 @@ logic = {
             }
 
         });
-
-
-
-
-
-
-
+        trackables.save();
     },
 };
