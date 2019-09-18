@@ -596,7 +596,7 @@ var logic = {
         58: function () { // Bumper Cave
               return logic.darkWorldNW() ?
                   items.glove.val && items.cape.val &&
-                  (!inverted || (logic.lightWorldLink()
+                  (!inverted()|| (logic.lightWorldLink()
                         && items.mirror.val)
                   )
                      ? STATE.avail
@@ -1628,7 +1628,7 @@ var logic = {
 			var max;
             var entry = logic.entry10(),
                 bigKey = items.bigKey10.val,
-                canClimb = items.bow.val >= 2 && logic.fire() && (bigKey || settings.keyMode !== 1),
+                canClimb = items.bow.val >= 2 && logic.fire() && (bigKey ||!keysanity()),
                 light = items.lamp.val,
                 somaria = items.somaria.val,
                 firerod = items.firerod.val,
