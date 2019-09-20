@@ -1529,7 +1529,7 @@ var logic = {
                   }
                if(front && !back){//max inv ks
   //inverted
-                   max = front !== 0 ?
+                   max = front != 0 ?
                       1 +                             // compass Chest
                       (firerod ? 2 : 0) +                               // compass Chest
                       (key >= 1 ? 1 : 0) +            // chomp room
@@ -1543,7 +1543,7 @@ var logic = {
                     bc=bigKey && (hook ||  somaria);
                     cr=bc||somaria;
                   max=5 + bc + cr; //laser + cr bc chomp=7
-                  if(front||key>0){
+                  if(front||(somaria && key>0)){
                      max+=1+(firerod?2:0);//compass roller=10
                      if (!front){
                         keysLeft--;
