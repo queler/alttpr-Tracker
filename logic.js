@@ -1245,10 +1245,10 @@ var logic = {
             } else if (retro()) {    // RETRO LOGIC
 
                 boss = fightKhold ?                   //boss reqs
-                    spikeWalk ? STATE.avail: STATE.maybe:             //big key might be past spikes
+                    spikeWalk ? entry: STATE.maybe:             //big key might be past spikes
                     0;
 
-                min = entry ?
+                min = entry == STATE.avail ?
                     1 +                                                 // guaranteed 1 item from first 4 chests
                     (hammer ? 1 : 0) +                                  // 3 items might be behind hammer
                     (hookshot || spikeWalk ? 1 : 0) +                   // 2 items might be past spike/hammer area
@@ -1262,10 +1262,10 @@ var logic = {
             } else {    // REGULAR LOGIC
 
                 boss = fightKhold ?
-                    hookshot ? STATE.avail: STATE.maybe:            // big key might be past spikes
+                    hookshot ? entry: STATE.maybe:            // big key might be past spikes
                     0;
 
-                min = entry ?
+                min = entry==STATE.avail ?
                     (hammer && hookshot ? 2 : 0) +      // hammer and hookshot guarantee all chests
                     (hammer && spikeWalk ? 1 : 0) :     // hammer and other form of spikeWalk guarantee one
                     0;
