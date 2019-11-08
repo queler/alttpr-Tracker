@@ -490,9 +490,9 @@ var logic = {
         },
         44: function () { // Mimic Cave
            if(inverted()){
-              return logic.eastDM()
+              return (logic.eastDM()
                  && items.hammer.val
-                 && items.pearl.val;
+                 && items.pearl.val) * logic.DMlightAorD();
            }else{
               return !(keysanity() && items.key9.val < 2) &&
                   items.pearl.val &&
@@ -1561,7 +1561,7 @@ var logic = {
                else{//max inv ks
                   max=0;
                }
-            } else if (retro()) {    // RETRO LOGIC inverted
+            } else {    // RETRO LOGIC inverted
                 //must have a keyshop if accessible
                 var laser=safety && back==STATE.avail;
                 var cr=somaria&&lamp&&(back==STATE.avail);
@@ -1573,9 +1573,9 @@ var logic = {
                               ? logic.DMlightAorD() //bigkey obv got in to TR
                               : STATE.maybe
                            :STATE.unavail;
-
+                var prizes=5 + (retro()?4:0);
                 min=Math.max(0,
-                    -2 + (4 * laser) +
+                    prizes-12+1 + (4 * laser) +
                     cr +
                     2 + //chomp and big key chest
                     floor1 +
@@ -1589,34 +1589,11 @@ var logic = {
                     var chestImpossible= (!firerod?0:2) //back roller
                        + ((front||somaria)?0:1) //Compass
                        + (boss?0:1);
-                     max=Math.min(9,12-chestImpossible);
+                     max=Math.min(prizes,12-chestImpossible);
               }else{
                  max=0;
               }
 //inverted
-            } else {    // REGULAR LOGIC inverted
-
-                boss = fightTri
-                    ? front==STATE.avail && back
-                        ? STATE.avail
-                        :  back
-                            ? STATE.maybe
-                            : front
-                               ? STATE.maybe
-                               : STATE.unavail
-                    : STATE.unavail;
-                if (boss==STATE.avail && !lamp){
-                    boss=STATE.dark;
-                }
-//inverted
-//12 chests 5 items
-                max = entry && medallion !== 0 ? 5 : 0;
-
-                min = entry && light && firerod && medallion == 1 ?
-                    1 +
-                    (safety ? 3 : 0) +
-                    (safety && icerod ? 1 : 0) :
-                    0;
             }
 //inverted
             return { boss: boss, max: max, min: min }
@@ -1808,7 +1785,7 @@ var logic = {
                     (key ? 1 : 0) : //second chest
                     0;
 
-                min = entry ?
+                min = entry && logic.DMlight() ?
                     1 +                       //first chest
                     (key && light ? 1 : 0) :    //second chest
                     0;
