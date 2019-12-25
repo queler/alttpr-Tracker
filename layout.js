@@ -41,7 +41,11 @@ settings = {
 
 		//applies each setting from basil to the radio buttons
 		$.each(savedSettings, function (k, v) {
-			$('input:radio[name=' + k + ']:nth(' + v + ')').attr('checked', true);
+			if($('input[name=' + k + ']').attr('type')=='radio') {
+			   $('input:radio[name=' + k + ']:nth(' + v + ')').attr('checked', true);
+			} else if($('input[name=' + k + ']').attr('type')=='number') {
+			   $('input[name=' + k + ']').val(v);
+			} 
 		});
 
 		settings.apply(true);
@@ -57,7 +61,8 @@ settings = {
 		settings.dungeonDisp = $("input[name='dungeonDisp']:checked").val();
 		settings.openMode = $("input[name='openMode']:checked").val();
 		settings.timerMode = $("input[name='timerMode']:checked").val();
-		settings.predictor = $("input[name='predictor']:checked").val();
+		settings.openTower = $("input[name='openTower']").val();
+  settings.beatGanon = $("input[name='beatGanon']").val();
 
 		basil.set('settings',settings);
 

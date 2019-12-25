@@ -400,19 +400,16 @@
 		</div>
 
 		<div class="selection" style="top: 130px;left:530px">
-			<b>&nbsp;LOCATION
-				<br/>&nbsp;PREDICTOR
-				<br/>&nbsp;(Non-inverted)
+			<b>&nbsp;CRYSTALS
+			<br/>
+				<input checked title="Crystals needed to open Tower" class="number openTower" type="number" name="openTower" value="7" min="0" max="7" step="1" onchange="settings.apply(false)"
+				 >
+				<span class="number openTower">Ganon's Tower</span>
 				<br/>
-				<input title="No Predictions" class="radio predictOff" type="radio" name="predictor" value="0" onclick="settings.apply(false)"
-				 checked>
-				<span class="radio predictOff"> Off</span>
+				<input checked title="Crystals needed to Defeat Ganon" class="number beatGanon" type="number" name="beatGanon" value="7" min="0" max="7" step="1" onchange="settings.apply(false)"
+				 >
+				<span class="number beatGanon">Beat Ganon</span>
 				<br/>
-				<input title="Predict for Accessible Locations" class="radio predictAccess" type="radio" name="predictor" value="1" onclick="settings.apply(false)">
-				<span class="radio predictAccess"> Accessible Only</span>
-				<br/>
-				<input title="Predict for All Locations" class="radio predictAll" type="radio" name="predictor" value="2" onclick="settings.apply(false)">
-				<span class="radio predictAll"> All</span>
 		</div>
 
 	</div>
@@ -426,7 +423,7 @@
 			trackables.load();
 			map.populate();											//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
-			stats.fetch();
+			
 		});
 
 		$(window).resize(function () {
