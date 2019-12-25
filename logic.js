@@ -571,7 +571,7 @@ var logic = {
         53: function () { // Pyramid Fairy
 
             return inverted()
-               ? ((items.redCrystal.val >= 2) && logic.lightWorldBunny()) && items.mirror.val 
+               ? ((items.redCrystal.val >= 2) && logic.lightWorldBunny())
                : ((items.redCrystal.val >= 2) && (items.boss11.val || logic.darkWorldEast()));
 
         },
