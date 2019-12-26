@@ -309,6 +309,15 @@ body {
 .medal.state2 {  background-position: -380px -720px; }
 .medal.state3 {  background-position: -380px -760px; }
 
+.crystal {width:40px;height:36px}
+.crystal.state1 {background-position:-516px -36px}
+.crystal.state2 {background-position:-516px -72px}
+.crystal.state3 {background-position:-516px -108px}
+.crystal.state4 {background-position:-516px -144px}
+.crystal.state5 {background-position:-516px -180px}
+.crystal.state6 {background-position:-516px -216px}
+.crystal.state7 {background-position:-516px -252px}
+
 .key {width:44px;height:36px;top:72px}
 .key.state0 {background-position:-516px -0px}
 .key.state1 {background-position:-516px -36px}
@@ -343,7 +352,8 @@ body {
 .key.infinite {background-position:-516px -1080px;width:68px;margin-left:-4px}
 #key11 { left:36px }
 #key12 { left:-4px }
-
+#crystal0 { left:36px }
+#crystal1 { left:-4px }
 .bigKey {width:36px;height:36px;top:72px;left:36px}
 .bigKey.state0 {background-position:-300px -640px}
 .bigKey.state1 {background-position:-264px -640px}

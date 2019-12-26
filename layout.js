@@ -406,9 +406,9 @@ layout = {
 				{ elem: ".stuff7", props: { x: 244, y: 80 } },
 				{ elem: ".stuff8", props: { x: 4, y: 156 } },
 				{ elem: ".stuff9", props: { x: 84, y: 156 } },
-				{ elem: ".stuff10", props: { x: -5000, y: 4 } },
+				{ elem: ".stuff10", props: { x: 180, y: 156 } },
 				{ elem: ".stuff11", props: { x: 244, y: 156 } },
-				{ elem: "#keyAny", props: { x: 180, y: 104, left: 0, top: 72 } }
+				{ elem: "#keyAny", props: { x: 180, y: 156, left: 0, top: 72 } }
 			],
 		},
 		3: { // Wide Layout

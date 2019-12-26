@@ -56,6 +56,9 @@ function itemsDef(){return {				//a list of everything we're tracking-- includes
 	prize9: { val: 0, max: 4 }, //TR
 	medal8: { val: 0, max: 3 }, //MM required medal
 	medal9: { val: 0, max: 3 }, //TR required medal
+	crystal0: { val:7, max:7},//tower entry
+	crystal1: { val:7, max:7},//ganon entry
+
 	key1: { val: 0, max: 1 }, //DP
 	key2: { val: 0, max: 1 }, //ToH
 	key3: { val: 0, max: 6 }, //PoD
