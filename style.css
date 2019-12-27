@@ -310,6 +310,7 @@ body {
 .medal.state3 {  background-position: -380px -760px; }
 
 .crystal {width:40px;height:36px}
+.crystal.state0 {background-position:-516px -0px}
 .crystal.state1 {background-position:-516px -36px}
 .crystal.state2 {background-position:-516px -72px}
 .crystal.state3 {background-position:-516px -108px}
