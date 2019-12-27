@@ -23,8 +23,6 @@
 	<script src="trackables.js"></script>
 	<script src="moment.js"></script>
 	<script src="timer.js"></script>
-	<script src="stats_standard_random.js"></script>
-	<script src="stats.js"></script>
 </head>
 
 <body>
@@ -400,19 +398,7 @@
 		</div>
 
 		<div class="selection" style="top: 130px;left:530px">
-			<b>&nbsp;LOCATION
-				<br/>&nbsp;PREDICTOR
-				<br/>&nbsp;(Non-inverted)
-				<br/>
-				<input title="No Predictions" class="radio predictOff" type="radio" name="predictor" value="0" onclick="settings.apply(false)"
-				 checked>
-				<span class="radio predictOff"> Off</span>
-				<br/>
-				<input title="Predict for Accessible Locations" class="radio predictAccess" type="radio" name="predictor" value="1" onclick="settings.apply(false)">
-				<span class="radio predictAccess"> Accessible Only</span>
-				<br/>
-				<input title="Predict for All Locations" class="radio predictAll" type="radio" name="predictor" value="2" onclick="settings.apply(false)">
-				<span class="radio predictAll"> All</span>
+<!-- Where stats/location predictor used to be <-->
 		</div>
 
 	</div>
@@ -426,7 +412,6 @@
 			trackables.load();
 			map.populate();											//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
-			stats.fetch();
 		});
 
 		$(window).resize(function () {
@@ -447,33 +432,6 @@
 		);
 
 
-		$(".icon").hover(
-			function () {
-				stats.find(this);
-			}, function () {
-
-				if (settings.predictor == 0) {
-					stats.clear();
-				} else {
-					stats.find("boss10");
-				}
-
-			}
-		);
-		$(".icon").focus(
-			function () {
-				stats.find(this);
-			});
-		$(".icon").blur( function () {
-
-				if (settings.predictor == 0) {
-					stats.clear();
-				} else {
-					stats.find("boss10");
-				}
-
-			}
-		);
 		$('.icon').contextmenu(function (event) {					//adds listener for right-click on icons
 				toggle.icon(this, true);
 		});
