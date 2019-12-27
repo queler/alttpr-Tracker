@@ -1898,7 +1898,6 @@ var logic = {
     //function that runs through all chests/dungeons and calculates/applies their status
     apply: function () {
 
-        stats.clear();
         logic.setPrizes();
         if (retro()) { logic.keyShopCheck(); }
 
@@ -1939,12 +1938,6 @@ var logic = {
                                 : 0;
 
                 logic.colour("#chestPip" + id + "-" + chest, pipStatus);
-            }
-
-            if (settings.predictor !== 0) {
-                stats.find("boss10");
-            } else {
-                stats.clear();
             }
 
         });

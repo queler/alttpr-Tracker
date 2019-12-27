@@ -61,8 +61,6 @@ settings = {
 		settings.dungeonDisp = $("input[name='dungeonDisp']:checked").val();
 		settings.openMode = $("input[name='openMode']:checked").val();
 		settings.timerMode = $("input[name='timerMode']:checked").val();
-		settings.openTower = $("input[name='openTower']").val();
-  settings.beatGanon = $("input[name='beatGanon']").val();
 
 		basil.set('settings',settings);
 

@@ -23,8 +23,6 @@
 	<script src="trackables.js"></script>
 	<script src="moment.js"></script>
 	<script src="timer.js"></script>
-	<script src="stats_standard_random.js"></script>
-	<script src="stats.js"></script>
 </head>
 
 <body>
@@ -403,16 +401,7 @@
 		</div>
 
 		<div class="selection" style="top: 130px;left:530px">
-			<b>&nbsp;CRYSTALS
-			<br/>
-				<input checked title="Crystals needed to open Tower" class="number openTower" type="number" name="openTower" value="7" min="0" max="7" step="1" onchange="settings.apply(false)"
-				 >
-				<span class="number openTower">Ganon's Tower</span>
-				<br/>
-				<input checked title="Crystals needed to Defeat Ganon" class="number beatGanon" type="number" name="beatGanon" value="7" min="0" max="7" step="1" onchange="settings.apply(false)"
-				 >
-				<span class="number beatGanon">Beat Ganon</span>
-				<br/>
+<!-- Where stats/location predictor used to be <-->
 		</div>
 
 	</div>
@@ -426,7 +415,6 @@
 			trackables.load();
 			map.populate();											//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
-			
 		});
 
 		$(window).resize(function () {
@@ -447,33 +435,6 @@
 		);
 
 
-		$(".icon").hover(
-			function () {
-				stats.find(this);
-			}, function () {
-
-				if (settings.predictor == 0) {
-					stats.clear();
-				} else {
-					stats.find("boss10");
-				}
-
-			}
-		);
-		$(".icon").focus(
-			function () {
-				stats.find(this);
-			});
-		$(".icon").blur( function () {
-
-				if (settings.predictor == 0) {
-					stats.clear();
-				} else {
-					stats.find("boss10");
-				}
-
-			}
-		);
 		$('.icon').contextmenu(function (event) {					//adds listener for right-click on icons
 				toggle.icon(this, true);
 		});
