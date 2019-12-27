@@ -41,11 +41,7 @@ settings = {
 
 		//applies each setting from basil to the radio buttons
 		$.each(savedSettings, function (k, v) {
-			if($('input[name=' + k + ']').attr('type')=='radio') {
-			   $('input:radio[name=' + k + ']:nth(' + v + ')').attr('checked', true);
-			} else if($('input[name=' + k + ']').attr('type')=='number') {
-			   $('input[name=' + k + ']').val(v);
-			} 
+			$('input:radio[name=' + k + ']:nth(' + v + ')').attr('checked', true);
 		});
 
 		settings.apply(true);
