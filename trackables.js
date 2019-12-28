@@ -224,7 +224,7 @@ trackables= {
 		chests=basil.get("chests")||chestsDef();
 		dungeons=basil.get("dungeons")||dungeonsDef();
 		keyShops=basil.get("keyShops")||keyShopsDef();
-		$('.icon,.dungeon').each(function() {
+		$('.icon,.dungeon,.iconBox').each(function() {
 			rID=(/(\D+)(\d*)/.exec(this.id));
 			if(rID[1]!=='abbr'){
 				switch (rID[1]){
