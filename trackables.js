@@ -56,6 +56,9 @@ function itemsDef(){return {				//a list of everything we're tracking-- includes
 	prize9: { val: 0, max: 4 }, //TR
 	medal8: { val: 0, max: 3 }, //MM required medal
 	medal9: { val: 0, max: 3 }, //TR required medal
+	crystal0: { val:7, max:7},//tower entry
+	crystal1: { val:7, max:7},//ganon entry
+
 	key1: { val: 0, max: 1 }, //DP
 	key2: { val: 0, max: 1 }, //ToH
 	key3: { val: 0, max: 6 }, //PoD
@@ -155,6 +158,7 @@ function chestsDef(){return {
 	62: { world: "DW", amount: 1, xPos: 30.9, yPos: 68.5, opened: false, status: null, name: "Stumpy" },
 	63: { world: "DW", amount: 1, xPos: 5.00, yPos: 69.9, opened: false, status: null, name: "Digging Game" },
 	64: { world: "DW", amount: 2, xPos: 4.00, yPos: 79.5, opened: false, status: null, name: "Mire Shed" },
+ 65: { world: "DW", amount: 1, xPos: 50.0, yPos: 41.0, opened: false, status: null, name: "GANON" },
 };}
 
 function dungeonsDef(){return {
@@ -221,7 +225,7 @@ trackables= {
 		chests=basil.get("chests")||chestsDef();
 		dungeons=basil.get("dungeons")||dungeonsDef();
 		keyShops=basil.get("keyShops")||keyShopsDef();
-		$('.icon,.dungeon').each(function() {
+		$('.icon,.dungeon,.iconBox').each(function() {
 			rID=(/(\D+)(\d*)/.exec(this.id));
 			if(rID[1]!=='abbr'){
 				switch (rID[1]){

@@ -308,6 +308,17 @@ body {
 .medal.state2 {  background-position: -380px -720px; }
 .medal.state3 {  background-position: -380px -760px; }
 
+.crystalIcon {width: 40px; height: 40px; background-position:-340px -760px;position: absolute;left: 10px;}
+.crystal .crystalNum{width:27px;height:27px;position: absolute;top: 10px;left: 0px;}
+.crystal.state0 .crystalNum {background-position:-557px -369px}
+.crystal.state1 .crystalNum {background-position:-557px -405px}
+.crystal.state2 .crystalNum {background-position:-557px -441px}
+.crystal.state3 .crystalNum {background-position:-557px -477px}
+.crystal.state4 .crystalNum {background-position:-557px -513px}
+.crystal.state5 .crystalNum {background-position:-557px -549px}
+.crystal.state6 .crystalNum {background-position:-557px -585px}
+.crystal.state7 .crystalNum {background-position:-557px -621px}
+
 .key {width:44px;height:36px;top:72px}
 .key.state0 {background-position:-516px -0px}
 .key.state1 {background-position:-516px -36px}

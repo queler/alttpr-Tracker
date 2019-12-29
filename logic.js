@@ -192,7 +192,10 @@ var logic = {
             return logic.darkEastDM() && items.hammer.val && items.somaria.val;
         },
         entry10: function () {
-            return items.crystal.val >= 7 && (inverted()?logic.lightWorldLink():logic.darkEastDM()) ;
+            return items.crystal.val >= items.crystal0.val
+               && (inverted()
+                  ?logic.lightWorldLink()
+                  :logic.darkEastDM()) ;
         },
     entry11: function () { if(inverted()){
           return logic.climbDM();
@@ -576,7 +579,7 @@ var logic = {
         53: function () { // Pyramid Fairy
 
             return inverted()
-               ? ((items.redCrystal.val >= 2) && logic.lightWorldBunny()) && items.mirror.val 
+               ? ((items.redCrystal.val >= 2) && logic.lightWorldBunny()) && items.mirror.val
                : ((items.redCrystal.val >= 2) && (items.boss11.val || logic.darkWorldEast()));
 
         },
@@ -628,6 +631,20 @@ var logic = {
         },
         64: function () { // Mire Shed
             return logic.mireArea();
+        },
+        65: function() {//GANON
+           if(logic.darkWorldEast() && logic.fire()
+              &&(items.crystal.val >=
+                 items.crystal1.val)){
+              if(swordless()){
+                 return items.hammer.val==1
+                 && items.bow.val==3;
+              }else{//normal
+                 return items.sword.val<=2;
+              }
+           }else{
+              return STATE.unavail;
+           }
         }
     },
 
