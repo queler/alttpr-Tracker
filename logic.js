@@ -635,7 +635,7 @@ var logic = {
         65: function() {//GANON
            if(logic.darkWorldEast() && logic.fire()
               &&(items.crystal.val >=
-                 items.crystal1.val)){
+                 items.crystal1.val) && items.boss10.val) {
               if(swordless()){
                  return items.hammer.val==1
                  && items.bow.val==3;
