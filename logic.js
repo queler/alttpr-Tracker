@@ -40,7 +40,12 @@ var logic = {
             return items.sword.val>=2;
         }
     },
-
+    canShoot: function canShoot(){
+        return items.bow.val >= 1 && (!retro() || items.keyShopFound.val);
+    },
+    canShootSilvers: function canShootSilvers(){
+        return items.bow.val >= 2 && (!retro() || items.keyShopFound.val);
+    },
     canUseMedallions: function(){
         if( swordless()){
             return 1
@@ -641,7 +646,7 @@ var logic = {
             var boss;
 			var min;
 			var max;
-			var bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+			var bow = logic.canShoot(),
                 lamp = items.lamp.val,
                 bigKey = items.bigKey0.val;
 
@@ -685,7 +690,7 @@ var logic = {
             var entry = logic.entry1(),
                 glove = items.glove.val,
                 reachLanmo = entry && logic.fire() && glove,
-                bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+                bow = logic.canShoot(),
                 fightLanmo = reachLanmo && (items.hammer.val || items.sword.val >= 1 || bow || logic.cane() || logic.rod()),
                 boots = items.boots.val,
                 key = items.key1.val,
@@ -872,7 +877,7 @@ var logic = {
             var entry = logic.entry3(),
                 lamp = items.lamp.val,
                 hammer = items.hammer.val,
-                bow = retro() ? (items.bow.val == 2 && items.keyShopFound.val || items.bow.val == 3) : items.bow.val >= 2,
+                bow = logic.canShoot(),
                 hamBow = hammer && bow,
                 key = items.key3.val,
                 bigKey = items.bigKey3.val,
@@ -1288,7 +1293,7 @@ var logic = {
                 spikeWalk = items.byrna.val || items.cape.val,
                 key = items.key8.val,
                 bigKey = items.bigKey8.val,
-                fightVit = entry && somaria && (items.sword.val >= 1 || items.bow.val >= 2),
+                fightVit = entry && somaria && (items.sword.val >= 1 || logic.canShoot()),
                 medallion = logic.medallion(8)
                 ;
 
@@ -1605,7 +1610,7 @@ var logic = {
 			var max;
             var entry = logic.entry10(),
                 bigKey = items.bigKey10.val,
-                canClimb = items.bow.val >= 2 && logic.fire() && (bigKey ||!keysanity()),
+                canClimb = logic.canShoot() && logic.fire() && (bigKey ||!keysanity()),
                 light = items.lamp.val,
                 somaria = items.somaria.val,
                 firerod = items.firerod.val,
@@ -1944,3 +1949,4 @@ var logic = {
         trackables.save();
     },
 };
+

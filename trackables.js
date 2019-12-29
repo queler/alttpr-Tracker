@@ -1,6 +1,6 @@
 idParser=/(\D+)(\d*)/;
 function itemsDef(){return {				//a list of everything we're tracking-- includes all inventory items and also some other variables
-	bow: { val: 0, max: 3 },
+	bow: { val: 0, max: 2 },
 	boomerang: { val: 0, max: 3 },
 	hookshot: { val: 0, max: 1 },
 	bomb: { val: 1, max: 1 },		//this is the only item checked off by default

@@ -82,9 +82,8 @@ body {
 
 #bow {left:0px;top:0px;width:60px; height:64px; }
 #bow.state0 { background-position:0px -64px}
-#bow.state1 { background-position:0px 0px}
-#bow.state2 { background-position:0px -384px}
-#bow.state3 { background-position:0px -448px}
+#bow.state1 { background-position:0px -384px}
+#bow.state2 { background-position:0px -448px}
 
 #boomerang { left:60px; top:0px; width:60px; height:64px;}
 #boomerang.state0 { background-position:-60px -64px}
