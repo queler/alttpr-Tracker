@@ -187,7 +187,10 @@ var logic = {
             return logic.darkEastDM() && items.hammer.val && items.somaria.val;
         },
         entry10: function () {
-            return items.crystal.val >= 7 && (inverted()?logic.lightWorldLink():logic.darkEastDM()) ;
+            return items.crystal.val >= items.crystal0.val
+               && (inverted()
+                  ?logic.lightWorldLink()
+                  :logic.darkEastDM()) ;
         },
     entry11: function () { if(inverted()){
           return logic.climbDM();
