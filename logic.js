@@ -623,6 +623,20 @@ var logic = {
         },
         64: function () { // Mire Shed
             return logic.mireArea();
+        },
+        65: function() {//GANON
+           if(logic.darkWorldEast() && logic.fire()
+              &&(items.crystal.val >=
+                 items.crystal1.val)){
+              if(swordless()){
+                 return items.hammer.val==1
+                 && items.bow.val==3;
+              }else{//normal
+                 return items.sword.val<=2;
+              }
+           }else{
+              return STATE.unavail;
+           }
         }
     },
 
