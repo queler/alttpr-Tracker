@@ -640,7 +640,7 @@ var logic = {
                  return items.hammer.val==1
                  && items.bow.val==3;
               }else{//normal
-                 return items.sword.val<=2;
+                 return items.sword.val>=2;
               }
            }else{
               return STATE.unavail;
