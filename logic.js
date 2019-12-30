@@ -432,7 +432,7 @@ var logic = {
                 );
             }
 
-            var lampTest = items.lamp.val ? 1 : 2;
+            var lampTest = logic.fire() ? 1 : 2;
 
             return ( std() || items.glove.val
                ? 1
@@ -448,7 +448,7 @@ var logic = {
                         : 0
                      : items.glove.val
                         ? lampTest
-                        : items.lamp.val
+                        : logic.fire()
                            ? STATE.maybe
                            : STATE.dark
              ) * logic.lightWorldLink();
@@ -456,7 +456,7 @@ var logic = {
 
         },
         36: function () { // Sewers - Dark Cross
-            return (std() || items.lamp.val ? 1 : 2)
+            return (std() || logic.fire() ? 1 : 2)
                * logic.lightWorldLink();
         },
         37: function () { return logic.lightWorldLink(); }, // Hyrule Castle
@@ -670,13 +670,13 @@ var logic = {
             if (keysanity()) {    // KEY-SANITY LOGIC
 
                 boss = bow && bigKey ?          // need these to reach
-                    lamp ? STATE.avail : STATE.dark :              // boss accessible; light determines status
+                    logic.fire() ? STATE.avail : STATE.dark :              // boss accessible; light determines status
                     STATE.unavail;
 
                 min = 3 +                             // base access
                     (lamp ? 1 : 0) +                  // BK chest
                     (bigKey ? 1 : 0) +                // big chest
-                    (lamp && bigKey && bow ? 1 : 0)   // boss
+                    (logic.fire() && bigKey && bow ? 1 : 0)   // boss
                     ;
 
                 max = 4 +                             // base access (includes BK chest regardless of lamp)
