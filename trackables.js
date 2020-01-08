@@ -30,7 +30,7 @@ function itemsDef(){return {				//a list of everything we're tracking-- includes
 	pearl: { val: 0, max: 1 },
 	boots: { val: 0, max: 1 },
 	glove: { val: 0, max: 2 },
-	flippers: { val: 0, max: 1 },
+	flippers: { val: 1, max: 1 },
 	halfmagic: { val: 0, max: 2 },
 	boss0: { val: 0, max: 1 }, //EP
 	boss1: { val: 0, max: 1 }, //DP

@@ -164,9 +164,9 @@ var logic = {
     //SP
     entry4: function () {
         if (inverted()) {
-            return this.lightWorldLink() && items.mirror.val && items.flippers.val;
+            return true;;
         } else {
-            return this.darkWorldSouth() && items.mirror.val && items.flippers.val;
+            return this.darkWorldSouth();5
         }
     },
     //sw
@@ -1030,9 +1030,9 @@ var logic = {
 		         	var min;
          			var max;
             var entry = logic.entry4(),
-                hammer = items.hammer.val,
+                hammer = true,
                 hookshot = items.hookshot.val,
-                fightArrg = entry && hookshot && hammer,
+                fightArrg = entry && hookshot && (items.hammer.val || items.sword.val>1),
                 key = items.key4.val,
                 bigKey = items.bigKey4.val
                 ;
@@ -1044,9 +1044,9 @@ var logic = {
                 min = entry ?
                     1 +                                       // entrance
                     (key ? 1 : 0) +                           // ledge Chest
-                    (key && hammer ? 3 : 0) +                 // main Dungeon
-                    (key && hammer && bigKey ? 1 : 0) +       // big Chest
-                    (key && hammer && hookshot ? 4 : 0) :     // back of dungeon
+                    (key ? 3 : 0) +                 // main Dungeon
+                    (key  && bigKey ? 1 : 0) +       // big Chest
+                    (key  && hookshot ? 4 : 0) :     // back of dungeon
                     0;
 
                 max = min;                                    // accessible items are the same no matter what
