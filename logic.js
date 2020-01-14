@@ -285,7 +285,7 @@ var logic = {
             if (logic.lightWorldLink() && items.flippers.val) {
                 return STATE.avail;
             }else if (logic.lightWorldLink()) {
-                return STATE.visible;
+                return STATE.unavail;
             }else{
                 return STATE.unavail;
             }
@@ -335,7 +335,7 @@ var logic = {
         17: function () { return logic.lightWorldLink()
              ? items.boss11.val && items.boots.val
                 ? STATE.avail
-                : STATE.visible
+                : STATE.unavail
              : STATE.unavail; }, // Lumberjack Tree
         18: function () { return !inverted()
               ? logic.darkWorldNW() && items.mirror.val
@@ -386,18 +386,18 @@ var logic = {
                   ? logic.lightWorldBunny()
                      ? items.boots.val && items.pearl.val
                         ? STATE.avail
-                        : STATE.visible
+                        : STATE.unavail
                      : STATE.unavail
                   : items.boots.val
                      ? STATE.avail
-                     : STATE.visible
+                     : STATE.unavail
              ;}, // Library
         30: function () { return logic.lightWorldLink(); }, // Maze Race
         31: function () { // Desert Ledge
             return logic.entry1()
                ? STATE.avail
                : logic.lightWorldBunny()
-                  ? STATE.visible
+                  ? STATE.unavail
                   : 0;
         },
         32: function () { // Lake Hylia Island
@@ -411,9 +411,7 @@ var logic = {
                    ? items.flippers.val
                       ? STATE.avail
                       : STATE.dark
-                   : logic.lightWorldBunny()
-                      ? STATE.visible
-                      : STATE.unavail;
+                   : STATE.unavail;
         },
         33: function () { return logic.lightWorldLink() && items.shovel.val; }, // Flute Spot
         34: function () { return logic.lightWorldLink(); }, // Sanctuary
@@ -487,9 +485,7 @@ var logic = {
             }
             return av
                ? logic.DMlightAorD()
-               : logic.climbDM()
-                 ? STATE.visible
-                 : STATE.unavail;
+               : STATE.unavail;
         },
         43: function () { // Spiral Cave
             return logic.eastDM() ?
@@ -530,7 +526,7 @@ var logic = {
                ? (!inverted() && items.mirror.val && items.pearl.val && items.glove.val >= 2)
                   || (inverted())
                   ?  logic.DMlightAorD()
-                  :  STATE.visible
+                  :  STATE.unavail
                : 0;
         },
         47: function () { // Superbunny Cave
@@ -608,7 +604,7 @@ var logic = {
                         && items.mirror.val)
                   )
                      ? STATE.avail
-                     : STATE.visible
+                     : STATE.unavail
                   :0;
         },
         59: function () { // BlackSmith
