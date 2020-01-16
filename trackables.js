@@ -206,13 +206,25 @@ trackables= {
 			logic.apply();
 		}
 	},
-	getJSON: function(){
+	createJSON: function(){
 		var obj={};
 		obj.items=basil.get("items")||itemsDef();
 		obj.chests=basil.get("chests")||chestsDef();
 		obj.dungeons=basil.get("dungeons")||dungeonsDef();
 		obj.keyShops=basil.get("keyShops")||keyShopsDef();
 		return JSON.stringify(obj);
+	},
+	exportJson:function(){
+		
+		let dataStr = trackables.createJSON();
+		let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+		let exportFileDefaultName = 'z3r.json';
+
+		let linkElement = document.createElement('a');
+		linkElement.setAttribute('href', dataUri);
+		linkElement.setAttribute('download', exportFileDefaultName);
+		linkElement.click();
 	},
 	loadJSON: function(obj){
         basil.set("items", obj.items);
@@ -443,5 +455,3 @@ toggle = {
 		logic.apply();
 	},
 };
-
-
