@@ -10,7 +10,7 @@ function popout() {
 
 	console.log(width + " " + height)
 
-	open('index.html',
+	window.open('index.html',
 		'',
 		'width=' + width + ',height=' + height + ',titlebar=0,menubar=0,toolbar=0,scrollbars=0,resizable=0'
 	);

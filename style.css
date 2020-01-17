@@ -391,7 +391,7 @@ body {
     background-color:#7f7f7f;
 
     color:#000;
- 	text-align:center;	
+ 	text-align:center;
 	font-family:Oswald,Sans-Serif;
 	font-weight: 600;
 	font-size:19px;
@@ -406,7 +406,7 @@ body {
 .dungeonChest {
     margin-left:4px;
 	margin-top:4px;
-	
+
 }
 
 .chestPip {
@@ -542,7 +542,7 @@ input {cursor:pointer;}
 	left:5px;
 	top:0px;
 	color:#fff;
-	width:30px;
+	width:40px;
 	height: 30px;
 	text-align:center;
 	line-height:30px;
@@ -559,10 +559,40 @@ input {cursor:pointer;}
 	line-height:20px;
 	text-align:left;
 }
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
 
+  .inputfile + label {
+    display: inline-block;
+  }
+
+  .inputfile + label {
+    cursor: pointer; /* "hand" cursor */
+  }
+  .button {
+
+    display: inline-block;
+    text-align: center;
+    margin: 4px;
+
+    text-align: center;
+    cursor: default;
+
+    box-sizing: border-box;
+    padding: 2px 5px 2px 5px;
+    border-width: 2px;
+    border-style: inset;
+    border-color: 0;
+  }
 #caption {
 	position:absolute;
-	left:200px;
+	left:100px;
 	top:4px;
 	width:500px;
 	color: #fff;
@@ -580,7 +610,7 @@ input {cursor:pointer;}
 
 
 
-#timer {    
+#timer {
 	left:8px;
     top:8px;
     border-image: url(images/borderB.png) 20 round;
