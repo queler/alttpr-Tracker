@@ -217,7 +217,14 @@ trackables= {
 	exportJson:function(){
 		
 		let dataStr = trackables.createJSON();
-		download(dataStr,"z3r.json","application/json");
+		let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+
+		let exportFileDefaultName = 'z3r.json';
+
+		let linkElement = document.createElement('a');
+		linkElement.setAttribute('href', dataUri);
+		linkElement.setAttribute('download', exportFileDefaultName);
+		linkElement.click();
 	},
 	loadJSON: function(obj){
         basil.set("items", obj.items);
