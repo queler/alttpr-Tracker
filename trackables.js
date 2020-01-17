@@ -204,6 +204,7 @@ trackables= {
 			basil.remove("keyShops");
 			this.load();
 			logic.apply();
+			logic.apply();
 		}
 	},
 	createJSON: function(){
@@ -214,16 +215,33 @@ trackables= {
 		obj.keyShops=basil.get("keyShops")||keyShopsDef();
 		return JSON.stringify(obj);
 	},
-	exportJson:function(){
-		
+ importJSON:function(){
+   let input=$('#import')[0];
+   if(input.files.length>0){
+      const fr=new FileReader() ;
+      fr.onload=function(evt){
+         try{
+            let obj=JSON.parse(fr.result);
+            trackables.loadJSON(obj);
+            trackables.load();
+            logic.apply();
+         } catch(er) {
+            console.log('bad json');
+            console.log(er);
+         }
+      };
+      fr.readAsText(input.files[0]);
+  }
+ },
+	exportJSON: function(){
 		let dataStr = trackables.createJSON();
-		let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
 
-		let exportFileDefaultName = 'z3r.json';
+		let fname = 'z3r.json';
+		let dataUri = 'data:application/json;charset=utf-8;name=z3r.json;base64,'+ btoa(dataStr);
 
 		let linkElement = document.createElement('a');
 		linkElement.setAttribute('href', dataUri);
-		linkElement.setAttribute('download', exportFileDefaultName);
+		linkElement.setAttribute('download', fname);
 		linkElement.click();
 	},
 	loadJSON: function(obj){
@@ -310,6 +328,7 @@ map = {
 				state = logic.keyShops[id]();
 				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			} else {
+			//TODO: CAPTION ERROR
 				state = logic.chests[id]();
 				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			}
