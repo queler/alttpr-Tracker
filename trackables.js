@@ -288,15 +288,16 @@ function setState(el, stateVal){
 }
 map = {
 	populate: function () {
+		$(".dungeon, .chest, .keyShop").remove();
 		$.each(chests, function (id, chest) {	//places all the chest icons onto the map
-			$("#map" + chest.world).append("<div class=chest onclick=toggle.chest(" + id + ") id=chest" + id + " style=left:" + chest.xPos + "%;top:" + chest.yPos + "%;z-index:" + (1000 - id) + ">" + ((chest.amount > 1) ? chest.amount : "") + "</div>");
+			$("#map" + chest.world).append("<div class=chest id=chest" + id + " style=left:" + chest.xPos + "%;top:" + chest.yPos + "%;z-index:" + (1000 - id) + ">" + ((chest.amount > 1) ? chest.amount : "") + "</div>");
 		});
-
+		$(".chest").click(toggle.chest);
 		$.each(dungeons, function (id, dungeon) {	//places all the dungeon icons onto the map
-			$("#map" + dungeon.world).append("<div class=dungeon onclick=toggle.boss(" + id + ") id=dungeon" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1100 - id) + "></div>");
+			$("#map" + dungeon.world).append("<div title=\""+ dungeon.name+ "\" class=dungeon  id=dungeon" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1100 - id) + "></div>");
 			$("#map" + dungeon.world).append("<div class='chest dungeonChest' onclick=toggle.dungeonChest(" + id + ") id=dungeonChest" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1200 - id) + ">" + dungeon["chests" + settings.keyMode] + "</div>");
 		});
-
+		$(".dungeon").click(toggle.boss);
 		$('.dungeonChest').contextmenu(function (event) {	//adds right-click functionality to dungeon chest counters
 				toggle.dungeonChest((this.id.replace(/\D/g, '')), true);
 		});
@@ -317,26 +318,27 @@ map = {
 			$("#caption").html("");
 		});
 
+		
+		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering	
+			var state ;	
+			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];	
+			id = (this.id.replace(/\D/g, ''));	
+			if (this.id.indexOf("dungeonChest") >= 0) {	
+				$("#caption").html(dungeons[id].name + " Chests");	
+			} else if (this.id.indexOf("keyShop") >= 0) {	
+				state = 0+logic.keyShops[id]();	
+				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");	
+			} else {	
+				state = 0+logic.chests[id]();	
+				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");	
+			}	
 
-		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering
-			var state ;
-			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
-			id = (this.id.replace(/\D/g, ''));
-			if (this.id.indexOf("dungeonChest") >= 0) {
-				$("#caption").html(dungeons[id].name + " Chests");
-			} else if (this.id.indexOf("keyShop") >= 0) {
-				state = 0+logic.keyShops[id]();
-				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
-			} else {
-				state = 0+logic.chests[id]();
-				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
-			}
-
-		}, function () {
-			$("#caption").html("");
+		}, function () {	
+			$("#caption").html("");	
 		});
+	
 
-		$(".icon, .dungeonChest, #timer").on("contextmenu", function () {
+		$(".icon, .dungeonChest, #timer, .chest").on("contextmenu", function () {
 			return false;
 		});
 
@@ -389,11 +391,13 @@ map = {
 
 
 toggle = {
-	chest: function (id) {							//toggles a chest's open status
+	chest: function (e) {							//toggles a chest's open status
+		id=e.target.id.replace(idParser,"$2");		
 		chests[id].opened = !chests[id].opened;
 		logic.apply();
 	},
-	boss: function (id) {							//toggles a dungeon's completion and marks its boss icon appropriately
+	boss: function (e) {
+		id=e.target.id.replace(idParser,"$2");							//toggles a dungeon's completion and marks its boss icon appropriately
 		dungeons[id].completed = !dungeons[id].completed;
 		items["boss" + id].val = items["boss" + id].val ? 0 : 1;
 		$('#boss' + id)
