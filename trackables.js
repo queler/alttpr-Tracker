@@ -325,11 +325,10 @@ map = {
 			if (this.id.indexOf("dungeonChest") >= 0) {
 				$("#caption").html(dungeons[id].name + " Chests");
 			} else if (this.id.indexOf("keyShop") >= 0) {
-				state = logic.keyShops[id]();
+				state = 0+logic.keyShops[id]();
 				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			} else {
-			//TODO: CAPTION ERROR
-				state = logic.chests[id]();
+				state = 0+logic.chests[id]();
 				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
 			}
 
