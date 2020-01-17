@@ -318,23 +318,25 @@ map = {
 		});
 
 
-		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering
+		$(".chest, .keyShop").on("touchstart mouseenter",function () {	//Writes chest names to the caption when hovering	
 			var state ;
-			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
+			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];	
 			id = (this.id.replace(/\D/g, ''));
 			if (this.id.indexOf("dungeonChest") >= 0) {
 				$("#caption").html(dungeons[id].name + " Chests");
 			} else if (this.id.indexOf("keyShop") >= 0) {
-				state = 0+logic.keyShops[id]();
-				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+				state = 0+logic.keyShops[id]();	
+				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");	
 			} else {
 				state = 0+logic.chests[id]();
-				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");	
 			}
 
-		}, function () {
-			$("#caption").html("");
 		});
+		$(".chest, .keyShop").on("mouseleave touchmove ", function () {	
+			$("#caption").html("");	
+		});
+	
 
 		$(".icon, .dungeonChest, #timer").on("contextmenu", function () {
 			return false;
