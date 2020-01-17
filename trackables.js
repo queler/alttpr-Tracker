@@ -216,12 +216,12 @@ trackables= {
 		return JSON.stringify(obj);
 	},
  importJSON:function(){
-   let input=$('#import')[0];
+   var input=$('#import')[0];
    if(input.files.length>0){
-      const fr=new FileReader() ;
+      var fr=new FileReader() ;
       fr.onload=function(evt){
          try{
-            let obj=JSON.parse(fr.result);
+            var obj=JSON.parse(fr.result);
             trackables.loadJSON(obj);
             trackables.load();
             logic.apply();
@@ -234,12 +234,12 @@ trackables= {
   }
  },
 	exportJSON: function(){
-		let dataStr = trackables.createJSON();
+		var dataStr = trackables.createJSON();
 
-		let fname = 'z3r.json';
-		let dataUri = 'data:application/json;charset=utf-8;name=z3r.json;base64,'+ btoa(dataStr);
+		var fname = 'z3r.json';
+		var dataUri = 'data:application/json;charset=utf-8;name=z3r.json;base64,'+ btoa(dataStr);
 
-		let linkElement = document.createElement('a');
+		var linkElement = document.createElement('a');
 		linkElement.setAttribute('href', dataUri);
 		linkElement.setAttribute('download', fname);
 		linkElement.click();
