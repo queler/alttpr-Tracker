@@ -437,20 +437,33 @@
 		});
 
   function caption(name, state){
+      var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
+      var jqCS=$("#captionState");
+      if (name===undefined){
+         $("#captionName").text("");
+         jqCS.text("");
+      }else{
+         $("#captionName").text(name);
+         if(state===undefined){
+            jqCS.text("");
+         }else{
+            jqCS.text(states[state+0]);
+            setState(jqCS[0],state+0);
+         }
+      }
   
-  
-  $("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+  //$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
   }
 
 		$(".icon,input").hover(
 			function () {
 				$(this).attr("tooltip-data", $(this).attr("title"));
 				$(this).removeAttr("title");
-				$("#caption").html($(this).attr("tooltip-data"));
+				caption($(this).attr("tooltip-data"));
 			}, function () {
 				$(this).attr("title", $(this).attr("tooltip-data"));
 				$(this).removeAttr("tooltip-data");
-				$("#caption").html("");
+				caption();
 			}
 		);
 

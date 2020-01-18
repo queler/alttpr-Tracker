@@ -601,11 +601,11 @@ input {cursor:pointer;}
 	overflow:hidden;
 }
 
-.captionState0 { color: #cb0b26; font-weight:700;}
-.captionState1 { color: #0cd46f; font-weight:700;}
-.captionState2 { color: #006999; font-weight:700;}
-.captionState3 { color: #f4d800; font-weight:700;}
-.captionState4 { color: #e26d00; font-weight:700;}
+#captionState.state0 { color: #cb0b26; font-weight:700;}
+#captionState.state1 { color: #0cd46f; font-weight:700;}
+#captionState.state2 { color: #006999; font-weight:700;}
+#captionState.state3 { color: #f4d800; font-weight:700;}
+#captionState.state4 { color: #e26d00; font-weight:700;}
 
 
 
