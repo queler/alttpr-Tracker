@@ -330,6 +330,7 @@ map = {
 			} else {
 				state = 0+logic.chests[id]();
 				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+			console.log($("#caption").html());
 			}
 
 		}, function () {
