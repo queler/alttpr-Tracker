@@ -436,6 +436,11 @@
 			layout.sizeMap($("input[name='mapAlign']:checked").val());  //re-arranges the maps if window size changes
 		});
 
+  function caption(name, state){
+  
+  
+  $("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+  }
 
 		$(".icon,input").hover(
 			function () {
