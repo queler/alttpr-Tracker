@@ -312,28 +312,27 @@ map = {
 
 		$(".dungeon").hover(function () {	//Writes dungeon names to the caption when hovering
 			id = (this.id.replace(/\D/g, ''));
-			$("#caption").html(dungeons[id].name + " Boss");
+			caption(dungeons[id].name + " Boss");
 		}, function () {
-			$("#caption").html("");
+			caption();
 		});
 
 
 		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering
 			var state ;
-			var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
 			id = (this.id.replace(/\D/g, ''));
 			if (this.id.indexOf("dungeonChest") >= 0) {
-				$("#caption").html(dungeons[id].name + " Chests");
+				caption(dungeons[id].name + " Chests");
 			} else if (this.id.indexOf("keyShop") >= 0) {
 				state = 0+logic.keyShops[id]();
-				$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+				caption(keyShops[id].name,state);
 			} else {
 				state = 0+logic.chests[id]();
-				$("#caption").html(chests[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+				caption(chests[id].name,state);
 			}
 
 		}, function () {
-			$("#caption").html("");
+			caption();
 		});
 
 		$(".icon, .dungeonChest, #timer").on("contextmenu", function () {

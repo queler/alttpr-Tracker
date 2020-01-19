@@ -278,7 +278,10 @@
 	<div id="settingsTab">
 		<div id="tabIcon" onclick="settings.toggle()">&#9776;</div>
 				<div id="tabIcon" style="left:50px" onclick="trackables.reset()">&#8635;</div>
-			<div id="caption"></div>
+			<div id="caption">
+			   <span id="captionName"></span>
+			   <span id="captionState" class="captionState1"></span>
+			</div>
 
 		<div class="selection" style="top: 40px;left:50px;">
 			<b>&nbsp;VARIATION</b>
@@ -433,16 +436,34 @@
 			layout.sizeMap($("input[name='mapAlign']:checked").val());  //re-arranges the maps if window size changes
 		});
 
+  function caption(name, state){
+      var states = ["UNAVAILABLE","AVAILABLE","DARK","POSSIBLE","CHECKABLE"];
+      var jqCS=$("#captionState");
+      if (name===undefined){
+         $("#captionName").text("");
+         jqCS.text("");
+      }else{
+         $("#captionName").text(name);
+         if(state===undefined){
+            jqCS.text("");
+         }else{
+            jqCS.text(states[state+0]);
+            setState(jqCS[0],state+0);
+         }
+      }
+  
+  //$("#caption").html(keyShops[id].name+" &nbsp;<span class='captionState"+state+"'>"+states[state]+"</span>");
+  }
 
 		$(".icon,input").hover(
 			function () {
 				$(this).attr("tooltip-data", $(this).attr("title"));
 				$(this).removeAttr("title");
-				$("#caption").html($(this).attr("tooltip-data"));
+				caption($(this).attr("tooltip-data"));
 			}, function () {
 				$(this).attr("title", $(this).attr("tooltip-data"));
 				$(this).removeAttr("tooltip-data");
-				$("#caption").html("");
+				caption();
 			}
 		);
 
