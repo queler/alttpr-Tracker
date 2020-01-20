@@ -70,7 +70,10 @@ body {
     height:208px;
 }
 #dungeons .trackerTitle{ background-position:0px -40px}
-
+.iconBox {position:absolute;
+    left:0px;
+    top:0px;
+    }
 .icon {
     position:absolute;
     left:0px;
@@ -302,13 +305,14 @@ body {
 #abbr8 {background-position:-320px -1056px}
 #abbr9 {background-position:-368px -1056px}
 
-.medal {width:40px; height:40px}
+.medal {width:40px;height:40px;}
 .medal.state0 {  background-position: -380px -640px; }
 .medal.state1 {  background-position: -380px -680px; }
 .medal.state2 {  background-position: -380px -720px; }
 .medal.state3 {  background-position: -380px -760px; }
-
-.crystalIcon {width: 40px; height: 40px; background-position:-340px -760px;position: absolute;left: 10px;}
+#crystal0 {left: -10px;}
+#crystal1 {left: 44px;}
+.crystalIcon {width: 40px;height: 40px;background-position:-340px -760px;position: absolute}
 .crystal .crystalNum{width:27px;height:27px;position: absolute;top: 10px;left: 0px;}
 .crystal.state0 .crystalNum {background-position:-557px -369px}
 .crystal.state1 .crystalNum {background-position:-557px -405px}
