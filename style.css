@@ -466,7 +466,7 @@ body {
 
 .keyShop {
 	position:absolute;
-	background-color:#222;
+	background-color: #0cd46f;
 	width:20px;
 	height:20px;
 	border:solid 1px #000;
@@ -499,8 +499,12 @@ body {
 	background-color: #006999;
 	border-color:#1fa874;
 }
-
-.keyShop.active {
+.keyShop.checked{background-color:#7f7f7f;color: #000000;font-weight: bolder;}
+.keyShop.checked .keyCirc {
+	background-color: #775700;
+	border-color: #000000;
+}
+.keyShop.found {
 	background-color: #775700;
 	color:#e0a800
 }
@@ -511,12 +515,12 @@ body {
 	bottom:2px;
 	width:6px;
 	height:6px;
-	background-color:#222;
+	background-color: inherit;
 	border:solid 1px #555;
-	border-radius:100%
+	border-radius:100%;
 }
 
-.keyShop.active .keyCirc {
+.keyShop.found .keyCirc {
 	background-color: #775700;
 	border-color:#e0a800
 }

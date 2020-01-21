@@ -177,15 +177,15 @@ function dungeonsDef(){return {
 };}
 
 function keyShopsDef(){return {
-	0: { world: "LW", xPos: 71.1, yPos: 75.0, active: false, name: "Lake Hylia Shop" },
-	1: { world: "LW", xPos: 9.40, yPos: 56.3, active: false, name: "Kakariko Shop" },
-	2: { world: "LW", xPos: 84.0, yPos: 11.9, active: false, name: "Death Mountain Shop" },
-	3: { world: "DW", xPos: 63.3, yPos: 78.0, active: false, name: "Dark Lake Hylia Shop" },
-	4: { world: "DW", xPos: 85.0, yPos: 9.20, active: false, name: "Dark Death Mountain Shop" },
-	5: { world: "DW", xPos: 18.7, yPos: 50.9, active: false, name: "Village of Outcasts Shop" },
-	6: { world: "DW", xPos: 31.7, yPos: 43.4, active: false, name: "Dark World Forest Shop" },
-	7: { world: "DW", xPos: 32.1, yPos: 3.40, active: false, name: "Dark World Lumberjack Shop" },
-	8: { world: "DW", xPos: 78.9, yPos: 31.3, active: false, name: "Dark World Potion Shop" },
+	0: { world: "LW", xPos: 71.1, yPos: 75.0, checked: SHOP.NOT_CHECKED, name: "Lake Hylia Shop" },
+	1: { world: "LW", xPos: 9.40, yPos: 56.3, checked: SHOP.NOT_CHECKED, name: "Kakariko Shop" },
+	2: { world: "LW", xPos: 84.0, yPos: 11.9, checked: SHOP.NOT_CHECKED, name: "Death Mountain Shop" },
+	3: { world: "DW", xPos: 63.3, yPos: 78.0, checked: SHOP.NOT_CHECKED, name: "Dark Lake Hylia Shop" },
+	4: { world: "DW", xPos: 85.0, yPos: 9.20, checked: SHOP.NOT_CHECKED, name: "Dark Death Mountain Shop" },
+	5: { world: "DW", xPos: 18.7, yPos: 50.9, checked: SHOP.NOT_CHECKED, name: "Village of Outcasts Shop" },
+	6: { world: "DW", xPos: 31.7, yPos: 43.4, checked: SHOP.NOT_CHECKED, name: "Dark World Forest Shop" },
+	7: { world: "DW", xPos: 32.1, yPos: 3.40, checked: SHOP.NOT_CHECKED, name: "Dark World Lumberjack Shop" },
+	8: { world: "DW", xPos: 78.9, yPos: 31.3, checked: SHOP.NOT_CHECKED, name: "Dark World Potion Shop" },
 };}
 var items, chests, dungeons,keyShops;
 trackables= {
@@ -305,9 +305,11 @@ map = {
 		$("#dungeon11").css({ 'background-image': 'none' }).html("AGA");
 
 		$.each(keyShops, function (id, shop) {		//places all the shops onto the map (only matters in Retro mode)
-			$("#map" + shop.world).append("<div class=keyShop onclick=toggle.keyShop(" + id + ") id=keyShop" + id + " style=left:" + shop.xPos + "%;top:" + shop.yPos + "%;z-index:" + (1000 - id) + ">F<div class=keyCirc></div></div>");
+			$("#map" + shop.world).append("<div class=\"keyShop\" onclick=toggle.keyShop(" + id + ") id=keyShop" + id + " style=left:" + shop.xPos + "%;top:" + shop.yPos + "%;z-index:" + (1000 - id) + ">F<div class=keyCirc></div></div>");
 		});
-
+        $('.keyShop').contextmenu(function (event) {	//adds right-click functionality to dungeon chest counters
+				toggle.keyShop((this.id.replace(/\D/g, '')), true);
+		});
 		map.placeMiniChests();	 //places the proper amount of pips for each dungeon's chests, depending on mode
 
 		$(".dungeon").hover(function () {	//Writes dungeon names to the caption when hovering
@@ -335,7 +337,7 @@ map = {
 			caption();
 		});
 
-		$(".icon, .dungeonChest, #timer").on("contextmenu", function () {
+		$(".icon, .dungeonChest, #timer, .keyShop").on("contextmenu", function () {
 			return false;
 		});
 
@@ -382,7 +384,11 @@ map = {
 
 
 
-
+var SHOP={
+	NOT_CHECKED: 0,
+	CHECKED: 1,
+	FOUND: 2
+};
 
 
 
@@ -408,9 +414,12 @@ toggle = {
 		if (dungeons[id].openChests < 0) { dungeons[id].openChests = dungeons[id]["chests" + settings.keyMode]; }
 		logic.apply();
 	},
-	keyShop: function (id) {								//toggles whether a shop is marked as having a key
-		keyShops[id].active = !keyShops[id].active;
-		$("#keyShop" + id).toggleClass("active", keyShops[id].active);
+	keyShop: function (id,reverse) {								//toggles whether a shop is marked as having a key
+		reverse=(typeof reverse !== 'undefined') ?  reverse : false;
+		keyShops[id].checked = (keyShops[id].checked +3 + (reverse ? -1 : 1)) % 3;
+		//$("#keyShop" + id).toggleClass("notChecked", keyShops[id].checked==SHOP.NOT_CHECKED);
+		$("#keyShop" + id).toggleClass("checked", keyShops[id].checked==SHOP.CHECKED);
+		$("#keyShop" + id).toggleClass("found", keyShops[id].checked==SHOP.FOUND);
 		logic.apply();
 	},
 	icon: function (icon, reverse ) {			//toggles icons on the tracker

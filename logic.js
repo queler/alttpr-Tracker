@@ -1882,13 +1882,13 @@ var logic = {
 
         $.each(logic.keyShops, function (id, test) {
 
-            if (test()) { count++ } //if the keyShop is accessible, add it to the count
+            if (test()==STATE.avail) { count++ } //if the keyShop is accessible, add it to the count
 
             //toggle accessibility status on map
             $("#keyShop" + id).toggleClass("unavail", test() == 0);
             $("#keyShop" + id).toggleClass("dark", test() == 2);
 
-            if (keyShops[id].active == true) { found = true } //check if any shop has been clicked
+            if (keyShops[id].checked == SHOP.FOUND) { found = true } //check if any shop has been clicked
         });
 
         if (count >= 5) { found = true; } //if more than 5 shops are accessible, one must be a key shop
