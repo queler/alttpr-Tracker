@@ -1876,6 +1876,40 @@ var logic = {
         7: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Lumberjack
         8: function () { return logic.darkWorldEast() ? 1 : 0; },  //DW Potion Shop
     },
+    caves:{
+    0: function () { return true; },  //Lumberjack's House
+1: function () { return true; },  //Lost Woods Gamble
+2: function () { return true; },  //Fortune Teller(Light)
+3: function () { return true; },  //Snltch Lady West
+4: function () { return true; },  //Snitch Lady East
+5: function () { return true; },  //Bush Covered House
+6: function () { return true; },  //Bomb Hut
+7: function () { return true; },  //Kakarlko Gamble Game
+8: function () { return true; },  //Bonk Fairy (Light)
+9: function () { return true; },  //Desert Falry
+10: function () { return true; },  //Rupee Cave
+11: function () { return true; },  //Light Hype Fairy
+12: function () { return true; },  //lake Hylia Fortune Telter
+13: function () { return true; },  //Lake hylia Fairy
+14: function () { return true; },  //Long Fairy Cave(warp 
+15: function () { return true; },  //Good Bee Cave
+16: function () { return true; },  //Rupee Cave
+17: function () { return true; },  //Capacity Upgrade
+18: function () { return true; },  //Hookshot Fairy
+19: function () { return true; },  //Fortune Teller(Dark)
+20: function () { return true; },  //Archery Game
+21: function () { return true; },  //Dark Sanctuary Hint
+22: function () { return true; },  //Bonk Falry(Dark)
+23: function () { return true; },  //Dark Desert Falry
+24: function () { return true; },  //Dark Desert Hint
+25: function () { return true; },  //Dark Lake Hylia Fairy
+26: function () { return true; },  //Palace of Dnrkness Hint
+27: function () { return true; },  //East Dark Woeld Hint
+28: function () { return true; },  //Dark Lake Mytla Ledge Falry
+29: function () { return true; },  //Dark Lnke Hylin Ledgo Spike Cave
+30: function () { return true; },  //Dark Lake Mylla Ledge Hint
+31: function () { return true; },  //Dark Death Mouatain Fairy 
+},
     keyShopCheck: function () { //function for checking and applying the status of key shop access in Retro mode
         var count = 0;
         var found = false;
@@ -1926,7 +1960,13 @@ var logic = {
 
             logic.colour("#chest" + id, status);         //colours the chest on the map
         });
+        $.each(logic.caves, function (id, test) {
 
+            var status = caves[id].opened ? null : test(); //if the chest's not open, it is tested
+            chests[id].checked = status;                 //sets chest's status according to what the test found
+
+            logic.colour("#cave" + id, status);         //colours the chest on the map
+        });
         $.each(logic.dungeons, function (id, test) {
             var dStatus = test();
 

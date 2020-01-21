@@ -381,7 +381,23 @@ body {
 
 #mapLW {background-position:0px    0px;}
 #mapDW {background-position:0px -650px;}
+.grid {
+    position: absolute;
+    left: inherit;
+    height: inherit;
+    width: inherit;
+    top: inherit;
+    background-image: linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom,black 1px, transparent 1px);
+    z-index: 500;
+    display: inline;
+    background-size: 10% 10%;
+}
 
+.grid1.grid {
+    background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom,grey 1px, transparent 1px);
+    background-size: 1% 1%;
+}
 .chest {
 	width: 32px;
 	height: 32px;
@@ -463,7 +479,15 @@ body {
 .visible { background-color: #e26d00; }
 .opened { background-color:#7f7f7f; color:#7f7f7f; }
 
-
+.cave {
+position:absolute;
+	width:20px;
+	height:20px;
+	border:solid 1px #000;
+	border-radius:4px;
+	transform:rotate(45deg);
+	cursor:pointer;
+}
 .keyShop {
 	position:absolute;
 	background-color: #0cd46f;

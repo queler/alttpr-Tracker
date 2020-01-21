@@ -187,6 +187,40 @@ function keyShopsDef(){return {
 	7: { world: "DW", xPos: 32.1, yPos: 3.40, checked: SHOP.NOT_CHECKED, name: "Dark World Lumberjack Shop" },
 	8: { world: "DW", xPos: 78.9, yPos: 31.3, checked: SHOP.NOT_CHECKED, name: "Dark World Potion Shop" },
 };}
+function cavesDef() {return {
+   0: { world: "LW", amount: 1, xPos: 32, yPos: 5, opened: false, status: null, name: "Lumberjack's House" },
+1: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Lost Woods Gamble" },
+2: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Fortune Teller(Light)" },
+3: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Snltch Lady West" },
+4: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Snitch Lady East" },
+5: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Bush Covered House" },
+6: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Bomb Hut" },
+7: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Kakarlko Gamble Game" },
+8: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Bonk Fairy (Light)" },
+9: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Desert Falry" },
+10: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Rupee Cave" },
+11: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Light Hype Fairy" },
+12: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "lake Hylia Fortune Telter" },
+13: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Lake hylia Fairy" },
+14: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Long Fairy Cave(warp " },
+15: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Good Bee Cave" },
+16: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Rupee Cave" },
+17: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Capacity Upgrade" },
+18: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Hookshot Fairy" },
+19: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Fortune Teller(Dark)" },
+20: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Archery Game" },
+21: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Sanctuary Hint" },
+22: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Bonk Falry(Dark)" },
+23: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Desert Falry" },
+24: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Desert Hint" },
+25: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Lake Hylia Fairy" },
+26: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Palace of Dnrkness Hint" },
+27: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "East Dark Woeld Hint" },
+28: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Lake Mytla Ledge Falry" },
+29: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Lnke Hylin Ledgo Spike Cave" },
+30: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Lake Mylla Ledge Hint" },
+31: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Death Mouatain Fairy" }
+};}
 var items, chests, dungeons,keyShops;
 trackables= {
 //	objs:{items, chests, dungeons,keyShops},
@@ -195,6 +229,7 @@ trackables= {
 		basil.set("chests", chests);
 		basil.set("dungeons", dungeons);
 		basil.set("keyShops", keyShops);
+		basil.set("caves", caves);
 	},
 	reset: function(){
 		if (window.confirm("Are you sure you want to reset?")){
@@ -202,6 +237,7 @@ trackables= {
 			basil.remove("chests");
 			basil.remove("dungeons");
 			basil.remove("keyShops");
+			basil.remove("caves");
 			this.load();
 			logic.apply();
 			logic.apply();
@@ -213,6 +249,7 @@ trackables= {
 		obj.chests=basil.get("chests")||chestsDef();
 		obj.dungeons=basil.get("dungeons")||dungeonsDef();
 		obj.keyShops=basil.get("keyShops")||keyShopsDef();
+  obj.keyShops=basil.get("caves")||cavesDef();
 		return JSON.stringify(obj);
 	},
  importJSON:function(){
@@ -255,6 +292,7 @@ trackables= {
 		chests=basil.get("chests")||chestsDef();
 		dungeons=basil.get("dungeons")||dungeonsDef();
 		keyShops=basil.get("keyShops")||keyShopsDef();
+		caves=basil.get("caves")||cavesDef();
 		$('.icon,.dungeon,.iconBox').each(function() {
 			rID=(/(\D+)(\d*)/.exec(this.id));
 			if(rID[1]!=='abbr'){
@@ -307,7 +345,10 @@ map = {
 		$.each(keyShops, function (id, shop) {		//places all the shops onto the map (only matters in Retro mode)
 			$("#map" + shop.world).append("<div class=\"keyShop\" onclick=toggle.keyShop(" + id + ") id=keyShop" + id + " style=left:" + shop.xPos + "%;top:" + shop.yPos + "%;z-index:" + (1000 - id) + ">F<div class=keyCirc></div></div>");
 		});
-        $('.keyShop').contextmenu(function (event) {	//adds right-click functionality to dungeon chest counters
+		$.each(caves, function (id, cave) {		//places all the shops onto the map (only matters in Retro mode)
+			$("#map" + cave.world).append("<div class=\"cave\" onclick=toggle.cave(" + id + ") id=cave" + id + " style=left:" + cave.xPos + "%;top:" + cave.yPos + "%;z-index:" + (1000 - id) + "></div>");
+		});
+  $('.keyShop').contextmenu(function (event) {	//adds right-click functionality to dungeon chest counters
 				toggle.keyShop((this.id.replace(/\D/g, '')), true);
 		});
 		map.placeMiniChests();	 //places the proper amount of pips for each dungeon's chests, depending on mode
@@ -320,7 +361,7 @@ map = {
 		});
 
 
-		$(".chest, .keyShop").hover(function () {	//Writes chest names to the caption when hovering
+		$(".chest, .keyShop, .cave").hover(function () {	//Writes chest names to the caption when hovering
 			var state ;
 			id = (this.id.replace(/\D/g, ''));
 			if (this.id.indexOf("dungeonChest") >= 0) {
@@ -396,6 +437,10 @@ var SHOP={
 toggle = {
 	chest: function (id) {							//toggles a chest's open status
 		chests[id].opened = !chests[id].opened;
+		logic.apply();
+	},
+	cave: function (id) {							//toggles a chest's open status
+		caves[id].opened = !caves[id].opened;
 		logic.apply();
 	},
 	boss: function (id) {							//toggles a dungeon's completion and marks its boss icon appropriately
