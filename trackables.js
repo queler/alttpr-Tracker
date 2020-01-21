@@ -188,7 +188,7 @@ function keyShopsDef(){return {
 	8: { world: "DW", xPos: 78.9, yPos: 31.3, checked: SHOP.NOT_CHECKED, name: "Dark World Potion Shop" },
 };}
 function cavesDef() {return {
-   0: { world: "LW", amount: 1, xPos: 32, yPos: 5, opened: false, status: null, name: "Lumberjack's House" },
+   0: { world: "LW", amount: 1, xPos: 33.6, yPos: 6, opened: false, status: null, name: "Lumberjack's House" },
 1: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Lost Woods Gamble" },
 2: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Fortune Teller(Light)" },
 3: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Snltch Lady West" },

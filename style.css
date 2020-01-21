@@ -383,10 +383,10 @@ body {
 #mapDW {background-position:0px -650px;}
 .grid {
     position: absolute;
-    left: inherit;
+   /* left: inherit;top: inherit;*/
     height: inherit;
     width: inherit;
-    top: inherit;
+    
     background-image: linear-gradient(to right, black 1px, transparent 1px),
     linear-gradient(to bottom,black 1px, transparent 1px);
     z-index: 500;
