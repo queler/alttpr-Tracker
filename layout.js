@@ -252,7 +252,7 @@ layout = {
 				{ elem: ".stuff9", props: { x: 416, y: 80 } },
 				{ elem: ".stuff10", props: { x: 416, y: 4 } },
 				{ elem: ".stuff11", props: { x: 8, y: 4 } },
-				{ elem: "#keyAny", props: { x: 356, y: -48, left: 0, top: 72 } }
+				{ elem: "#retroBox", props: { x: 348, y: 4} }
 			],
 		},
 		1: { //Arranges dungeons by their map positions; a little less economical
