@@ -445,18 +445,14 @@ var logic = {
                         ? minKey >= 1
                            ? lampTest
                            : STATE.maybe
-                        : 0
-                     : items.glove.val
-                        ? lampTest
-                        : logic.fire()
-                           ? STATE.maybe
-                           : STATE.dark
+                        : STATE.unavail //because no glove
+                     : lampTest //retro with keyshop or reg open
              ) * logic.lightWorldLink();
 
 
         },
         36: function () { // Sewers - Dark Cross
-            return (std() || logic.fire() ? 1 : 2)
+            return (std() || logic.fire() ? STATE.avail : STATE.dark)
                * logic.lightWorldLink();
         },
         37: function () { return logic.lightWorldLink(); }, // Hyrule Castle
