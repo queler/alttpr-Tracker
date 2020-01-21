@@ -481,12 +481,13 @@ body {
 
 .keyShop.unavail {
 	background-color: #cb0b26;
-	color:#cb0b26;
+	color: #000000;
+	font-weight: bolder;
 }
 
 .keyShop.unavail .keyCirc {
 	background-color: #cb0b26;
-	border-color:#cb0b26;
+	border-color: #000000;
 }
 
 .keyShop.dark {
