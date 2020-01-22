@@ -231,15 +231,43 @@ trackables= {
 		basil.set("keyShops", keyShops);
 		basil.set("caves", caves);
 	},
-	createSaveObj: function createSaveObj(){
-		var obj={};
-		obj.items={};
-		$.each(items,function(k,v){
-			obj.items[k]=obj.items[k]||{};
-			obj.items[k].val=v.val
+	getMappings: function(){
+	return {
+		   items:{
+		      obj:items,
+		      save:["val"]
+		    },
+		    chests:{
+		       obj:chests,
+		       save:["opened"]
+		    },
+		    dungeons:{
+         obj:dungeons,
+         save:["openChests","completed","prize"]
+		    },
+		    keyShops:{
+		       obj:keyShops,
+		       save:["checked"]
+		    },
+		    caves:{
+		       obj:caves,
+		       save:["opened"]
+		    }
+		 };
+ },
+createSaveObj: function createSaveObj(){
+		var t=this.getMappings();
+		var saveobj={};
+		$.each(t,function eachTrackable(tName,tMap){
+     saveobj[tName]={};
+		   $.each(tMap.obj,function itemInTrackable(iName,iObj){
+        saveobj[tName][iName]={};
+		      $.each(tMap.save,function eachField(i,fName){
+		         saveobj[tName][iName][fName]=tMap.obj[iName][fName];
+		      });
+		   });
 		});
-
-		return obj;
+	 return saveobj;
 	},
 	reset: function(){
 		if (window.confirm("Are you sure you want to reset?")){
