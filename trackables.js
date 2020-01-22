@@ -189,7 +189,7 @@ function keyShopsDef(){return {
 };}
 function cavesDef() {return {
    0: { world: "LW", amount: 1, xPos: 33.6, yPos: 6, opened: false, status: null, name: "Lumberjack's House" },
-1: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Lost Woods Gamble" },
+1: { world: "LW", amount: 1, xPos: 18.5, yPos: 1, opened: false, status: null, name: "Lost Woods Gamble" },
 2: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Fortune Teller(Light)" },
 3: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Snltch Lady West" },
 4: { world: "LW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Snitch Lady East" },
@@ -221,7 +221,7 @@ function cavesDef() {return {
 30: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Lake Mylla Ledge Hint" },
 31: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Death Mouatain Fairy" }
 };}
-var items, chests, dungeons,keyShops,caves;
+var items={}, chests={}, dungeons={},keyShops={},caves={};
 trackables= {
 //	objs:{items, chests, dungeons,keyShops},
 	save: function(){
@@ -252,7 +252,7 @@ trackables= {
 		    caves:{
 		       obj:caves,
 		       save:["opened"],
-		       def:cavesDef()
+		       def:cavesDef
 		    }
 		 };
  },
@@ -272,24 +272,15 @@ createSaveObj: function createSaveObj(){
 	},
 	reset: function(){
 		if (window.confirm("Are you sure you want to reset?")){
-			basil.remove("items");
-			basil.remove("chests");
-			basil.remove("dungeons");
-			basil.remove("keyShops");
-			basil.remove("caves");
+			basil.remove("trackables");
 			this.load();
+			syncIcons();
 			logic.apply();
 			logic.apply();
 		}
 	},
 	createJSON: function(){
-		var obj={};
-		obj.items=basil.get("items")||itemsDef();
-		obj.chests=basil.get("chests")||chestsDef();
-		obj.dungeons=basil.get("dungeons")||dungeonsDef();
-		obj.keyShops=basil.get("keyShops")||keyShopsDef();
-        obj.keyShops=basil.get("caves")||cavesDef();
-		return JSON.stringify(obj);
+		return JSON.stringify(trackables.createSaveObj());
 	},
  importJSON:function(){
    var input=$('#import')[0];
@@ -299,7 +290,7 @@ createSaveObj: function createSaveObj(){
          try{
             var obj=JSON.parse(fr.result);
             trackables.loadJSON(obj);
-            trackables.load();
+            trackables.loadSaveObj();
             logic.apply();
          } catch(er) {
             console.log('bad json');
@@ -311,7 +302,6 @@ createSaveObj: function createSaveObj(){
  },
 	exportJSON: function(){
 		var dataStr = trackables.createJSON();
-
 		var fname = 'z3r.json';
 		var dataUri = 'data:application/json;charset=utf-8;name=z3r.json;base64,'+ btoa(dataStr);
 
@@ -321,44 +311,47 @@ createSaveObj: function createSaveObj(){
 		linkElement.click();
 	},
 	loadJSON: function(obj){
-        basil.set("items", obj.items);
-		basil.set("chests", obj.chests);
-		basil.set("dungeons", obj.dungeons);
-		basil.set("keyShops", obj.keyShops);
+        basil.set("trackables",obj);
 	},
-	load: function(){
+	load: function load(){
 	   var t=trackables.getMappings();
 	   $.each(t,function(name,map){
-	      map[name].obj=map.def()
+	      Object.assign(map.obj, map.def())
 	   });
 	},
 	loadSaveObj: function(){
-		items=basil.get("items")||itemsDef();
-		chests=basil.get("chests")||chestsDef();
-		dungeons=basil.get("dungeons")||dungeonsDef();
-		keyShops=basil.get("keyShops")||keyShopsDef();
-		caves=basil.get("caves")||cavesDef();
-		$('.icon,.dungeon,.iconBox').each(function() {
-			rID=(/(\D+)(\d*)/.exec(this.id));
-			if(rID[1]!=='abbr'){
-				switch (rID[1]){
-					case 'bigPrize':
-						this.classList.toggle("complete",items['boss'+rID[2]].val);
-						/* falls through */
-					case "dungeon":
-					itemId='prize' +rID[2];
-					break;
-					default:
-						itemId=this.id;
-					break;
-				}
-				if (items[itemId]) {
-					setState(this,items[itemId].val);
-				}
-			}
-		});
+		var saveobj=basil.get('trackables')||{};
+		var t=trackables.getMappings();
+        $.each(t,function(tName,tMap){
+        	$.each(tMap.obj,function(iName,iObj){
+				Object.assign(iObj,(saveobj[tName]||{})[iName]||{});
+        	})
+        });
+        syncIcons();
 	}
 };
+function syncIcons(){
+	   //syncIcons
+		$('.icon,.dungeon,.iconBox').each(function() {
+		rID=(/(\D+)(\d*)/.exec(this.id));
+		if(rID[1]!=='abbr'){
+			switch (rID[1]){
+				case 'bigPrize':
+					this.classList.toggle("complete",items['boss'+rID[2]].val);
+					/* falls through */
+				case "dungeon":
+				itemId='prize' +rID[2];
+				break;
+				default:
+					itemId=this.id;
+				break;
+			}
+			if (items[itemId]) {
+				setState(this,items[itemId].val);
+			}
+		}
+	});
+}
 function setState(el, stateVal){
 
 					var newCN=el.className.replace(/state(\d*)/,"state"+stateVal);
@@ -527,9 +520,9 @@ toggle = {
 		//increments or decrements the icon state
 		curVal = items[icon.id].val;
 		if (reverse === false) {
-			items[icon.id].val = (curVal == items[icon.id].max) ? 0 : (curVal + 1);
+			items[icon.id].val = (curVal >= items[icon.id].max) ? 0 : (curVal + 1);
 		} else {
-			items[icon.id].val = (curVal === 0) ? items[icon.id].max : (curVal - 1);
+			items[icon.id].val = (curVal <= 0) ? items[icon.id].max : (curVal - 1);
 		}
 
 		if (icon.id.indexOf("boss") >= 0) {								//if it's a boss, do the boss toggle stuff
