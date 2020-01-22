@@ -231,6 +231,16 @@ trackables= {
 		basil.set("keyShops", keyShops);
 		basil.set("caves", caves);
 	},
+	createSaveObj: function createSaveObj(){
+		var obj={};
+		obj.items={};
+		$.each(items,function(k,v){
+			obj.items[k]=obj.items[k]||{};
+			obj.items[k].val=v.val
+		});
+
+		return obj;
+	},
 	reset: function(){
 		if (window.confirm("Are you sure you want to reset?")){
 			basil.remove("items");
@@ -249,7 +259,7 @@ trackables= {
 		obj.chests=basil.get("chests")||chestsDef();
 		obj.dungeons=basil.get("dungeons")||dungeonsDef();
 		obj.keyShops=basil.get("keyShops")||keyShopsDef();
-  obj.keyShops=basil.get("caves")||cavesDef();
+        obj.keyShops=basil.get("caves")||cavesDef();
 		return JSON.stringify(obj);
 	},
  importJSON:function(){
