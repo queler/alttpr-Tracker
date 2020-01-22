@@ -221,37 +221,38 @@ function cavesDef() {return {
 30: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Lake Mylla Ledge Hint" },
 31: { world: "DW", amount: 1, xPos: 0, yPos: 0, opened: false, status: null, name: "Dark Death Mouatain Fairy" }
 };}
-var items, chests, dungeons,keyShops;
+var items, chests, dungeons,keyShops,caves;
 trackables= {
 //	objs:{items, chests, dungeons,keyShops},
 	save: function(){
-		basil.set("items", items);
-		basil.set("chests", chests);
-		basil.set("dungeons", dungeons);
-		basil.set("keyShops", keyShops);
-		basil.set("caves", caves);
+		basil.set("trackables", trackables.createSaveObj());
 	},
 	getMappings: function(){
 	return {
 		   items:{
 		      obj:items,
-		      save:["val"]
+		      save:["val"],
+		      def:itemsDef
 		    },
 		    chests:{
 		       obj:chests,
-		       save:["opened"]
+		       save:["opened"],
+		       def:chestsDef
 		    },
 		    dungeons:{
          obj:dungeons,
-         save:["openChests","completed","prize"]
+         save:["openChests","completed","prize"],
+         def:dungeonsDef
 		    },
 		    keyShops:{
 		       obj:keyShops,
-		       save:["checked"]
+		       save:["checked"],
+		       def:keyShopsDef
 		    },
 		    caves:{
 		       obj:caves,
-		       save:["opened"]
+		       save:["opened"],
+		       def:cavesDef()
 		    }
 		 };
  },
@@ -326,6 +327,12 @@ createSaveObj: function createSaveObj(){
 		basil.set("keyShops", obj.keyShops);
 	},
 	load: function(){
+	   var t=trackables.getMappings();
+	   $.each(t,function(name,map){
+	      map[name].obj=map.def()
+	   });
+	},
+	loadSaveObj: function(){
 		items=basil.get("items")||itemsDef();
 		chests=basil.get("chests")||chestsDef();
 		dungeons=basil.get("dungeons")||dungeonsDef();
