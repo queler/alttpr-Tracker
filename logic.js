@@ -32,6 +32,10 @@ var MEDAL={
     quake:3
 };
 var logic = {
+  fromEl: function (id){ //only for trackables
+      var parsed=idParser.exec(id);
+      return logic[parsed[1]+'s'][+parsed[2]]();
+   },
     //these functions return true or false
     canActivatabteTablets: function(){
         if( swordless()){
