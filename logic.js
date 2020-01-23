@@ -1887,13 +1887,13 @@ var logic = {
 7: function () { return true; },  //Kakarlko Gamble Game
 8: function () { return true; },  //Bonk Fairy (Light)
 9: function () { return true; },  //Desert Falry
-10: function () { return true; },  //Rupee Cave
+10: function () { return true; },  //50 Rupee Cave
 11: function () { return true; },  //Light Hype Fairy
 12: function () { return true; },  //lake Hylia Fortune Telter
 13: function () { return true; },  //Lake hylia Fairy
 14: function () { return true; },  //Long Fairy Cave(warp 
 15: function () { return true; },  //Good Bee Cave
-16: function () { return true; },  //Rupee Cave
+16: function () { return true; },  //20 Rupee Cave
 17: function () { return true; },  //Capacity Upgrade
 18: function () { return true; },  //Hookshot Fairy
 19: function () { return true; },  //Fortune Teller(Dark)
