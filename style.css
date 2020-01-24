@@ -322,7 +322,7 @@ body {
 .crystal.state5 .crystalNum {background-position:-557px -549px}
 .crystal.state6 .crystalNum {background-position:-557px -585px}
 .crystal.state7 .crystalNum {background-position:-557px -621px}
-
+.crystal.state8 .crystalNum {background-position: -380px -640px, background-size:cover}
 .key {width:44px;height:36px;top:72px}
 .key.state0 {background-position:-516px -0px}
 .key.state1 {background-position:-516px -36px}
