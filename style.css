@@ -631,7 +631,7 @@ input {cursor:pointer;}
 	text-align: left;
 	overflow:hidden;
 }
-
+#captionState {position:relative;left:3px}
 #captionState.state0 { color: #cb0b26; font-weight:700;}
 #captionState.state1 { color: #0cd46f; font-weight:700;}
 #captionState.state2 { color: #006999; font-weight:700;}
