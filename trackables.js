@@ -217,7 +217,7 @@ function cavesDef() {return {
 26: { world: "DW", amount: 1, xPos: 84.8, yPos: 50, opened: false, status: null, name: "Palace of Darkness Hint" },
 27: { world: "DW", amount: 1, xPos: 98, yPos: 70, opened: false, status: null, name: "East Dark World Hint" },
 28: { world: "DW", amount: 1, xPos: 89, yPos: 76.5, opened: false, status: null, name: "Dark Lake Hylia Ledge Fairy(ice)" },
-29: { world: "DW", amount: 1, xPos: 90.20, yPos: 79, opened: false, status: null, name: "Dark Lnke Hylin Ledge Spike Cave(rock)" },
+29: { world: "DW", amount: 1, xPos: 90.20, yPos: 79, opened: false, status: null, name: "Dark Lnke Hylia Ledge Spike Cave(rock)" },
 30: { world: "DW", amount: 1, xPos: 91.2, yPos: 76.5, opened: false, status: null, name: "Dark Lake Hylia Ledge Hint(bee)" },
 31: { world: "DW", amount: 1, xPos: 40.6, yPos: 18.8, opened: false, status: null, name: "Dark Death Mouatain Fairy" }
 };}

@@ -1878,7 +1878,12 @@ var logic = {
         5: function () { return logic.darkWorldNW() && items.hammer.val ? 1 : 0; },  //Outcasts
         6: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Forest
         7: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Lumberjack
-        8: function () { return logic.darkWorldEast() ? 1 : 0; },  //DW Potion Shop
+        8: function () { return ((logic.darkWorldEast()&&(items.hammer.val || items.glove.val || items.flippers.val)) ||
+           (logic.darkWorldNW()&&items.flippers.val))
+              ? STATE.avail
+              : logic.darkWorldNW()&&items.boots.val
+                 ? STATE.dark
+                 : STATE.unavail;},  //DW Potion Shop
     },
    caves:{
       0: function () { return logic.lightWorldBunny(); },  //Lumberjack's House
@@ -1900,19 +1905,32 @@ var logic = {
       16: function () { return logic.lightWorldLink(); },  //20 Rupee Cave
       17: function () { return logic.chests[25]()/*hobo*/; },  //Capacity Upgrade
       18: function () { return logic.eastDM(); },  //Hookshot Fairy
-      19: function () { return true; },  //Fortune Teller(Dark)
-      20: function () { return true; },  //Archery Game
-      21: function () { return true; },  //Dark Sanctuary Hint
-      22: function () { return true; },  //Bonk Falry(Dark)
-      23: function () { return true; },  //Dark Desert Falry
-      24: function () { return true; },  //Dark Desert Hint
-      25: function () { return true; },  //Dark Lake Hylia Fairy
-      26: function () { return true; },  //Palace of Dnrkness Hint
-      27: function () { return true; },  //East Dark Woeld Hint
-      28: function () { return true; },  //Dark Lake Mytla Ledge Falry
-      29: function () { return true; },  //Dark Lnke Hylin Ledgo Spike Cave
-      30: function () { return true; },  //Dark Lake Mylla Ledge Hint
-      31: function () { return true; },  //Dark Death Mouatain Fairy 
+      19: function () { return logic.darkWorldNW(); },  //Fortune Teller(Dark)
+      20: function () { return logic.darkWorldSouth(); },  //Archery Game
+      21: function () { return logic.darkWorldNW(); },  //Dark Sanctuary Hint
+      22: function () { return logic.darkWorldSouth()&&items.boots.val; },  //Bonk Falry(Dark)
+      23: function () { return logic.mireArea(); },  //Dark Desert Falry
+      24: function () { return logic.mireArea(); },  //Dark Desert Hint
+      25: function () {
+         return (items.boss11.val && !inverted()) ||
+            logic.darkWorldEast();
+      },  //Dark Lake Hylia Fairy
+      26: function () { return logic.caves[25](); },  //Palace of Dnrkness Hint
+      27: function () { return logic.caves[25](); },  //East Dark World Hint
+      28: function () { return logic.caves[30]() ; },  //Dark Lake Hylia Ledge Fairy(ice)
+      29: function () { return logic.caves[30]() * (items.glove.val>0) ; },  //"Dark Lake Hylia Ledge Spike Cave(rock)"
+      30: function () {
+         
+            return items.flippers.val && logic.darkWorldSouth()
+               ? STATE.avail
+               : logic.keyShops[8]() //potion ledg, can ff
+                  ? STATE.dark
+                  : inverted() && logic.lightWorldBunny() && items.mirror.val
+                     ? STATE.avail
+                     : STATE.unavail;
+         
+      },  //Dark Lake Hylia Ledge Hint(bee)"
+      31: function () { return logic.climbDM(); },  //Dark Death Mouatain Fairy 
 },
     keyShopCheck: function () { //function for checking and applying the status of key shop access in Retro mode
         var count = 0;
