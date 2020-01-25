@@ -1963,8 +1963,6 @@ var logic = {
             if (test()==STATE.avail) { count++ } //if the keyShop is accessible, add it to the count
 
             //toggle accessibility status on map
-            $("#keyShop" + id).toggleClass("unavail", test() == 0);
-            $("#keyShop" + id).toggleClass("dark", test() == 2);
 
             if (keyShops[id].checked == SHOP.FOUND) { found = true } //check if any shop has been clicked
         });
@@ -1988,7 +1986,8 @@ var logic = {
             .toggleClass("visible", state == 4)
             .toggleClass("darkmaybe",state == 6)
             .toggleClass("opened", state == "null")
-            ;
+            .toggleClass("alt1", state==-1)
+            .toggleClass("alt2", state==-2);
 
     },
 
@@ -2001,14 +2000,24 @@ var logic = {
         $.each(logic.chests, function (id, test) {
 
             var status = chests[id].opened ? null : test(); //if the chest's not open, it is tested
-            chests[id].status = status;                 //sets chest's status according to what the test found
 
             logic.colour("#chest" + id, status);         //colours the chest on the map
         });
+        $.each(logic.keyShops, function (id, test) {
+
+            var status =keyShops[id].checked==SHOP.CHECKED
+               ? null
+               : keyShops[id].checked==SHOP.FOUND
+                  ? -1
+                  : test(); //if the chest's not open, it is tested
+            //chests[id].checked = status;                 //sets chest's status according to what the test found
+
+            logic.colour("#keyShop" + id, status);         //colours the chest on the map
+        });
+
         $.each(logic.caves, function (id, test) {
 
             var status = caves[id].opened ? null : test(); //if the chest's not open, it is tested
-            chests[id].checked = status;                 //sets chest's status according to what the test found
 
             logic.colour("#cave" + id, status);         //colours the chest on the map
         });
