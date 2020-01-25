@@ -207,7 +207,18 @@ var logic = {
           return (swordless()?items.hammer.val:(items.sword.val >= 2)) || items.cape.val;
        }
     },
-
+    crystal: function(id) {
+       var have=items.crystal.val;
+       var needed=items['crystal'+id].val;
+       return needed==8
+          ? have==7
+             ? STATE.avail
+             : have>0
+                ? STATE.maybe
+                : STATE.unavail
+          : have>=needed;
+    
+    }, 
     //this function returns 0, 1, or 3
     // 0 = unavailable
     // 1 = available
