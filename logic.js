@@ -685,9 +685,11 @@ var logic = {
 
             if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = bow && bigKey ?          // need these to reach
-                    logic.fire() ? STATE.avail : STATE.dark :              // boss accessible; light determines status
-                    STATE.unavail;
+                boss = bow && bigKey     // need these to reach
+                   ? logic.fire()
+                      ? STATE.avail
+                      : STATE.dark  // boss accessible; light determines status
+                   : STATE.unavail;
 
                 min = 3 +                             // base access
                     (lamp ? 1 : 0) +                  // BK chest
@@ -1765,11 +1767,15 @@ var logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = entry *( canClimb && hookshot ?
-                    hamHook && fireCane && boots ?
-                        logic.DMlight() ? STATE.avail : STATE.dark:
-                        STATE.maybe :
-                    STATE.unavail) ;
+                boss = ( canClimb && hookshot
+                   ? hamHook && fireCane && boots
+                      ? logic.DMlight() ? STATE.avail : STATE.dark
+                      : STATE.maybe
+                   : STATE.unavail) ;
+                boss=(entry==STATE.maybe || entry==STATE.dark) &&
+                     (boss==STATE.maybe || boss==STATE.dark)
+                   ? boss
+                   : boss * entry;
 
                 min = entry==STATE.avail ?
                     (somaria && firerod && hammer && hookshot ? 3 : 0) +
