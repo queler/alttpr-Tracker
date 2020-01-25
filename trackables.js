@@ -508,6 +508,8 @@ toggle = {
    },
    icon: function (icon, reverse ) {         //toggles icons on the tracker
       reverse=(typeof reverse !== 'undefined') ?  reverse : false;
+      console.log("toggle.icon"+(reverse?"rev ":" ") +icon.id);
+//  if ($(icon).parent().hasClass('iconBox')==false  ){    
       if (icon.id.indexOf("bigPrize") >= 0) {         //if icon is a Bigprize, changes the target
          num = icon.id.replace(/\D/g, '');
          icon = $("#prize" + num)[0];
@@ -517,15 +519,15 @@ toggle = {
          num = icon.id.replace(/\D/g, '');
          icon = $("#boss" + num)[0];
       }
-
-      //increments or decrements the icon state
-      curVal = items[icon.id].val;
-      if (reverse === false) {
-         items[icon.id].val = (curVal >= items[icon.id].max) ? 0 : (curVal + 1);
-      } else {
-         items[icon.id].val = (curVal <= 0) ? items[icon.id].max : (curVal - 1);
-      }
-
+      
+            //increments or decrements the icon state
+            curVal = items[icon.id].val;
+            if (reverse === false) {
+               items[icon.id].val = (curVal >= items[icon.id].max) ? 0 : (curVal + 1);
+            } else {
+               items[icon.id].val = (curVal <= 0) ? items[icon.id].max : (curVal - 1);
+            }
+      
       if (icon.id.indexOf("boss") >= 0) {                        //if it's a boss, do the boss toggle stuff
          num = icon.id.replace(/\D/g, '');
          dungeons[num].completed = !dungeons[num].completed;
@@ -550,7 +552,7 @@ toggle = {
          $('#shovel').attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); }).addClass("state" + items.shovel.val);
          $('#flute').attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); }).addClass("state" + items.flute.val);
       }
-
+  
       if (icon.id == "mushroom" || icon.id == "powder" || icon.id == "flute" || icon.id == "shovel") { //and vice versa, this ensures that the combined mushroom/powder and shovel/flute icons always match the separated versions of those icons
          items.mushroompowder.val = (items.mushroom.val ? 1 : 0) + (items.powder.val ? 2 : 0);
          items.shovelflute.val = (items.shovel.val ? 1 : 0) + (items.flute.val ? 2 : 0);
@@ -563,5 +565,6 @@ toggle = {
          .addClass("state" + items[icon.id].val);
 
       logic.apply();
+//  }
    },
 };

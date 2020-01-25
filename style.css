@@ -70,10 +70,7 @@ body {
     height:208px;
 }
 #dungeons .trackerTitle{ background-position:0px -40px}
-.iconBox {position:absolute;
-    left:0px;
-    top:0px;
-    }
+
 .icon {
     position:absolute;
     left:0px;
@@ -81,6 +78,21 @@ body {
     background-image:url(images/grid1.png);
     cursor:pointer;
     margin:8px 8px;
+}
+.iconBox {
+    position:absolute;
+    left:0px;
+    top:0px;
+    height: 40px;
+    z-index: 1;
+    width: 40px;
+    margin: 8px;
+    background-image: none;
+    }
+.subicon {
+    background-image: url(images/grid1.png);
+    margin: 0px;
+    z-index: unset;
 }
 
 #bow {left:0px;top:0px;width:60px; height:64px; }
@@ -312,7 +324,7 @@ body {
 .medal.state3 {  background-position: -380px -760px; }
 #crystal0 {left: -10px;}
 #crystal1 {left: 44px;}
-.crystalIcon {width: 40px;height: 40px;background-position:-340px -760px;position: absolute}
+.crystalIcon {width: 40px;height: 40px;background-position:-340px -760px;position: absolute;/* margin: 0; */}
 .crystal .crystalNum{width:27px;height:27px;position: absolute;top: 10px;left: 0px;}
 .crystal.state0 .crystalNum {background-position:-557px -369px}
 .crystal.state1 .crystalNum {background-position:-557px -405px}
@@ -322,7 +334,7 @@ body {
 .crystal.state5 .crystalNum {background-position:-557px -549px}
 .crystal.state6 .crystalNum {background-position:-557px -585px}
 .crystal.state7 .crystalNum {background-position:-557px -621px}
-.crystal.state8 .crystalNum {background-position: -380px -640px, background-size:cover}
+.crystal.state8 .crystalNum {background-position: -347px -648px;width: 27px;height: 27px;transform: scale(.9);}
 .key {width:44px;height:36px;top:72px}
 .key.state0 {background-position:-516px -0px}
 .key.state1 {background-position:-516px -36px}
