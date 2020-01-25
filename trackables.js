@@ -368,6 +368,7 @@ function setState(el, stateVal){
 }
 map = {
    populate: function () {
+      console.log("map.populate")
       $.each(chests, function (id, chest) {   //places all the chest icons onto the map
          $("#map" + chest.world).append("<div class=chest onclick=toggle.chest(" + id + ") id=chest" + id + " style=left:" + chest.xPos + "%;top:" + chest.yPos + "%;z-index:" + (1000 - id) + ">" + ((chest.amount > 1) ? chest.amount : "") + "</div>");
       });
@@ -475,14 +476,17 @@ var SHOP={
 
 toggle = {
    chest: function (id) {                     //toggles a chest's open status
+      console.log("toggle chest:"+id+":"+chests[id].name);
       chests[id].opened = !chests[id].opened;
       logic.apply();
    },
    cave: function (id) {                     //toggles a chest's open status
+      console.log("toggle cave:"+id+":"+caves[id].name);
       caves[id].opened = !caves[id].opened;
       logic.apply();
    },
    boss: function (id) {                     //toggles a dungeon's completion and marks its boss icon appropriately
+      console.log("toggle boss:"+id+":");
       dungeons[id].completed = !dungeons[id].completed;
       items["boss" + id].val = items["boss" + id].val ? 0 : 1;
       $('#boss' + id)
