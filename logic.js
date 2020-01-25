@@ -1918,13 +1918,13 @@ var logic = {
       7: function () { return logic.lightWorldBunny(); },  //Kakarlko Gamble Game
       8: function () { return logic.lightWorldLink()&&items.boots.val; },  //Bonk Fairy (Light)
       9: function () { return logic.lightWorldBunny(); },  //Desert Falry
-      10: function () { return logic.lightWorldLink(); },  //50 Rupee Cave
+      10: function () { return logic.lightWorldLink() && items.glove.val>0;},  //50 Rupee Cave
       11: function () { return logic.lightWorldLink(); },  //Light Hype Fairy
       12: function () { return logic.lightWorldBunny(); },  //lake Hylia Fortune Telter
       13: function () { return logic.lightWorldBunny(); },  //Lake hylia Fairy
       14: function () { return logic.lightWorldBunny(); },  //Long Fairy Cave(warp 
       15: function () { return logic.lightWorldBunny(); },  //Good Bee Cave
-      16: function () { return logic.lightWorldLink(); },  //20 Rupee Cave
+      16: function () { return logic.lightWorldLink()&&items.glove.val>0; },  //20 Rupee Cave
       17: function () { return logic.chests[25]()/*hobo*/; },  //Capacity Upgrade
       18: function () { return logic.eastDM(); },  //Hookshot Fairy
       19: function () { return logic.darkWorldNW(); },  //Fortune Teller(Dark)
