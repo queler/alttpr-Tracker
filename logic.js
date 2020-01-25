@@ -22,7 +22,8 @@ var STATE={
       avail:1,
       dark:2,
       maybe:3,
-      visible:4
+      visible:4,
+      darkmaybe:6
 };
 //0 = unknown, 1 = bombos, 2 = ether, 3 = quake
 var MEDAL={
@@ -196,10 +197,13 @@ var logic = {
             return logic.darkEastDM() && items.hammer.val && items.somaria.val;
         },
         entry10: function () {
-            return items.crystal.val >= items.crystal0.val
-               && (inverted()
+            return ((inverted()
                   ?logic.lightWorldLink()
-                  :logic.darkEastDM()) ;
+                  :logic.darkEastDM()) 
+               ? logic.DMlightAorD()
+               : STATE.unavail)
+               
+               * logic.crystal(0);
         },
     entry11: function () { if(inverted()){
           return logic.climbDM();
@@ -644,18 +648,19 @@ var logic = {
             return logic.mireArea();
         },
         65: function() {//GANON
+           var x=STATE.unavail;
            if(logic.darkWorldEast() && logic.fire()
-              &&(items.crystal.val >=
-                 items.crystal1.val) && items.boss10.val) {
+              && items.boss10.val) {
               if(swordless()){
-                 return items.hammer.val==1
-                 && items.bow.val==3;
+                 x= items.hammer.val==1
+                 && logic.canShootSilvers();
               }else{//normal
-                 return items.sword.val>=2;
+                 x= items.sword.val>=2;
               }
            }else{
-              return STATE.unavail;
+              x= STATE.unavail;
            }
+           return x*logic.crystal(1);
         }
     },
 
@@ -1653,11 +1658,11 @@ var logic = {
 
             if (keysanity()) {    // KEY-SANITY LOGIC
 
-                boss = entry && canClimb && hookshot && bigKey && key >= 1 ?
-                    key == 4 ?
-                        logic.DMlight() ? STATE.avail : STATE.dark:
+                boss = ( canClimb && hookshot && bigKey && key >= 1 ?
+                    key == 4?
+                        logic.DMlight() ? entry : STATE.dark:
                         STATE.maybe :
-                    STATE.unavail;
+                    STATE.unavail);
 
                 max = entry ?
                     2 +                     //hope room
@@ -1681,7 +1686,7 @@ var logic = {
                     (key >= 3 && canClimb && hookshot ? 1 : 0) :
                     0;
 
-                min = entry && logic.DMlight() ?
+                min = (entry==STATE.avail) && logic.DMlight() ?
                     2 +                     //hope room
                     (boots ? 1 : 0) +       //torch
                     (hamHook ? 4 : 0) +     //dark mag room
@@ -1723,7 +1728,7 @@ var logic = {
                         3 :
                     0;
 
-                min = entry && logic.DMlight() ?
+                min = (entry==STATE.avail) && logic.DMlight() ?
                     (canClimb && somaria && !firerod && hammer && !hookshot && !boots ? 1 : 0) +
                     (canClimb && somaria && firerod && hammer && hookshot && boots ? 4 : 0) +
                     (canClimb && !somaria && !hammer && hookshot && boots ? 1 : 0) +
@@ -1760,13 +1765,13 @@ var logic = {
 
             } else {    // REGULAR LOGIC
 
-                boss = entry && canClimb && hookshot ?
+                boss = entry *( canClimb && hookshot ?
                     hamHook && fireCane && boots ?
                         logic.DMlight() ? STATE.avail : STATE.dark:
                         STATE.maybe :
-                    STATE.unavail;
+                    STATE.unavail) ;
 
-                min = entry ?
+                min = entry==STATE.avail ?
                     (somaria && firerod && hammer && hookshot ? 3 : 0) +
                     (!somaria && !firerod && hammer && hookshot ? 11 : 0) +
                     (somaria && hammer && hookshot ? 8 : 0) +
@@ -1975,6 +1980,7 @@ var logic = {
             .toggleClass("dark", state == 2)
             .toggleClass("maybe", state == 3)
             .toggleClass("visible", state == 4)
+            .toggleClass("darkmaybe",state == 6)
             .toggleClass("opened", state == "null")
             ;
 

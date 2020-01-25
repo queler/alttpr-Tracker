@@ -552,6 +552,7 @@ body {
 .dark { background-color: #006999; }
 .maybe { background-color: #f4d800; }
 .visible { background-color: #e26d00; }
+.darkmaybe{background-color:#f54799;} 
 .opened { background-color:#7f7f7f; color:#7f7f7f; }
 
 input {cursor:pointer;}
