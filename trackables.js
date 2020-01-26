@@ -506,8 +506,8 @@ toggle = {
       reverse=(typeof reverse !== 'undefined') ?  reverse : false;
       keyShops[id].checked = (keyShops[id].checked +3 + (reverse ? -1 : 1)) % 3;
       //$("#keyShop" + id).toggleClass("notChecked", keyShops[id].checked==SHOP.NOT_CHECKED);
-      $("#keyShop" + id).toggleClass("checked", keyShops[id].checked==SHOP.CHECKED);
-      $("#keyShop" + id).toggleClass("found", keyShops[id].checked==SHOP.FOUND);
+      $("#keyShop" + id).toggleClass("opened", keyShops[id].checked==SHOP.CHECKED);
+      $("#keyShop" + id).toggleClass("alt1", keyShops[id].checked==SHOP.FOUND);
       logic.apply();
    },
    icon: function (icon, reverse ) {         //toggles icons on the tracker
