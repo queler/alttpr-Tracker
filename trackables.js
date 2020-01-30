@@ -367,8 +367,12 @@ function setState(el, stateVal){
                }
 }
 map = {
+   clear: function () {
+      $('.map').children('.chest,.keyShop,.cave,.dungeon,.chestPip').remove() ;
+   },
    populate: function () {
-      console.log("map.populate")
+      console.log("map.populate");
+      console.log(JSON.stringify(settings) );
       $.each(chests, function (id, chest) {   //places all the chest icons onto the map
          $("#map" + chest.world).append("<div class=chest onclick=toggle.chest(" + id + ") id=chest" + id + " style=left:" + chest.xPos + "%;top:" + chest.yPos + "%;z-index:" + (1000 - id) + ">" + ((chest.amount > 1) ? chest.amount : "") + "</div>");
       });
