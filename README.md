@@ -24,8 +24,8 @@ Icons on the map are displayed in various colours. Here's what they mean:
 - **RED:** This item is not accessible.
 - **ORANGE**: This item is not accessible, but it is possible to check what it is.
 - **GREEN**: This item is accessible.
-- **BLUE**: This item is accessible, but only by traversing a dark room.
-- **YELLOW**: It is uncertain whether or not this item is accessible.
+- **BLUE**: This item is accessible, but only by traversing a dark room.Also minor glitches like fake flippers and super bunny
+- **YELLOW**: It is uncertain whether or not this item is accessible. Also used for some chestz3g being acceasible in inverted superbunny (e.g. Blind's hut, Kak well)\,
 
 ###### DUNGEON CHESTS
 
