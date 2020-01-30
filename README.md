@@ -64,4 +64,3 @@ Click the icon in the bottom left to open up the options menu.
 - **COMBINE FETCH ITEMS:** Choose whether you want to combine the mushroom/powder and flute/shovel, or keep those icons separated (if choosing the latter, the mushroom will replace the bomb and the shovel will replace the bug net).
 - **MAPS:** Choose how the map is positioned, or turn it off.
 - **TIMER:** Show/hide the timer's tracker.
-- **LOCATION PREDICTOR:** Highlights the historical probability that a particular chest contains an item you'll need for go mode. The brightest chest is the one most likely to be valuable. Hovering over an item in the tracker will show probabilities for that particular item. Note that this feature is based only on past data and does not account for logic at all.
