@@ -463,26 +463,19 @@ body {
 .dungeon.state3 { background-position:-2px -146px; }
 .dungeon.state4 { background-position:-2px -194px; }
 #chest65 {
-	width: 72px;
-	height: 72px;
-	margin-left: -48px;
-	margin-top: -48px;
-	position: absolute;
-	background-repeat: no-repeat;
-	z-index: 2;
-	cursor:pointer;
-	border: solid 3px #000;
-	border-radius:50%;
-    
-    background-image:url(images/grid1.png);
-    background-size:auto;
-	background-position:-271px -780px;
-	color:#000;
-	text-align:center;
-	font-weight:800;
-	font-size:20px;
-	line-height:41px;
-	transform:scale(.75)
+  width: 90px;
+  height: 90px;
+  margin-left: -45px;
+  margin-top: -45px;
+  background-repeat: no-repeat;
+  z-index: 2;
+  cursor:pointer;
+  border: solid 5.75px #000;
+  border-radius:50%;
+  background-image:url(images/grid1.png);
+  background-size: auto;
+  background-position: -265px -770px;
+  transform: scale(0.5217391);
 }
 .dungeon:hover {
     border-color:#fff;
@@ -500,39 +493,39 @@ body {
    background-color: #7f7f7f;
    }
 .keyShop {
-	position:absolute;
-	background-color: #7f7f7f;
-	width:20px;
-	height:20px;
-	border:solid 1px #000;
-	border-radius:4px;
-	transform:scaleX(-1) rotate(135deg);
-	cursor:pointer;
-	color:#555;
-	line-height:11px;
-	font-size:10px;
-	text-align:center;
+  position:absolute;
+  background-color: #7f7f7f;
+  width:20px;
+  height:20px;
+  border:solid 1px #000;
+  border-radius:4px;
+  transform:scaleX(-1) rotate(135deg);
+  cursor:pointer;
+  color:#555;
+  line-height:11px;
+  font-size:10px;
+  text-align:center;
 }
 
 .keyShop.unavail {
-	background-color: #cb0b26;
-	color: #000000;
-	font-weight: bolder;
+  background-color: #cb0b26;
+  color: #000000;
+  font-weight: bolder;
 }
 
 .keyShop.unavail .keyCirc {
-	background-color: #cb0b26;
-	border-color: #000000;
+  background-color: #cb0b26;
+  border-color: #000000;
 }
 
 .keyShop.dark {
-	background-color: #006999;
-	color:#1fa874;
+  background-color: #006999;
+  color:#1fa874;
 }
 
 .keyShop.dark .keyCirc {
-	background-color: #006999;
-	border-color:#1fa874;
+  background-color: #006999;
+  border-color:#1fa874;
 }
 .keyShop.opened{background-color:#7f7f7f;color: #000000;font-weight: bolder;}
 .keyShop.opened .keyCirc {
