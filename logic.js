@@ -646,6 +646,21 @@ var logic = {
         },
         64: function () { // Mire Shed
             return logic.mireArea();
+        },
+        65: function() {//GANON
+           var x=STATE.unavail;
+           if(logic.darkWorldEast() && logic.fire()
+              && items.boss10.val) {
+              if(swordless()){
+                 x= items.hammer.val==1
+                 && logic.canShootSilvers();
+              }else{//normal
+                 x= items.sword.val>=2;
+              }
+           }else{
+              x= STATE.unavail;
+           }
+           return x*logic.crystal(1);
         }
     },
 
@@ -1875,23 +1890,6 @@ var logic = {
 
             return { boss: boss, max: max, min: min }
         },
-        12: function() {//GANON
-           var x=STATE.unavail;
-           if(logic.darkWorldEast() && logic.fire()
-              && items.boss10.val) {
-              if(swordless()){
-                 x= items.hammer.val==1
-                 && logic.canShootSilvers();
-              }else{//normal
-                 x= items.sword.val>=2;
-              }
-           }else{
-              x= STATE.unavail;
-           }
-           return {boss:x*logic.crystal(1),
-                   min:0,
-                   max:0};
-        }
     },
     keyShops: {
         0: function () { return logic.lightWorldBunny() },  //LW Lake Hylia

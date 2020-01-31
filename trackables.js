@@ -158,7 +158,8 @@ function chestsDef(){return {
    62: { world: "DW", amount: 1, xPos: 30.9, yPos: 68.5, opened: false, status: null, name: "Stumpy" },
    63: { world: "DW", amount: 1, xPos: 5.00, yPos: 69.9, opened: false, status: null, name: "Digging Game" },
    64: { world: "DW", amount: 2, xPos: 4.00, yPos: 79.5, opened: false, status: null, name: "Mire Shed" },
- };}
+ 65: { world: "DW", amount: 1, xPos: 50.0, yPos: 41.0, opened: false, status: null, name: "GANON" },
+};}
 
 function dungeonsDef(){return {
    0: { world: "LW", xPos: 92.9, yPos: 40.0, chests0: 3, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Eastern Palace" },
@@ -173,8 +174,6 @@ function dungeonsDef(){return {
    9: { world: "DW", xPos: 92.9, yPos: 5.00, chests0: 5, chests1: 12, chests2: 9, openChests: 0, completed: false, status: null, prize: 0, name: "Turtle Rock" },
    10: { world: "DW", xPos: 56.0, yPos: 4.00, chests0: 20, chests1: 27, chests2: 24, openChests: 0, completed: false, status: null, prize: 0, name: "Ganon's Tower" },
    11: { world: "LW", xPos: 50.0, yPos: 51.0, chests0: 0, chests1: 2, chests2: 2, openChests: 0, completed: false, status: null, prize: "AGA", name: "Agahnim's Tower" },
-   12: { world: "DW", xPos: 50.0, yPos: 41.0, chests0: 0, chests1: 0, chests2: 0, openChests: 0, completed: false, status: null, prize: "G",name: "GANON" },
-
 };}
 
 function keyShopsDef(){return {
@@ -373,13 +372,13 @@ map = {
    },
    populate: function () {
       console.log("map.populate");
-      //console.log(JSON.stringify(settings) );
+      console.log(JSON.stringify(settings) );
       $.each(chests, function (id, chest) {   //places all the chest icons onto the map
          $("#map" + chest.world).append("<div class=chest onclick=toggle.chest(" + id + ") id=chest" + id + " style=left:" + chest.xPos + "%;top:" + chest.yPos + "%;z-index:" + (1000 - id) + ">" + ((chest.amount > 1) ? chest.amount : "") + "</div>");
       });
 
       $.each(dungeons, function (id, dungeon) {   //places all the dungeon icons onto the map
-         $("#map" + dungeon.world).append("<div class=dungeon onclick=toggle.boss(" + id + ") id=dungeon"                           + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1100 - id) + "></div>");
+         $("#map" + dungeon.world).append("<div class=dungeon onclick=toggle.boss(" + id + ") id=dungeon" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1100 - id) + "></div>");
          $("#map" + dungeon.world).append("<div class='chest dungeonChest' onclick=toggle.dungeonChest(" + id + ") id=dungeonChest" + id + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1200 - id) + ">" + dungeon["chests" + settings.keyMode] + "</div>");
       });
 
@@ -389,7 +388,6 @@ map = {
 
       $("#dungeon10").css({ 'background-image': 'none' }).html("GT");   //replaces prize icons with text for these dungeons
       $("#dungeon11").css({ 'background-image': 'none' }).html("AGA");
-     // $("#dungeon12").css({ 'background-image': 'none' }).html("G");
 
       $.each(keyShops, function (id, shop) {      //places all the shops onto the map (only matters in Retro mode)
          $("#map" + shop.world).append("<div class=\"keyShop\" onclick=toggle.keyShop(" + id + ") id=keyShop" + id + " style=left:" + shop.xPos + "%;top:" + shop.yPos + "%;z-index:" + (1000 - id) + ">F<div class=keyCirc></div></div>");
