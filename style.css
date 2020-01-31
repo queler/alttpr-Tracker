@@ -462,7 +462,7 @@ body {
 .dungeon.state1 { background-position:-2px -98px; }
 .dungeon.state3 { background-position:-2px -146px; }
 .dungeon.state4 { background-position:-2px -194px; }
-
+#dungeon12 { background-position:-204px -776px}
 .dungeon:hover {
     border-color:#fff;
 }

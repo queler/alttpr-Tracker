@@ -389,7 +389,7 @@ map = {
 
       $("#dungeon10").css({ 'background-image': 'none' }).html("GT");   //replaces prize icons with text for these dungeons
       $("#dungeon11").css({ 'background-image': 'none' }).html("AGA");
-      $("#dungeon12").css({ 'background-image': 'none' }).html("G");
+     // $("#dungeon12").css({ 'background-image': 'none' }).html("G");
 
       $.each(keyShops, function (id, shop) {      //places all the shops onto the map (only matters in Retro mode)
          $("#map" + shop.world).append("<div class=\"keyShop\" onclick=toggle.keyShop(" + id + ") id=keyShop" + id + " style=left:" + shop.xPos + "%;top:" + shop.yPos + "%;z-index:" + (1000 - id) + ">F<div class=keyCirc></div></div>");
