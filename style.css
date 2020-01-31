@@ -462,7 +462,28 @@ body {
 .dungeon.state1 { background-position:-2px -98px; }
 .dungeon.state3 { background-position:-2px -146px; }
 .dungeon.state4 { background-position:-2px -194px; }
-#dungeon12 { background-position:-204px -776px}
+#chest65 {
+	width: 72px;
+	height: 72px;
+	margin-left: -48px;
+	margin-top: -48px;
+	position: absolute;
+	background-repeat: no-repeat;
+	z-index: 2;
+	cursor:pointer;
+	border: solid 3px #000;
+	border-radius:50%;
+    
+    background-image:url(images/grid1.png);
+    background-size:auto;
+	background-position:-271px -780px;
+	color:#000;
+	text-align:center;
+	font-weight:800;
+	font-size:20px;
+	line-height:41px;
+	transform:scale(.75)
+}
 .dungeon:hover {
     border-color:#fff;
 }

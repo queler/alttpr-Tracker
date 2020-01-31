@@ -158,7 +158,7 @@ function chestsDef(){return {
    62: { world: "DW", amount: 1, xPos: 30.9, yPos: 68.5, opened: false, status: null, name: "Stumpy" },
    63: { world: "DW", amount: 1, xPos: 5.00, yPos: 69.9, opened: false, status: null, name: "Digging Game" },
    64: { world: "DW", amount: 2, xPos: 4.00, yPos: 79.5, opened: false, status: null, name: "Mire Shed" },
- 65: { world: "DW", amount: 1, xPos: 50.0, yPos: 41.0, opened: false, status: null, name: "GANON" },
+   65: { world: "DW", amount: 1, xPos: 51.0, yPos: 44.0, opened: false, status: null, name: "GANON" },
 };}
 
 function dungeonsDef(){return {
