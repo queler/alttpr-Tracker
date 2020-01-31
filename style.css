@@ -393,23 +393,7 @@ body {
 
 #mapLW {background-position:0px    0px;}
 #mapDW {background-position:0px -650px;}
-.grid {
-    position: absolute;
-   /* left: inherit;top: inherit;*/
-    height: inherit;
-    width: inherit;
-    
-    background-image: linear-gradient(to right, black 1px, transparent 1px),
-    linear-gradient(to bottom,black 1px, transparent 1px);
-    z-index: 500;
-    display: inline;
-    background-size: 10% 10%;
-}
 
-.grid1.grid {
-    background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom,grey 1px, transparent 1px);
-    background-size: 1% 1%;
-}
 .chest {
 	width: 32px;
 	height: 32px;

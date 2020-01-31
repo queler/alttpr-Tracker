@@ -9,7 +9,9 @@
 
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script src="eruda.min.js"></script>
-	<script>eruda.init();</script>
+	<script src="eruda-dom.min.js"></script>
+	<script>
+	eruda.init();eruda.add(erudaDom); </script>
 	<script src="TweenMax.min.js"></script>
 	<script src="Draggable.min.js"></script>
 	<script src="soundjs-0.6.1.min.js"></script>
@@ -26,11 +28,34 @@
 </head>
 
 <body>
+<style id="grid" onload="this.disabled=true" >
+ .grid {
+    position: absolute;
+    height: inherit;
+    width: inherit;
+    background-image: linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom,black 1px, transparent 1px);
+    z-index: 500;
+    display: inline;
+    background-size: 10% 10%;
+}
+
+.grid1.grid {
+    background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom,grey 1px, transparent 1px);
+    background-size: 1% 1%;
+}
+</style>
  <style id="hideRetro">
  .cave,.keyShop{
    display:none
 }
 </style>
+<script>
+function grid() {
+   var el=document.getElementById('grid');
+   el.disabled=!el.disabled;
+}
+</script>
 	<div id="totalCover"></div>
 
 	<div id="trackerBox">
@@ -276,8 +301,8 @@
 	</div>
 
 	<div id="mapBox">
-		<div class="map" id="mapLW"><div class="gridx gridx" ></div><div class="gridx" ></div></div>
-		<div class="map" id="mapDW"><div class="gridx gridx"></div><div class="gridx" ></div></div>
+		<div class="map" id="mapLW"><div class="grid grid1" ></div><div class="grid" ></div></div>
+		<div class="map" id="mapDW"><div class="grid grid1"></div><div class="grid" ></div></div>
 	</div>
 
 	<div id="settingsTab">
