@@ -221,6 +221,15 @@ function cavesDef() {return {
 30: { world: "DW", amount: 1, xPos: 91.2, yPos: 76.5, opened: false, status: null, name: "Dark Lake Hylia Ledge Hint(bee)" },
 31: { world: "DW", amount: 1, xPos: 40.6, yPos: 18.8, opened: false, status: null, name: "Dark Death Mouatain Fairy" }
 };}
+var morphs={
+   2:[
+      {
+         id:'chest21',
+         map:'DW',
+         x:-1
+      }
+   ]
+};
 var items={}, chests={}, dungeons={},keyShops={},caves={};
 trackables= {
 //   objs:{items, chests, dungeons,keyShops},

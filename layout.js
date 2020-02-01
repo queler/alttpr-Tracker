@@ -44,8 +44,9 @@ settings = {
 		settings.apply(true);
 	},
 	apply: function (reset) {
-
-		settings.keyMode = $("input[name='keyMode']:checked").val();
+	 var old=old = JSON.parse(JSON.stringify(settings));
+	 console.log(/*JSON.stringify*/(old));
+	 settings.keyMode = $("input[name='keyMode']:checked").val();
 		settings.layout = $("input[name='layout']:checked").val();
 		settings.border = $("input[name='border']:checked").val();
 		settings.iconSet = $("input[name='iconSet']:checked").val();
@@ -72,12 +73,17 @@ settings = {
 			$('.dispHeads').css({ 'display': 'inline' });
 			$('.dispPrizes').css({ 'display': 'none' });
 		}
-
-        map.clear();
-        map.populate();
-    //    modforinvert
-
-        $('#hideRetro')[0].disabled=retro();
+   if(settings.openMode!=old.openMode){
+      map.clear();
+      map.populate();
+      (morphs[settings.openMode]||[]).forEach(function(el){
+         var j=$('#'+el.id).appendTo('#map'+el.map);
+         if(el.x>=0){
+            j.css('left',el.x+'%').css('top',el.y+'%');
+         }
+      });
+   }
+   $('#hideRetro')[0].disabled=retro();
         //applies the chosen icon images
 		$('.icon').css({ 'background-image': ("url('images/grid" + settings.iconSet + ".png')") });
 
