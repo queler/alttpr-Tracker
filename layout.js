@@ -77,9 +77,14 @@ settings = {
       map.clear();
       map.populate();
       (morphs[settings.openMode]||[]).forEach(function(el){
-         var j=$('#'+el.id).appendTo('#map'+el.map);
-         if(el.x>=0){
-            j.css('left',el.x+'%').css('top',el.y+'%');
+         var sel=('#'+el.id)
+            .replace(/(#dungeon)(\d+)/,
+               '$1$2,$1Chest$2');
+         console.log(el.id+' sel;'+sel);
+         var $el=$(sel).appendTo('#map'+el.world);
+         console.log($el);
+         if(el.xPos===undefined||el.pos>=0){
+            $el.css('left',el.xPos+'%').css('top',el.yPos+'%');
          }
       });
    }

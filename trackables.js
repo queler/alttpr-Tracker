@@ -128,8 +128,8 @@ function chestsDef(){return {
    33: { world: "LW", amount: 1, xPos: 29.0, yPos: 66.5, opened: false, status: null, name: "Flute Spot" },
    34: { world: "LW", amount: 1, xPos: 46.2, yPos: 26.5, opened: false, status: null, name: "Sanctuary" },
    35: { world: "LW", amount: 3, xPos: 52.0, yPos: 29.4, opened: false, status: null, name: "Sewers - Secret Room" },
-   36: { world: "LW", amount: 1, xPos: 51.0, yPos: 36.5, opened: false, status: null, name: "Sewers - Dark Cross" },
-   37: { world: "LW", amount: 3, xPos: 50.0, yPos: 43.6, opened: false, status: null, name: "Hyrule Castle" },
+   36: { world: "LW", amount: 1, xPos: 47.5, yPos: 34, opened: false, status: null, name: "Sewers - Dark Cross" },
+   37: { world: "LW", amount: 3, xPos: 50.0, yPos: 36.5, opened: false, status: null, name: "Hyrule Castle" },
    38: { world: "LW", amount: 2, xPos: 57.3, yPos: 42.3, opened: false, status: null, name: "Link's Uncle" },
         //TODO:maybe switch
    39: { world: "LW", amount: 1, xPos: 40.7, yPos: 18.6, opened: false, status: null, name: "Old Man" },
@@ -225,8 +225,29 @@ var morphs={
    2:[
       {
          id:'chest21',
-         map:'DW',
-         x:-1
+         world:'DW'
+      },
+      {
+         id:'dungeon11',
+         world: "DW",
+         xPos: 56.0,
+         yPos: 4.00
+      },
+      {
+         id:'dungeon10',
+         world: "LW",
+         xPos: 50.0,
+         yPos: 43.00
+      },
+      {
+         id:'chest65',
+         world: "LW",
+         xPos: 50.0,
+         yPos: 55.00
+      },
+      {
+         id:'chest39',
+         world:"DW"
       }
    ]
 };
@@ -441,11 +462,17 @@ map = {
       $.each(dungeons, function (id, dungeon) {
 
          count = dungeon["chests" + settings.keyMode]; //checks how many chests the dungeon has in this mode
+         var $d= $('#dungeon'+id)
+         var $map=$d.parent('.map');
          for (chest = 1; chest <= count; chest++) {
 
-
-            $("#map" + dungeon.world).append("<div class=chestPip id=chestPip" + id + "-" + chest + " style=left:" + dungeon.xPos + "%;top:" + dungeon.yPos + "%;z-index:" + (1100 - id) + "></div>"); //creates the pip
-
+            $(document.createElement("div")).addClass('chestPip')
+               .prop('id',"chestPip" + id + "-" + chest)
+               .css({ left: $d.prop('style').left,
+                      top: $d.prop('style').top,
+                      "z-index": (1100 - id)
+                    }) //creates the pip
+               .appendTo($map);
             //calculations to figure out the position and angle of each pip
             if (count <= 11) {
                pos = chest;
