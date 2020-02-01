@@ -372,7 +372,6 @@ map = {
    },
    populate: function () {
       console.log("map.populate");
-      console.log(JSON.stringify(settings) );
       $.each(chests, function (id, chest) {   //places all the chest icons onto the map
          $("#map" + chest.world).append("<div class=chest onclick=toggle.chest(" + id + ") id=chest" + id + " style=left:" + chest.xPos + "%;top:" + chest.yPos + "%;z-index:" + (1000 - id) + ">" + ((chest.amount > 1) ? chest.amount : "") + "</div>");
       });
@@ -406,7 +405,7 @@ map = {
       }, function () {
          caption();
       });
-
+      //have to attach handlers here because they were just added to the tree
 
       $(".chest, .keyShop, .cave").hover(function () {   //Writes chest names to the caption when hovering
          var state ;
@@ -422,7 +421,7 @@ map = {
          caption();
       });
 
-      $(".icon, .dungeonChest, #timer, .keyShop").on("contextmenu", function () {
+      $(".dungeonChest, #timer, .keyShop,.cave").on("contextmenu", function () {
          return false;
       });
 

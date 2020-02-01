@@ -72,9 +72,13 @@ settings = {
 			$('.dispHeads').css({ 'display': 'inline' });
 			$('.dispPrizes').css({ 'display': 'none' });
 		}
-   $('#hideRetro')[0].disabled=retro();
 
-		//applies the chosen icon images
+        map.clear();
+        map.populate();
+    //    modforinvert
+
+        $('#hideRetro')[0].disabled=retro();
+        //applies the chosen icon images
 		$('.icon').css({ 'background-image': ("url('images/grid" + settings.iconSet + ".png')") });
 
 

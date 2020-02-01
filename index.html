@@ -457,8 +457,8 @@ function grid() {
 			//$('#caption').on("click",trackables.reset)
 			basil=new window.Basil({namespace: 'queler/z3r_tracker'});
 			layout.sizeMap($("input[name='mapAlign']:checked").val()); //arranges the maps to best fit on screen
-			trackables.load();
-			map.populate();											//adds dungeons and chest icons to the maps
+			trackables.load();//inits trackable objects to defaults
+			map.populate();	//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
 		});
 
@@ -500,6 +500,7 @@ function grid() {
 
 		$('.icon').contextmenu(function (event) {					//adds listener for right-click on icons
 				toggle.icon(this, true);
+				return false;
 		});
 
 		$('#timer').contextmenu(function (event) {					//adds listener for right-click on icons
