@@ -5,7 +5,7 @@ div {
 	-ms-user-select: none;      /* IE 10+ */
 }
 
-body {
+body, html {
     background-color:#000;
     font-family:Oswald;
     color:#fff;
@@ -755,3 +755,4 @@ input {cursor:pointer;}
 	text-align: center;
 	transform:translateY(8px) translateX(-86.5px);
 }
+head+div{display:none}
