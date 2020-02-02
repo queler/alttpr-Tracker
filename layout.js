@@ -31,6 +31,10 @@ settings = {
 			TweenMax.to("#settingsTab", 0.3, { bottom: -495, ease: Back.easeIn });
 			TweenMax.to("#settingsTab", 0.5, { backgroundColor: "rgba(17,17,17,0)", ease: Power4.easeOut });
 		}
+		$('#settingsTab>div')
+		.filter(function(i, v) { return $(v).text() == "\u21BB" })
+		.css('display',settings.open?'inline':'none');
+
 	},
 	applyCookie: function () {
 		//reads the user's localStorage with basil and returns it as a settings object
