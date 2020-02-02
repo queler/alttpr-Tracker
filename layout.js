@@ -87,7 +87,7 @@ settings = {
          console.log(el.id+' sel;'+sel);
          var $el=$(sel).appendTo('#map'+el.world);
          console.log($el);
-         if(el.xPos===undefined||el.pos>=0){
+         if(el.xPos!==undefined||el.pos>=0){
             $el.css('left',el.xPos+'%').css('top',el.yPos+'%');
          }
       });
