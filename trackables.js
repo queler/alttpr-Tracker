@@ -236,13 +236,13 @@ var morphs={
       {
          id:'dungeon10',
          world: "LW",
-         xPos: 50.0,
-         yPos: 43.00
+         xPos: 49.5,
+         yPos: 45.00
       },
       {
          id:'chest65',
          world: "LW",
-         xPos: 50.0,
+         xPos: 49.0,
          yPos: 55.00
       },
       {
