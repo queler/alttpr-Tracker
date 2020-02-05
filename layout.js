@@ -94,11 +94,8 @@ settings = {
    }
    $('#hideRetro')[0].disabled=retro();
         //applies the chosen icon images
-		$('.icon').css({ 'background-image': ("url('images/grid" + settings.iconSet + ".png')") });
-
-
-
-
+   $('#iconSet1')[0].disabled=!settings.iconSet;
+   
 		//goes through the layout object and applies the values for each element, according to the settings chosen
 		$.each(layout.positions[settings.layout].all, function (k, v) {
 			if (typeof (v.props !== 'undefined')) { TweenMax.set(v.elem, v.props); }

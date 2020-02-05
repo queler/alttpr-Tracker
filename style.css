@@ -75,7 +75,7 @@ body, html {
     position:absolute;
     left:0px;
     top:0px;
-    background-image:url(images/grid1.png);
+    background-image:url(images/grid0.png);
     cursor:pointer;
     margin:8px 8px;
 }
@@ -90,7 +90,7 @@ body, html {
     background-image: none;
     }
 .subicon {
-    background-image: url(images/grid1.png);
+    background-image: url(images/grid0.png);
     margin: 0px;
     z-index: unset;
 }
@@ -472,7 +472,7 @@ body, html {
   cursor:pointer;
   border: solid 5.75px #000;
   border-radius:50%;
-  background-image:url(images/grid1.png);
+  background-image:url(images/grid0.png);
   background-size: auto;
   background-position: -265px -770px;
   transform: scale(0.5217391);
