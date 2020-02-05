@@ -18,7 +18,8 @@ function popout() {
 
 
 
-
+//warning settings are strings
+//if(settings.xxxxx) is always true!
 settings = {
 	open: false,
 	toggle: function () {//function that opens and closes the settings box
@@ -50,7 +51,8 @@ settings = {
 	apply: function (reset) {
 	 var old=old = JSON.parse(JSON.stringify(settings));
 	 console.log(/*JSON.stringify*/(old));
-	 settings.keyMode = $("input[name='keyMode']:checked").val();
+	 //warning:settings are strings!
+        settings.keyMode = $("input[name='keyMode']:checked").val();
 		settings.layout = $("input[name='layout']:checked").val();
 		settings.border = $("input[name='border']:checked").val();
 		settings.iconSet = $("input[name='iconSet']:checked").val();
@@ -94,7 +96,7 @@ settings = {
    }
    $('#hideRetro')[0].disabled=retro();
         //applies the chosen icon images
-   $('#iconSet1')[0].disabled=!settings.iconSet;
+   $('#iconSet1')[0].disabled=settings.iconSet=="0";
    
 		//goes through the layout object and applies the values for each element, according to the settings chosen
 		$.each(layout.positions[settings.layout].all, function (k, v) {
