@@ -515,17 +515,17 @@ var SHOP={
 
 toggle = {
    chest: function (id) {                     //toggles a chest's open status
-      console.log("toggle chest:"+id+":"+chests[id].name);
+      //console.log("toggle chest:"+id+":"+chests[id].name);
       chests[id].opened = !chests[id].opened;
       logic.apply();
-   },
+   },/
    cave: function (id) {                     //toggles a chest's open status
-      console.log("toggle cave:"+id+":"+caves[id].name);
+      //console.log("toggle cave:"+id+":"+caves[id].name);
       caves[id].opened = !caves[id].opened;
       logic.apply();
    },
    boss: function (id) {                     //toggles a dungeon's completion and marks its boss icon appropriately
-      console.log("toggle boss:"+id+":");
+      //console.log("toggle boss:"+id+":");
       dungeons[id].completed = !dungeons[id].completed;
       items["boss" + id].val = items["boss" + id].val ? 0 : 1;
       $('#boss' + id)
