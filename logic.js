@@ -465,7 +465,9 @@ var logic = {
                            ? lampTest
                            : STATE.maybe
                         : STATE.unavail //because no glove
-                     : lampTest //retro with keyshop or reg open
+                     : items.glove.val
+                        ? lampTest 
+                        : STATE.maybe //retro with keyshop or reg open
              ) * logic.lightWorldLink();
 
 
@@ -680,7 +682,7 @@ var logic = {
 			var min;
 			var max;
 			var bow = logic.canShoot(),
-                lamp = items.lamp.val,
+                lamp = items.lamp.val || items.firerod.val,
                 bigKey = items.bigKey0.val;
 
             if (keysanity()) {    // KEY-SANITY LOGIC
@@ -1325,7 +1327,7 @@ var logic = {
                 somaria = items.somaria.val,
                 firerod = items.firerod.val,
                 fire = firerod || lamp,
-                spikeWalk = items.byrna.val || items.cape.val,
+                spikeWalk = true,// items.byrna.val || items.cape.val,
                 key = items.key8.val,
                 bigKey = items.bigKey8.val,
                 fightVit = entry && somaria && (items.sword.val >= 1 || logic.canShoot()),
@@ -1772,10 +1774,7 @@ var logic = {
                       ? logic.DMlight() ? STATE.avail : STATE.dark
                       : STATE.maybe
                    : STATE.unavail) ;
-                boss=(entry==STATE.maybe || entry==STATE.dark) &&
-                     (boss==STATE.maybe || boss==STATE.dark)
-                   ? boss
-                   : boss * entry;
+                
 
                 min = entry==STATE.avail ?
                     (somaria && firerod && hammer && hookshot ? 3 : 0) +
@@ -1805,6 +1804,10 @@ var logic = {
                     0;
 
             }
+            boss=(entry==STATE.maybe || entry==STATE.dark) &&
+                     (boss==STATE.maybe || boss==STATE.dark)
+                   ? boss
+                   : boss * entry;
             return { boss: boss, max: max, min: min }
         },
         11: function () { //Agahnim's Tower
