@@ -312,7 +312,7 @@ createSaveObj: function createSaveObj(){
    createJSON: function(){
       return JSON.stringify(trackables.createSaveObj());
    },
- importJSON:function(){
+ loadFromFS:function(){
    var input=$('#import')[0];
    if(input.files.length>0){
       var fr=new FileReader() ;
@@ -320,7 +320,7 @@ createSaveObj: function createSaveObj(){
          try{
             var obj=JSON.parse(fr.result);
             trackables.loadJSON(obj);
-            trackables.loadSaveObj();
+            trackables.loadFromCookie();
             logic.apply();
          } catch(er) {
             console.log('bad json');
@@ -330,7 +330,7 @@ createSaveObj: function createSaveObj(){
       fr.readAsText(input.files[0]);
   }
  },
-   exportJSON: function(){
+   saveToFS: function(){
       var dataStr = trackables.createJSON();
       var fname = 'z3r.json';
       var dataUri = 'data:application/json;charset=utf-8;name=z3r.json;base64,'+ btoa(dataStr);
@@ -349,7 +349,7 @@ createSaveObj: function createSaveObj(){
          Object.assign(map.obj, map.def())
       });
    },
-   loadSaveObj: function(){
+   loadFromCookie: function(){
       var saveobj=basil.get('trackables')||{};
       var t=trackables.getMappings();
         $.each(t,function(tName,tMap){

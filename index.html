@@ -450,8 +450,8 @@ function grid() {
 
 		<div class="selection" style="top: 110px;left:530px">
 <!-- Where stats/location predictor used to be <-->
-		<input type="file" id="import" class="inputfile" name="import" onchange="trackables.importJSON()" onclick="this.value=null" /><label for="import" class="button" >Import</label>
-		<br /><div id="export" class="button" onclick="trackables.exportJSON()">Export</div>
+		<input type="file" id="import" class="inputfile" name="import" onchange="trackables.loadFromFS()" onclick="this.value=null" /><label for="import" class="button" >Import</label>
+		<br /><div id="export" class="button" onclick="trackables.saveToFS()">Export</div>
   <br /><div id="popout" class="button" onclick="popout()">Pop-out</div>
 	</div>
 
