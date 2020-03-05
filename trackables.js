@@ -303,7 +303,7 @@ createSaveObj: function createSaveObj(){
    reset: function(){
       if (window.confirm("Are you sure you want to reset?")){
          basil.remove("trackables");
-         this.load();
+         this.init();
          syncIcons();
          logic.apply();
          logic.apply();
@@ -312,6 +312,12 @@ createSaveObj: function createSaveObj(){
    createJSON: function(){
       return JSON.stringify(trackables.createSaveObj());
    },
+   loadFromObj:function(obj){
+       trackables.loadSaveObjToCookie(obj);
+       trackables.loadFromCookie();
+       syncIcons();
+       logic.apply();
+   },
  loadFromFS:function(){
    var input=$('#import')[0];
    if(input.files.length>0){
@@ -319,9 +325,7 @@ createSaveObj: function createSaveObj(){
       fr.onload=function(evt){
          try{
             var obj=JSON.parse(fr.result);
-            trackables.loadSaveObjToCookie(obj);
-            trackables.loadFromCookie();
-            logic.apply();
+            trackables.loadFromObj(obj);
          } catch(er) {
             console.log('bad json');
             console.log(er);
@@ -343,7 +347,7 @@ createSaveObj: function createSaveObj(){
    loadSaveObjToCookie: function(obj){
         basil.set("trackables",obj);
    },
-   load: function load(){
+   init: function init(){
       var t=trackables.getMappings();
       $.each(t,function(name,map){
          Object.assign(map.obj, map.def())
