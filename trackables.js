@@ -254,7 +254,7 @@ var morphs={
 var items={}, chests={}, dungeons={},keyShops={},caves={};
 trackables= {
 //   objs:{items, chests, dungeons,keyShops},
-   save: function(){
+   saveToCookie: function(){
       basil.set("trackables", trackables.createSaveObj());
    },
    getMappings: function(){
@@ -518,7 +518,7 @@ toggle = {
       //console.log("toggle chest:"+id+":"+chests[id].name);
       chests[id].opened = !chests[id].opened;
       logic.apply();
-   },/
+   },
    cave: function (id) {                     //toggles a chest's open status
       //console.log("toggle cave:"+id+":"+caves[id].name);
       caves[id].opened = !caves[id].opened;

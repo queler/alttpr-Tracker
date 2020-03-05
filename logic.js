@@ -2056,7 +2056,7 @@ var logic = {
             }
 
         });
-        trackables.save();
+        trackables.saveToCookie();
     },
 };
 
