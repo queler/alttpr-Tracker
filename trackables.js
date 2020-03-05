@@ -530,12 +530,12 @@ toggle = {
    },
    boss: function (id) {                     //toggles a dungeon's completion and marks its boss icon appropriately
       //console.log("toggle boss:"+id+":");
-      dungeons[id].completed = !dungeons[id].completed;
+//      items["boss"+id].val = !items["boss"+id].val;
       items["boss" + id].val = items["boss" + id].val ? 0 : 1;
       $('#boss' + id)
          .attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); })
-         .addClass("state" + (dungeons[id].completed ? 1 : 0));
-      $("#bigPrize" + id).toggleClass("complete", dungeons[id].completed);
+         .addClass("state" + (items["boss"+id].val ? 1 : 0));
+      $("#bigPrize" + id).toggleClass("complete", items["boss"+id].val);
       logic.apply();
    },
    dungeonChest: function (id, reverse ) {         //increments or decrements a dungeon's open chest count
@@ -577,8 +577,8 @@ toggle = {
       
       if (icon.id.indexOf("boss") >= 0) {                        //if it's a boss, do the boss toggle stuff
          num = icon.id.replace(/\D/g, '');
-         dungeons[num].completed = !dungeons[num].completed;
-         $("#bigPrize" + num).toggleClass("complete", dungeons[num].completed);
+         items["boss"+num].val = !items["boss"+num].val;
+         $("#bigPrize" + num).toggleClass("complete", items["boss"+num].val);
       }
 
       if (icon.id.indexOf("prize") >= 0) {                     //if it's a prize, toggle the prize
