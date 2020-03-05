@@ -319,7 +319,7 @@ createSaveObj: function createSaveObj(){
       fr.onload=function(evt){
          try{
             var obj=JSON.parse(fr.result);
-            trackables.loadJSON(obj);
+            trackables.loadSaveObjToCookie(obj);
             trackables.loadFromCookie();
             logic.apply();
          } catch(er) {
@@ -340,7 +340,7 @@ createSaveObj: function createSaveObj(){
       linkElement.setAttribute('download', fname);
       linkElement.click();
    },
-   loadJSON: function(obj){
+   loadSaveObjToCookie: function(obj){
         basil.set("trackables",obj);
    },
    load: function load(){
