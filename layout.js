@@ -45,7 +45,7 @@ settings = {
 		$.each(savedSettings, function (k, v) {
 			$('input:radio[name=' + k + ']:nth(' + v + ')').attr('checked', true);
 		});
-		trackables.loadSaveObj();
+		trackables.loadFromCookie();
 		settings.apply(true);
 	},
 	apply: function (reset) {

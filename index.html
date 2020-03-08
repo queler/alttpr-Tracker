@@ -450,8 +450,8 @@ function grid() {
 
 		<div class="selection" style="top: 110px;left:530px">
 <!-- Where stats/location predictor used to be <-->
-		<input type="file" id="import" class="inputfile" name="import" onchange="trackables.importJSON()" onclick="this.value=null" /><label for="import" class="button" >Import</label>
-		<br /><div id="export" class="button" onclick="trackables.exportJSON()">Export</div>
+		<input type="file" id="import" class="inputfile" name="import" onchange="trackables.loadFromFS()" onclick="this.value=null" /><label for="import" class="button" >Import</label>
+		<br /><div id="export" class="button" onclick="trackables.saveToFS()">Export</div>
   <br /><div id="popout" class="button" onclick="popout()">Pop-out</div>
 	</div>
 
@@ -463,7 +463,7 @@ function grid() {
 			//$('#caption').on("click",trackables.reset)
 			basil=new window.Basil({namespace: 'queler/z3r_tracker'});
 			layout.sizeMap($("input[name='mapAlign']:checked").val()); //arranges the maps to best fit on screen
-			trackables.load();//inits trackable objects to defaults
+			trackables.init();//inits trackable objects to defaults
 			map.populate();	//adds dungeons and chest icons to the maps
 			settings.applyCookie();									//applies saved user settings, or defaults if no cookie found
 		});

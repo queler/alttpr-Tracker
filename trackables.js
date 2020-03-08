@@ -162,18 +162,18 @@ function chestsDef(){return {
 };}
 
 function dungeonsDef(){return {
-   0: { world: "LW", xPos: 92.9, yPos: 40.0, chests0: 3, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Eastern Palace" },
-   1: { world: "LW", xPos: 7.00, yPos: 78.5, chests0: 2, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Desert Palace" },
-   2: { world: "LW", xPos: 56.0, yPos: 4.00, chests0: 2, chests1: 6, chests2: 3, openChests: 0, completed: false, status: null, prize: 0, name: "Tower of Hera" },
-   3: { world: "DW", xPos: 92.9, yPos: 40.0, chests0: 5, chests1: 14, chests2: 11, openChests: 0, completed: false, status: null, prize: 0, name: "Palace of Darkness" },
-   4: { world: "DW", xPos: 45.5, yPos: 91.5, chests0: 6, chests1: 10, chests2: 7, openChests: 0, completed: false, status: null, prize: 0, name: "Swamp Palace" },
-   5: { world: "DW", xPos: 5.00, yPos: 5.00, chests0: 2, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Skull Woods" },
-   6: { world: "DW", xPos: 12.0, yPos: 48.0, chests0: 4, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Thieves Town" },
-   7: { world: "DW", xPos: 79.0, yPos: 85.0, chests0: 3, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Ice Palace" },
-   8: { world: "DW", xPos: 9.00, yPos: 83.2, chests0: 2, chests1: 8, chests2: 5, openChests: 0, completed: false, status: null, prize: 0, name: "Misery Mire" },
-   9: { world: "DW", xPos: 92.9, yPos: 5.00, chests0: 5, chests1: 12, chests2: 9, openChests: 0, completed: false, status: null, prize: 0, name: "Turtle Rock" },
-   10: { world: "DW", xPos: 56.0, yPos: 4.00, chests0: 20, chests1: 27, chests2: 24, openChests: 0, completed: false, status: null, prize: 0, name: "Ganon's Tower" },
-   11: { world: "LW", xPos: 50.0, yPos: 51.0, chests0: 0, chests1: 2, chests2: 2, openChests: 0, completed: false, status: null, prize: "AGA", name: "Agahnim's Tower" },
+   0: { world: "LW", xPos: 92.9, yPos: 40.0, chests0: 3, chests1: 6, chests2: 3, openChests: 0,  status: null, prize: 0, name: "Eastern Palace" },
+   1: { world: "LW", xPos: 7.00, yPos: 78.5, chests0: 2, chests1: 6, chests2: 3, openChests: 0,  status: null, prize: 0, name: "Desert Palace" },
+   2: { world: "LW", xPos: 56.0, yPos: 4.00, chests0: 2, chests1: 6, chests2: 3, openChests: 0,  status: null, prize: 0, name: "Tower of Hera" },
+   3: { world: "DW", xPos: 92.9, yPos: 40.0, chests0: 5, chests1: 14, chests2: 11, openChests: 0,  status: null, prize: 0, name: "Palace of Darkness" },
+   4: { world: "DW", xPos: 45.5, yPos: 91.5, chests0: 6, chests1: 10, chests2: 7, openChests: 0,  status: null, prize: 0, name: "Swamp Palace" },
+   5: { world: "DW", xPos: 5.00, yPos: 5.00, chests0: 2, chests1: 8, chests2: 5, openChests: 0,  status: null, prize: 0, name: "Skull Woods" },
+   6: { world: "DW", xPos: 12.0, yPos: 48.0, chests0: 4, chests1: 8, chests2: 5, openChests: 0,  status: null, prize: 0, name: "Thieves Town" },
+   7: { world: "DW", xPos: 79.0, yPos: 85.0, chests0: 3, chests1: 8, chests2: 5, openChests: 0,  status: null, prize: 0, name: "Ice Palace" },
+   8: { world: "DW", xPos: 9.00, yPos: 83.2, chests0: 2, chests1: 8, chests2: 5, openChests: 0,  status: null, prize: 0, name: "Misery Mire" },
+   9: { world: "DW", xPos: 92.9, yPos: 5.00, chests0: 5, chests1: 12, chests2: 9, openChests: 0,  status: null, prize: 0, name: "Turtle Rock" },
+   10: { world: "DW", xPos: 56.0, yPos: 4.00, chests0: 20, chests1: 27, chests2: 24, openChests: 0,  status: null, prize: 0, name: "Ganon's Tower" },
+   11: { world: "LW", xPos: 50.0, yPos: 51.0, chests0: 0, chests1: 2, chests2: 2, openChests: 0,  status: null, prize: "AGA", name: "Agahnim's Tower" },
 };}
 
 function keyShopsDef(){return {
@@ -254,7 +254,7 @@ var morphs={
 var items={}, chests={}, dungeons={},keyShops={},caves={};
 trackables= {
 //   objs:{items, chests, dungeons,keyShops},
-   save: function(){
+   saveToCookie: function(){
       basil.set("trackables", trackables.createSaveObj());
    },
    getMappings: function(){
@@ -271,7 +271,7 @@ trackables= {
           },
           dungeons:{
          obj:dungeons,
-         save:["openChests","completed","prize"],
+         save:["openChests","prize"],
          def:dungeonsDef
           },
           keyShops:{
@@ -303,7 +303,7 @@ createSaveObj: function createSaveObj(){
    reset: function(){
       if (window.confirm("Are you sure you want to reset?")){
          basil.remove("trackables");
-         this.load();
+         this.init();
          syncIcons();
          logic.apply();
          logic.apply();
@@ -312,16 +312,20 @@ createSaveObj: function createSaveObj(){
    createJSON: function(){
       return JSON.stringify(trackables.createSaveObj());
    },
- importJSON:function(){
+   loadFromObj:function(obj){
+       trackables.loadSaveObjToCookie(obj);
+       trackables.loadFromCookie();
+       syncIcons();
+       logic.apply();
+   },
+ loadFromFS:function(){
    var input=$('#import')[0];
    if(input.files.length>0){
       var fr=new FileReader() ;
       fr.onload=function(evt){
          try{
             var obj=JSON.parse(fr.result);
-            trackables.loadJSON(obj);
-            trackables.loadSaveObj();
-            logic.apply();
+            trackables.loadFromObj(obj);
          } catch(er) {
             console.log('bad json');
             console.log(er);
@@ -330,7 +334,7 @@ createSaveObj: function createSaveObj(){
       fr.readAsText(input.files[0]);
   }
  },
-   exportJSON: function(){
+   saveToFS: function(){
       var dataStr = trackables.createJSON();
       var fname = 'z3r.json';
       var dataUri = 'data:application/json;charset=utf-8;name=z3r.json;base64,'+ btoa(dataStr);
@@ -340,16 +344,16 @@ createSaveObj: function createSaveObj(){
       linkElement.setAttribute('download', fname);
       linkElement.click();
    },
-   loadJSON: function(obj){
+   loadSaveObjToCookie: function(obj){
         basil.set("trackables",obj);
    },
-   load: function load(){
+   init: function init(){
       var t=trackables.getMappings();
       $.each(t,function(name,map){
          Object.assign(map.obj, map.def())
       });
    },
-   loadSaveObj: function(){
+   loadFromCookie: function(){
       var saveobj=basil.get('trackables')||{};
       var t=trackables.getMappings();
         $.each(t,function(tName,tMap){
@@ -515,23 +519,23 @@ var SHOP={
 
 toggle = {
    chest: function (id) {                     //toggles a chest's open status
-      console.log("toggle chest:"+id+":"+chests[id].name);
+      //console.log("toggle chest:"+id+":"+chests[id].name);
       chests[id].opened = !chests[id].opened;
       logic.apply();
    },
    cave: function (id) {                     //toggles a chest's open status
-      console.log("toggle cave:"+id+":"+caves[id].name);
+      //console.log("toggle cave:"+id+":"+caves[id].name);
       caves[id].opened = !caves[id].opened;
       logic.apply();
    },
    boss: function (id) {                     //toggles a dungeon's completion and marks its boss icon appropriately
-      console.log("toggle boss:"+id+":");
-      dungeons[id].completed = !dungeons[id].completed;
+      //console.log("toggle boss:"+id+":");
+//      items["boss"+id].val = !items["boss"+id].val;
       items["boss" + id].val = items["boss" + id].val ? 0 : 1;
       $('#boss' + id)
          .attr('class', function (i, c) { return c.replace(/(^|\s)state\S+/g, ''); })
-         .addClass("state" + (dungeons[id].completed ? 1 : 0));
-      $("#bigPrize" + id).toggleClass("complete", dungeons[id].completed);
+         .addClass("state" + (items["boss"+id].val ? 1 : 0));
+      $("#bigPrize" + id).toggleClass("complete", items["boss"+id].val);
       logic.apply();
    },
    dungeonChest: function (id, reverse ) {         //increments or decrements a dungeon's open chest count
@@ -573,8 +577,8 @@ toggle = {
       
       if (icon.id.indexOf("boss") >= 0) {                        //if it's a boss, do the boss toggle stuff
          num = icon.id.replace(/\D/g, '');
-         dungeons[num].completed = !dungeons[num].completed;
-         $("#bigPrize" + num).toggleClass("complete", dungeons[num].completed);
+         //items["boss"+num].val = !items["boss"+num].val;
+         $("#bigPrize" + num).toggleClass("complete", items["boss"+num].val);
       }
 
       if (icon.id.indexOf("prize") >= 0) {                     //if it's a prize, toggle the prize

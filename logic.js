@@ -250,7 +250,7 @@ var logic = {
         // 0 = unknown, 1 = red/blue pend, 2 = green pend, 3 = blue crystal, 4 = red crystal
 
         for (var i = 0; i <= 9; i++) { //checks each dungeon to see if it's completed and if so what its prize is
-            if (dungeons[i].completed) {
+            if (items["boss"+i].val) {
                 counts[dungeons[i].prize]++;
                 counts.total++;
             }
@@ -2027,7 +2027,7 @@ var logic = {
         $.each(logic.dungeons, function (id, test) {
             var dStatus = test();
 
-            dStatus.boss = dungeons[id].completed ? null : dStatus.boss;
+            dStatus.boss = items["boss"+id].val ? null : dStatus.boss;
             dungeons[id].status = dStatus.boss;              //applies the test result to the dungeons object
             logic.colour("#dungeon" + id, dStatus.boss);    //colours the boss by its status
             setState($("#dungeon"+id)[0],dungeons[id].prize);
@@ -2056,7 +2056,7 @@ var logic = {
             }
 
         });
-        trackables.save();
+        trackables.saveToCookie();
     },
 };
 
