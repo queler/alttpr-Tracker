@@ -49,8 +49,8 @@ settings = {
 		settings.apply(true);
 	},
 	apply: function (reset) {
-	 var old=old = JSON.parse(JSON.stringify(settings));
-	 console.log(/*JSON.stringify*/(old));
+	 var old= JSON.parse(JSON.stringify(settings));
+	 //console.log(/*JSON.stringify*/(old));
 	 //warning:settings are strings!
         settings.keyMode = $("input[name='keyMode']:checked").val();
 		settings.layout = $("input[name='layout']:checked").val();
