@@ -17,6 +17,41 @@ function inverted() {
 function std() {
     return settings.openMode==0;
 }
+function goModeTest(){
+    if(window.testing==true){
+        return false;
+    }
+    window.testing=true;
+    var s=trackables.createSaveObj();
+    var go=undefined;
+    var i=0;
+    var $greens;
+    try{
+        while(go===undefined && ++i<=65){
+            if ($("#chest65.avail").length){
+                go=true;
+
+            }else{
+                $greens=$(".avail:visible");
+                if($greens.length<=0){
+                    go=false
+                }else{
+                    $greens.click();
+                }
+
+            }
+
+        }
+    }
+    catch(e){
+        debugger;
+    }
+    finally{
+        if (s){trackables.loadFromObj(s)};
+        window.testing=false;
+        return go;
+    }
+}
 var STATE={
       unavail:0,
       avail:1,
@@ -2057,6 +2092,7 @@ var logic = {
 
         });
         trackables.saveToCookie();
+        if (!window.testing)$('#goMode')[0].disabled=!goModeTest();
     },
 };
 
