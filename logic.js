@@ -17,6 +17,16 @@ function inverted() {
 function std() {
     return settings.openMode==0;
 }
+function objToArray( obj,preId ){
+    var ownProps = Object.keys( obj ),
+        i = ownProps.length,
+        resArray = new Array(i); // preallocate the Array
+    preId=preId||"";
+    while (i--)
+      resArray[i] = {id:preId+ownProps[i], obj:obj[ownProps[i]]};
+
+    return resArray;
+  };
 function goModeTest(){
     if(window.testing==true){
         return false;
@@ -25,18 +35,31 @@ function goModeTest(){
     var s=trackables.createSaveObj();
     var go=undefined;
     var i=0;
-    var $greens;
+    var d;
+var id;
     try{
         while(go===undefined && ++i<=65){
-            if ($("#chest65.avail").length){
+            if (logic.chests[65]()==STATE.avail){
                 go=true;
 
             }else{
-                $greens=$(".avail:visible");
-                if($greens.length<=0){
+                d=objToArray(dungeons,"dungeon");
+                d.forEach(function(o){
+                    id=idParser.exec(o.id)[2];
+                    o.completed=items['boss'+id].val;
+                    o.state=logic.dungeons[id]().boss
+                });
+                d=d.filter(function(o){
+                    return !o.completed && o.state==STATE.avail;
+                });
+                if(d<=0){
                     go=false
                 }else{
-                    $greens.click();
+                    d.forEach(function(o){
+                        id='boss'+idParser.exec(o.id)[2];
+                        items[id].val=!items[id].val+0;
+                    });
+                    logic.setPrizes();
                 }
 
             }

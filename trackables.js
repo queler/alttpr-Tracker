@@ -555,7 +555,7 @@ toggle = {
    },
    icon: function (icon, reverse ) {         //toggles icons on the tracker
       reverse=(typeof reverse !== 'undefined') ?  reverse : false;
-      console.log("toggle.icon"+(reverse?"rev ":" ") +icon.id);
+      //console.log("toggle.icon"+(reverse?"rev ":" ") +icon.id);
 //  if ($(icon).parent().hasClass('iconBox')==false  ){    
       if (icon.id.indexOf("bigPrize") >= 0) {         //if icon is a Bigprize, changes the target
          num = icon.id.replace(/\D/g, '');
