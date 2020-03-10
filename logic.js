@@ -255,11 +255,11 @@ var logic = {
             return logic.darkEastDM() && items.hammer.val && items.somaria.val;
         },
         entry10: function () {
-            return ((inverted()
-                  ?logic.lightWorldLink()
-                  :logic.darkEastDM()) 
-               ? logic.DMlightAorD()
-               : STATE.unavail)
+            return (inverted()
+                  ? logic.lightWorldLink()
+                  : logic.darkEastDM()
+                     ? logic.DMlightAorD()
+                     : STATE.unavail)
                
                * logic.crystal(0);
         },
@@ -275,7 +275,7 @@ var logic = {
        return needed==8
           ? have==7
              ? STATE.avail
-             : have>0
+             : have>=0
                 ? STATE.maybe
                 : STATE.unavail
           : have>=needed;
