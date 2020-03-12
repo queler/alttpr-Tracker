@@ -166,7 +166,7 @@ settings = {
 		//sizes the maps to fit the chosen layout
 		layout.sizeMap(settings.mapAlign);
 
-		map.placeMiniChests();
+		//map.placeMiniChests();
 		$.each(dungeons, function (id, dungeon) {
 			dungeons[id].openChests = Math.min(dungeons[id].openChests, dungeons[id]["chests" + settings.keyMode]);
 			$('#dungeonChest'+id).css('display',dungeons[id]["chests" + settings.keyMode]>0?"":'none');
