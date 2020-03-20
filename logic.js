@@ -260,7 +260,7 @@ var logic = {
                   : logic.darkEastDM()
                      ? logic.DMlightAorD()
                      : STATE.unavail)
-               
+
                * logic.crystal(0);
         },
     entry11: function () { if(inverted()){
@@ -279,8 +279,8 @@ var logic = {
                 ? STATE.maybe
                 : STATE.unavail
           : have>=needed;
-    
-    }, 
+
+    },
     //this function returns 0, 1, or 3
     // 0 = unavailable
     // 1 = available
@@ -524,7 +524,7 @@ var logic = {
                            : STATE.maybe
                         : STATE.unavail //because no glove
                      : items.glove.val
-                        ? lampTest 
+                        ? lampTest
                         : STATE.maybe //retro with keyshop or reg open
              ) * logic.lightWorldLink();
 
@@ -1832,7 +1832,7 @@ var logic = {
                       ? logic.DMlight() ? STATE.avail : STATE.dark
                       : STATE.maybe
                    : STATE.unavail) ;
-                
+
 
                 min = entry==STATE.avail ?
                     (somaria && firerod && hammer && hookshot ? 3 : 0) +
@@ -1957,7 +1957,18 @@ var logic = {
         1: function () { return logic.lightWorldBunny() },  //Kakariko
         2: function () { return (logic.eastDM()&&(!inverted() || items.pearl.val)) ? logic.DMlightAorD() : 0; },  //Death Mountain
         3: function () { return logic.darkWorldSouth() ? 1 : 0; },  //DW Lake Hylia
-        4: function () { return logic.darkEastDM() ? logic.DMlightAorD() : 0; },  //Dark EDM
+        4: function () { if(inverted()){
+              return logic.climbDM()
+                 ? logic.DMlightAorD()
+                 : STATE.unavail;
+           } else{
+              return  items.glove.val >= 2 && logic.eastDM()
+
+                 ? logic.DMlightAorD()
+
+                 : 0;
+           }
+        },  //Dark EDM
         5: function () { return logic.darkWorldNW() && items.hammer.val ? 1 : 0; },  //Outcasts
         6: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Forest
         7: function () { return logic.darkWorldNW() ? 1 : 0; },  //DW Lumberjack
@@ -1983,7 +1994,7 @@ var logic = {
       11: function () { return logic.lightWorldLink(); },  //Light Hype Fairy
       12: function () { return logic.lightWorldBunny(); },  //lake Hylia Fortune Telter
       13: function () { return logic.lightWorldBunny(); },  //Lake hylia Fairy
-      14: function () { return logic.lightWorldBunny(); },  //Long Fairy Cave(warp 
+      14: function () { return logic.lightWorldBunny(); },  //Long Fairy Cave(warp 5)
       15: function () { return logic.lightWorldBunny(); },  //Good Bee Cave
       16: function () { return logic.lightWorldLink()&&items.glove.val>0; },  //20 Rupee Cave
       17: function () { return logic.chests[25]()/*hobo*/; },  //Capacity Upgrade
@@ -2003,7 +2014,7 @@ var logic = {
       28: function () { return logic.caves[30]() ; },  //Dark Lake Hylia Ledge Fairy(ice)
       29: function () { return logic.caves[30]() * (items.glove.val>0) ; },  //"Dark Lake Hylia Ledge Spike Cave(rock)"
       30: function () {
-         
+
             return items.flippers.val && logic.darkWorldSouth()
                ? STATE.avail
                : logic.keyShops[8]() //potion ledg, can ff
@@ -2011,9 +2022,9 @@ var logic = {
                   : inverted() && logic.lightWorldBunny() && items.mirror.val
                      ? STATE.avail
                      : STATE.unavail;
-         
+
       },  //Dark Lake Hylia Ledge Hint(bee)"
-      31: function () { return logic.climbDM(); },  //Dark Death Mouatain Fairy 
+      31: function () { return logic.climbDM(); },  //Dark Death Mouatain Fairy
 },
     keyShopCheck: function () { //function for checking and applying the status of key shop access in Retro mode
         var count = 0;

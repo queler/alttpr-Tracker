@@ -247,7 +247,9 @@ var morphs={
       },
       {
          id:'chest39',
-         world:"DW"
+         world:"DW",
+         xPos:37,
+         yPos:18.6
       }
    ]
 };
@@ -431,7 +433,7 @@ map = {
   $('.keyShop').contextmenu(function (event) {   //adds right-click functionality to dungeon chest counters
             toggle.keyShop((this.id.replace(/\D/g, '')), true);
       });
-      map.placeMiniChests();    //places the proper amount of pips for each dungeon's chests, depending on mode
+      //map.placeMiniChests();    //places the proper amount of pips for each dungeon's chests, depending on mode
 
       $(".dungeon").hover(function () {   //Writes dungeon names to the caption when hovering
          id = (this.id.replace(/\D/g, ''));
