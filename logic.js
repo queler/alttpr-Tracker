@@ -31,14 +31,14 @@ function goModeTest(){
     if(window.testing==true){
         return false;
     }
-    var goalTest=(items.goal.val===0)?logic.chests[65]
-                   :logic.chests[6];
+    var goalTest=(items.crystal1.val===9)?logic.chests[6]
+                   :logic.chests[65];
     window.testing=true;
     var s=trackables.createSaveObj();
     var go=undefined;
     var i=0;
     var d;
-var id;
+    var id;
 
     try{
         while(go===undefined && ++i<=65){
