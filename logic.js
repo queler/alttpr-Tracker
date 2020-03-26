@@ -31,15 +31,18 @@ function goModeTest(){
     if(window.testing==true){
         return false;
     }
+    var goalTest=(items.goal.val===0)?logic.chests[65]
+                   :logic.chests[6];
     window.testing=true;
     var s=trackables.createSaveObj();
     var go=undefined;
     var i=0;
     var d;
 var id;
+
     try{
         while(go===undefined && ++i<=65){
-            if (logic.chests[65]()==STATE.avail){
+            if (goalTest()==STATE.avail){
                 go=true;
 
             }else{

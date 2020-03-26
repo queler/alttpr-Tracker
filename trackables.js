@@ -58,6 +58,7 @@ function itemsDef(){return {            //a list of everything we're tracking-- 
    medal9: { val: 0, max: 3 }, //TR required medal
    crystal0: { val:7, max:8},//tower entry
    crystal1: { val:7, max:8},//ganon entry
+   goal:{val:0,max:1},//ganon=0,ped=1
 
    key1: { val: 0, max: 1 }, //DP
    key2: { val: 0, max: 1 }, //ToH
