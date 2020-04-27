@@ -448,7 +448,11 @@ var logic = {
         },
         27: function () { // Cave 45
             return inverted()
-               ? logic.lightWorldLink()
+               ? logic.lightWorldLink()==true
+                  ? STATE.avail
+                  : logic.lightWorldBunny()==true
+                     ? STATE.visible
+                     : STATE.unavail
                : items.mirror.val &&
                    (logic.darkWorldNW()
                       || items.boss11.val
@@ -472,7 +476,13 @@ var logic = {
                      ? STATE.avail
                      : STATE.visible
              ;}, // Library
-        30: function () { return logic.lightWorldLink(); }, // Maze Race
+        30: function () {
+   return logic.lightWorldLink()==true
+     ? STATE.avail
+     : logic.lightWorldBunny()==true
+        ? STATE.visible
+        : STATE.unavail ;
+   }, // Maze Race
         31: function () { // Desert Ledge
             return logic.entry1()
                ? STATE.avail
