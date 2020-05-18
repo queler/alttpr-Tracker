@@ -2011,7 +2011,7 @@ var logic = {
       15: function () { return logic.lightWorldBunny(); },  //Good Bee Cave
       16: function () { return logic.lightWorldLink()&&items.glove.val>0; },  //20 Rupee Cave
       17: function () { return logic.chests[25]()/*hobo*/; },  //Capacity Upgrade
-      18: function () { return logic.eastDM()?logic.DMlightAorD():STATE.unavil; },  //Hookshot Fairy
+      18: function () { return logic.eastDM()?logic.DMlightAorD():STATE.unavail; },  //Hookshot Fairy
       19: function () { return logic.darkWorldNW(); },  //Fortune Teller(Dark)
       20: function () { return logic.darkWorldSouth(); },  //Archery Game
       21: function () { return logic.darkWorldNW(); },  //Dark Sanctuary Hint
